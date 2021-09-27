@@ -115,7 +115,7 @@ create table dbo.group_file (
 	foreign key (group_message_id) references dbo.group_message (id) on delete no action,
 );
 
-create table notifications (
+create table dbo.notifications (
 	id int primary key identity(1, 1),
 	account_id int not null,
 	content varchar(255) not null,
