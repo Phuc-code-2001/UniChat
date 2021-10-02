@@ -1,3 +1,4 @@
+create database FALL2021_SWP201;
 use FALL2021_SWP201;
 
 create table dbo.role(
@@ -83,6 +84,15 @@ create table dbo.group_chat (
 	foreign key (room_id) references dbo.room_chat (id) on delete cascade on update cascade,
 );
 
+create table dbo.group_manage (
+	id int primary key identity(1, 1),
+	student_id int not null,
+	group_id int not null,
+	role bit default 0,
+	foreign key (student_id) references dbo.student_profile (id) on delete cascade,
+	foreign key (group_id) references dbo.group_chat (id) on delete cascade,
+);
+
 create table dbo.room_message (
 	id int primary key identity(1, 1),
 	account_id int,
@@ -120,4 +130,41 @@ create table dbo.notifications (
 	account_id int not null,
 	content varchar(255) not null,
 	foreign key (account_id) references dbo.account (id) on delete cascade,
+);
+
+create table dbo.login_cookies (
+	id int primary key identity(1, 1),
+	login_key varchar(24) unique,
+	account_id int,
+	foreign key (account_id) references dbo.account (id) on delete cascade,
+);
+
+create table dbo.room_marked_message (
+	id int primary key identity(1, 1),
+	room_message_id int not null,
+	time_marked datetime default current_timestamp,
+	foreign key (room_message_id) references dbo.room_message (id) on delete cascade,
+);
+
+create table dbo.group_marked_message (
+	id int primary key identity(1, 1),
+	group_message_id int not null,
+	time_marked datetime default current_timestamp,
+	foreign key (group_message_id) references dbo.group_message (id) on delete cascade,
+);
+
+create table dbo.room_dealine (
+	id int primary key identity(1, 1),
+	room_id int not null,
+	content varchar(500) not null,
+	expiration_time datetime,
+	foreign key (room_id) references dbo.room_chat (id) on delete cascade,
+);
+
+create table dbo.group_dealine (
+	id int primary key identity(1, 1),
+	room_id int not null,
+	content varchar(500) not null,
+	expiration_time datetime,
+	foreign key (room_id) references dbo.room_chat (id) on delete cascade,
 );
