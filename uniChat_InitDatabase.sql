@@ -1,11 +1,6 @@
 create database FALL2021_SWP201;
 use FALL2021_SWP201;
 
-create table dbo.role(
-	id int primary key identity(1, 1),
-	name varchar(30) not null unique,
-);
-
 create table dbo.class(
 	id int primary key identity(1, 1),
 	name varchar(20) not null unique,
@@ -16,7 +11,6 @@ create table dbo.account(
 	username varchar(50) unique not null,
 	password varchar(32) not null,
 	role_id int,
-	foreign key (role_id) references dbo.role (id) on delete set null on update cascade,
 );
 
 create table dbo.admin_profile (
@@ -135,7 +129,7 @@ create table dbo.notifications (
 create table dbo.login_cookie (
 	id int primary key identity(1, 1),
 	login_key varchar(24) unique not null,
-	account_id int bot null,
+	account_id int not null,
 	expiration_time datetime not null,
 );
 
