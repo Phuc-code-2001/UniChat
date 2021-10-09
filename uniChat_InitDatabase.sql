@@ -132,11 +132,11 @@ create table dbo.notifications (
 	foreign key (account_id) references dbo.account (id) on delete cascade,
 );
 
-create table dbo.login_cookies (
+create table dbo.login_cookie (
 	id int primary key identity(1, 1),
-	login_key varchar(24) unique,
-	account_id int,
-	foreign key (account_id) references dbo.account (id) on delete cascade,
+	login_key varchar(24) unique not null,
+	account_id int bot null,
+	expiration_time datetime not null,
 );
 
 create table dbo.room_marked_message (
