@@ -1,0 +1,47 @@
+﻿<link href="~/css/StyleLoginIndex.css" rel="stylesheet" />
+
+@*Component 1*@
+<div class="background">
+    <div class="text-box">
+        <div class="form-header">
+            <h1>Sign in</h1>
+        </div>
+        <br/>
+        <div class="form-body">
+            <form class="login-form" method="post">
+                @* name = username id = username *@
+                
+                <input type="text" id="username" name="username" placeholder="Username">
+                
+                @*Password id = pass; name = pass*@
+                <input type="password" id="password" name="password" placeholder="Password">
+
+                <div class="d-flex align-items-center py-1" style="gap: 1rem">
+                    <input type="checkbox" name="remember" checked>
+                    <span>Remember me</span>
+                </div>
+
+                    
+                <div class="btn-group">
+                    <a href="/Home/" class="button-2">Cancel</a>
+                    <input class="button-1" type="submit" value="Login"/>
+                </div>
+
+            </form>
+
+            <script>
+
+                $(document).ready(function () {
+
+                    $(".login-form").submit(function (e) {
+                        console.log("Submited...");
+                        
+                    })
+
+                })
+
+            </script>
+
+        </div>
+    </div>
+</div>

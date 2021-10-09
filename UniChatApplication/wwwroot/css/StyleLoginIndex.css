@@ -1,0 +1,115 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+}
+
+.button-1 {
+    background-image: radial-gradient(100% 100% at 100% 0, #5adaff 0, #5468ff 100%);
+    border: 0;
+    border-radius: 6px;
+    box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(58, 65, 111, .5) 0 -3px 0 inset;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    padding: .5rem 1rem;
+    transition: box-shadow .15s, transform .15s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    will-change: box-shadow,transform;
+    font-size: 18px;
+}
+
+.button-1:focus {
+    box-shadow: #3c4fe0 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+}
+
+.button-1:hover {
+    box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+    transform: translateY(-2px);
+}
+
+.button-1:active {
+    box-shadow: #3c4fe0 0 3px 7px inset;
+    transform: translateY(2px);
+}
+
+.button-2 {
+    box-sizing: border-box;
+    background-image: radial-gradient(100% 100% at 100% 0, #F08080 0, #DC143C 100%);
+    border: 0;
+    border-radius: 6px;
+    box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(58, 65, 111, .5) 0 -3px 0 inset;
+    color: #fff;
+    cursor: pointer;
+    padding: .5rem 1rem;
+    transition: box-shadow .15s,transform .15s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    will-change: box-shadow,transform;
+    font-size: 18px;
+}
+
+.button-2:focus {
+    box-shadow: #800000 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #800000 0 -3px 0 inset;
+}
+
+.button-2:hover {
+    box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #800000	 0 -3px 0 inset;
+    transform: translateY(-2px);
+    text-decoration: none;
+    color: #fff;
+}
+
+.button-2:active {
+    box-shadow: #3c4fe0 0 3px 7px inset;
+    transform: translateY(2px);
+}
+
+/*Component 1*/
+.background {
+    background-image: url(../images/4521373.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-left: 5%;
+}
+
+.text-box {
+    color: black;
+    background-color: white;
+    padding: 5%;
+    width: 90%;
+    max-width: 560px;
+    border: 1px black solid;
+    border-radius: 1em;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
+
+.text-box button {
+    margin-top: 1em;
+    margin-right: 1em;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+input {
+    padding: .5rem .8rem;
+    border-radius: 5px;
+    background-color: antiquewhite;
+}
+
+.btn-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

@@ -1,0 +1,47 @@
+﻿@model UniChatApplication.Models.AdminProfile
+<link href="~/css/StyleAdminIndex.css" rel="stylesheet" />
+
+@*Componet 1*@
+<nav class="navbar navbar bg-light justify-content-between">
+    <span class="navbar-text">
+        Wellcome to admin @Model.FullName
+    </span>
+
+    <a class="text-decoration-none text-white button-2" asp-area="" asp-controller="Login" asp-action="Logout"> Log out </a>
+</nav>
+
+<br />
+
+<div class="row">
+    @*Componet 2*@
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Student Management</h5>
+                <p class="card-text"> Allow admin to View, Search, Create, Edit, Delete student for unichat system. </p>
+                <a class="text-decoration-none text-white button-1" asp-area="" asp-controller="" asp-action="">Go</a>
+            </div>
+        </div>
+    </div>
+    @*Componet 3*@
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Teacher Management</h5>
+                <p class="card-text"> Allow admin to View, Search, Create, Edit, Delete teacher for unichat system.</p>
+                <a class="text-decoration-none text-white button-1" asp-area="" asp-controller="" asp-action="">Go</a>
+            </div>
+        </div>
+    </div>
+    @*Componet 5*@
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Class Management</h5>
+                <p class="card-text"> Allow admin to manage classes. </p>
+                <a class="text-decoration-none text-white button-1" asp-area="" asp-controller="" asp-action="">Go</a>
+            </div>
+        </div>
+    </div>
+</div>
+

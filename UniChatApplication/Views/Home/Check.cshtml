@@ -1,0 +1,17 @@
+﻿@model IEnumerable<UniChatApplication.Models.AdminProfile>
+
+<h2>Check Page</h2>
+
+<div class="container d-flex flex-column" style="gap: 1rem">
+
+    <div class="box">
+        <h4>Account list</h4>
+        <ol>
+            @foreach(var profile in Model)
+            {
+                @profile.FullName
+            }
+        </ol>
+    </div>
+
+</div>
