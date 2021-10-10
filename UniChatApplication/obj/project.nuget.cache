@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "UwwV66zh/C/Tvz1y7IUFcBMOsPSXE7AvK1WkFOqMgMAfpll3QGU3dNNEFLwOAEBQvat5TPlPlJMvbBdTXvpuDg==",
+  "dgSpecHash": "NUNNeq9Q3+QeXXRfLQViykWNHZwB5wh0Fb4vFHGwhcVCNMjw3gUXLnAr7kQNPdkjRkvhVoOtbk7+L0VKXdJ+iQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\UniChatApplication.csproj",
   "expectedPackageFiles": [
@@ -68,6 +68,7 @@
     "C:\\Users\\PhucHT\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
     "C:\\Users\\PhucHT\\.nuget\\packages\\newtonsoft.json\\11.0.2\\newtonsoft.json.11.0.2.nupkg.sha512",
     "C:\\Users\\PhucHT\\.nuget\\packages\\runtime.native.system\\4.3.0\\runtime.native.system.4.3.0.nupkg.sha512",
+    "C:\\Users\\PhucHT\\.nuget\\packages\\servicestack.interfaces\\5.12.0\\servicestack.interfaces.5.12.0.nupkg.sha512",
     "C:\\Users\\PhucHT\\.nuget\\packages\\system.collections\\4.3.0\\system.collections.4.3.0.nupkg.sha512",
     "C:\\Users\\PhucHT\\.nuget\\packages\\system.collections.concurrent\\4.3.0\\system.collections.concurrent.4.3.0.nupkg.sha512",
     "C:\\Users\\PhucHT\\.nuget\\packages\\system.collections.immutable\\5.0.0\\system.collections.immutable.5.0.0.nupkg.sha512",

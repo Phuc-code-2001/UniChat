@@ -1,0 +1,46 @@
+﻿@model IEnumerable<UniChatApplication.Models.Class>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container">
+
+    <h2>Classes Management</h2>
+
+    <div class="main-control">
+        <div class="create">
+            <a class="btn btn-outline-primary" asp-action="Create">Create</a>
+        </div>
+        <hr>
+        <table class="table table-bordered text-center">
+
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Number of students</th>
+                    <th>Configure</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                        <td>@item.StudentProfiles.Count</td>
+                        <td class="d-flex justify-content-center" style="gap: 1rem;">
+                            <a class="btn btn-primary">Edit</a>
+                            <a class="btn btn-info">Details</a>
+                            <a class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

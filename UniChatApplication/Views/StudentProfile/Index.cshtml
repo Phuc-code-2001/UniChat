@@ -3,83 +3,59 @@
 @{
     ViewData["Title"] = "Index";
 }
-<link rel="stylesheet" href="~/css/StyleStudentProfileManagement.css">
-<div class="container-fluid">
+
+<style>
+
+    table {
+        font-family: 'Times New Roman', Times, serif;
+    }
+
+    table thead {
+        background-color: #22f;
+        color: #fff;
+    }
+</style>
+
+<div class="container">
     <h1 class="text-center">Student Management</h1>
-
-    <div class="main-control">
-
-        <div class="">
-            <a class="btn btn-outline-primary" asp-action="Create">Create New</a>
-        </div>
-        <div class="list-student">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.FullName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Email)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Phone)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Gender)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Major)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.StudentCode)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Account)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Class)
-                        </th>
-                        <th>Configure</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FullName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Email)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Phone)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Gender)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Major)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.StudentCode)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Account.Username)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Class.Id)
-                            </td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+    <div class="create py-2">
+        <a class="btn btn-outline-primary" asp-action="Create">Create</a>
     </div>
+    <hr>
+    <h3 class="text-center">List of Students</h3>
+    <table class="table table-bordered text-center">
+        <thead>
+            <tr>
+                <th>Fullname</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Username</th>
+                <th>Gender</th>
+                <th>Major</th>
+                <th>StudentCode</th>
+                <th>Configure</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.FullName</td>
+                    <td>@item.Email</td>
+                    <td>@item.Phone</td>
+                    <td>@item.Account.Username</td>
+                    <td>@item.GenderText</td>
+                    <td>@item.Major</td>
+                    <td>@item.StudentCode</td>
+                    <td class="d-flex" style="gap: 1rem;">
+                        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
 </div>

@@ -32,7 +32,7 @@ namespace UniChatApplication.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return Redirect("/Home/");
             }
 
             var studentProfile = await _context.StudentProfile
@@ -41,7 +41,7 @@ namespace UniChatApplication.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (studentProfile == null)
             {
-                return NotFound();
+                return Redirect("/Home/");
             }
 
             return View(studentProfile);
@@ -55,7 +55,7 @@ namespace UniChatApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(string newFullName, string newEmail, string newPhone, bool newGender, string newMajor, string newStudentCode)
+        public ActionResult Create(string newFullName, string newEmail, bool newGender, string newMajor, string newStudentCode)
         {
             string username = "";
             for(int i = 0; i < newEmail.Length; i++){
@@ -68,11 +68,11 @@ namespace UniChatApplication.Controllers
             StudentProfile st = new StudentProfile(){
                         FullName=newFullName,
                         Email=newEmail,
-                        Phone=newPhone,
+                        Phone=null,
                         Gender=newGender,
                         Major=newMajor,
                         StudentCode=newStudentCode,
-                        Birthday=DateTime.Now,
+                        Birthday=DateTime.Now.ToLocalTime(),
                         Avatar=null,
                         ClassID=null,
                         Class=null
@@ -80,7 +80,7 @@ namespace UniChatApplication.Controllers
 
             try {
                 if (_context.Account.Any(a => a.Username == username)){
-                    ViewData["Error"] = $"Account with email {newEmail} existed...";
+                    ViewData["Error"] = $"Account {username} existed...";
                     
                     return View(st);
                 }
@@ -102,16 +102,14 @@ namespace UniChatApplication.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return Redirect("/Home/");
             }
 
             var studentProfile = await _context.StudentProfile.FindAsync(id);
             if (studentProfile == null)
             {
-                return NotFound();
+                return Redirect("/Home/");
             }
-            ViewData["AccountID"] = new SelectList(_context.Account, "Id", "Username", studentProfile.AccountID);
-            ViewData["ClassID"] = new SelectList(_context.Class, "Id", "Id", studentProfile.ClassID);
             return View(studentProfile);
         }
 
@@ -120,36 +118,18 @@ namespace UniChatApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FullName,Avatar,Email,Phone,Gender,Major,Birthday,StudentCode,AccountID,ClassID")] StudentProfile studentProfile)
+        public async Task<IActionResult> Edit(int Id, string editFullName, bool editGender, string editMajor, string editStudentCode)
         {
-            if (id != studentProfile.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(studentProfile);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!StudentProfileExists(studentProfile.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["AccountID"] = new SelectList(_context.Account, "Id", "Username", studentProfile.AccountID);
-            ViewData["ClassID"] = new SelectList(_context.Class, "Id", "Id", studentProfile.ClassID);
-            return View(studentProfile);
+            
+            var studentProfile = await _context.StudentProfile.FindAsync(Id);
+            studentProfile.FullName = editFullName;
+            studentProfile.Gender = editGender;
+            studentProfile.Major = editMajor;
+            studentProfile.StudentCode = editStudentCode;
+            _context.Update(studentProfile);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
+            
         }
 
         // GET: StudentProfile/Delete/5
@@ -175,11 +155,12 @@ namespace UniChatApplication.Controllers
         // POST: StudentProfile/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var studentProfile = await _context.StudentProfile.FindAsync(id);
+            var studentProfile = _context.StudentProfile.Include(p => p.Account).FirstOrDefault(p => p.Id == id);
+            _context.Account.Remove(studentProfile.Account);
             _context.StudentProfile.Remove(studentProfile);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 

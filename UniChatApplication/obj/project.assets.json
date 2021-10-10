@@ -1040,6 +1040,20 @@
           "lib/netstandard1.0/_._": {}
         }
       },
+      "ServiceStack.Interfaces/5.12.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Bcl.AsyncInterfaces": "1.1.1",
+          "System.Runtime.Serialization.Primitives": "4.3.0",
+          "System.Threading.Tasks.Extensions": "4.5.4"
+        },
+        "compile": {
+          "lib/netstandard2.0/ServiceStack.Interfaces.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/ServiceStack.Interfaces.dll": {}
+        }
+      },
       "System.Collections/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -1844,7 +1858,7 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/_._": {}
+          "ref/netstandard1.3/System.Runtime.Serialization.Primitives.dll": {}
         },
         "runtime": {
           "lib/netstandard1.3/System.Runtime.Serialization.Primitives.dll": {}
@@ -3948,6 +3962,20 @@
         "lib/netstandard1.0/_._",
         "runtime.native.system.4.3.0.nupkg.sha512",
         "runtime.native.system.nuspec"
+      ]
+    },
+    "ServiceStack.Interfaces/5.12.0": {
+      "sha512": "cHPEPCzr9j63oJAuv+RaubJlYj1qtbEIU30Nx4w6DMKCKLbciFc4UlRIf9/Hg8oSPkuEEFq0RETRZ/9iTKbx8A==",
+      "type": "package",
+      "path": "servicestack.interfaces/5.12.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net45/ServiceStack.Interfaces.dll",
+        "lib/net472/ServiceStack.Interfaces.dll",
+        "lib/netstandard2.0/ServiceStack.Interfaces.dll",
+        "servicestack.interfaces.5.12.0.nupkg.sha512",
+        "servicestack.interfaces.nuspec"
       ]
     },
     "System.Collections/4.3.0": {
@@ -7595,7 +7623,8 @@
       "Microsoft.EntityFrameworkCore.SqlServer >= 5.0.10",
       "Microsoft.EntityFrameworkCore.Tools >= 5.0.10",
       "Microsoft.Extensions.Caching.Memory >= 5.0.0",
-      "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 5.0.2"
+      "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 5.0.2",
+      "ServiceStack.Interfaces >= 5.12.0"
     ]
   },
   "packageFolders": {
@@ -7666,6 +7695,10 @@
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "target": "Package",
             "version": "[5.0.2, )"
+          },
+          "ServiceStack.Interfaces": {
+            "target": "Package",
+            "version": "[5.12.0, )"
           }
         },
         "imports": [
