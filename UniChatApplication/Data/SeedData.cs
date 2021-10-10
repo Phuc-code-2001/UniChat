@@ -20,7 +20,7 @@ namespace UniChatApplication.Data
                 FullName="Huynh Tan Phuc",
                 Email="phuchtce150394@fpt.edu.vn",
                 Phone="0987499512",
-                Gender=1,
+                Gender=true,
                 Account=AccountDAOs.CreateAccount("phuchtce150394", "123456", 3)
             };
 

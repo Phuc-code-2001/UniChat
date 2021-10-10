@@ -431,3 +431,8 @@ C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\ref\UniCh
 C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\UniChatApplication.pdb
 C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\UniChatApplication.genruntimeconfig.cache
 C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\Home\Error.cshtml.g.cs
+C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\StudentProfile\Create.cshtml.g.cs
+C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\StudentProfile\Delete.cshtml.g.cs
+C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\StudentProfile\Details.cshtml.g.cs
+C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\StudentProfile\Edit.cshtml.g.cs
+C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\StudentProfile\Index.cshtml.g.cs

@@ -7,8 +7,6 @@ namespace UniChatApplication.Models
     public class Account
     {
 
-        public Account() { }
-
         [Key]
         public int Id { get; set; }
 

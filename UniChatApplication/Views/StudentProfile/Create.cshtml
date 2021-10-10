@@ -1,0 +1,70 @@
+﻿@model UniChatApplication.Models.StudentProfile
+
+@{
+    ViewData["Title"] = "Create";
+}
+<link rel="stylesheet" href="~/css/StyleStudentProfileManagement.css">
+
+<div class="container mt-3">
+    <h1 class="text-center">Student Management</h1>
+    <h4>Create student account</h4>
+    @{
+        if (ViewData["Error"] != null){
+            <div class="alert alert-danger">
+                <strong>@ViewData["Error"]</strong>
+            </div>
+        }
+    }
+    <div class="main-control">
+        <form action="/StudentProfile/Create/" method="post">
+            <div class="form-group">
+                <label class="control-label">FullName</label>
+                <input type="text" class="form-control" name="newFullName" value="@Model.FullName">
+                <span class="text-danger" id="validateFullName"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Email</label>
+                <input type="email" class="form-control" name="newEmail" value="@Model.Email">
+                <span class="text-danger" id="validateEmail"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Phone</label>
+                <input type="text" class="form-control" name="newPhone" value="@Model.Phone">
+                <span class="text-danger" id="validatePhone"></span>
+            </div>
+            <div class="form-group">
+                <div>Gender</div>
+                <select name="newGender">
+                    <option value="true">Male</option>
+                    <option value="false">Female</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <div>Major</div>
+                <select name="newMajor">
+                    <option value="IOT">INTERNET OF THING</option>
+                    <option value="SE">SOFTWARE ENGINEERING</option>
+                    <option value="Unset">UNSET</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">StudentCode</label>
+                <input type="text" class="form-control" name="newStudentCode" value="@Model.StudentCode">
+                <span class="text-danger" id="validateStudentCode"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary"/>
+            </div>
+        </form>
+        <div>
+            <a class="btn btn-outline-danger" asp-action="Index">Back to List</a>
+        </div>
+
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

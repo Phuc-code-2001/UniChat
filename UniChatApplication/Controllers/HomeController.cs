@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using UniChatApplication.Data;
 using UniChatApplication.Models;
@@ -22,9 +21,31 @@ namespace UniChatApplication.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+
+            string username = HttpContext.Session.GetString("username");
+            if (username != null){
+                Account account = await _context.Account.FirstOrDefaultAsync(a => a.Username == username);
+                if (account.RoleName == "Admin"){
+
+                    return Redirect("/Admin/");
+                }
+                if (account.RoleName == "Teacher"){
+                    
+                    return Redirect("/Teacher/");
+                }
+
+                if (account.RoleName == "Student"){
+
+                    return Redirect("/Student/");
+                }
+                
+            }
+
+
             return View();
+            
         }
 
 

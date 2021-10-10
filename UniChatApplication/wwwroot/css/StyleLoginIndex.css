@@ -113,3 +113,8 @@ input {
     align-items: center;
     justify-content: space-between;
 }
+
+.alert {
+    font-size: .8rem;
+    padding: .5rem 1rem;
+}

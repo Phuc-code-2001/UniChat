@@ -68,6 +68,10 @@ namespace UniChatApplication
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "Logout",
+                    pattern: "Login/Logout/");
+
+                endpoints.MapControllerRoute(
                     name: "Error",
                     pattern: "Home/Error/");
 

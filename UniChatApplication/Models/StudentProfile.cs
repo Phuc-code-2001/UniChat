@@ -10,7 +10,7 @@ namespace UniChatApplication.Models
 
         [Key]
         public int Id { get; set; }
-
+        
         public string FullName { get; set; }
 
         public string Avatar { get; set; }
@@ -19,10 +19,11 @@ namespace UniChatApplication.Models
 
         public string Phone { get; set; }
 
-        public int Gender { get; set; }
+        public bool Gender { get; set; }
 
         public string Major { get; set; }
 
+        
         public DateTime Birthday { get; set; }
 
         [Column("student_code")]
@@ -44,8 +45,8 @@ namespace UniChatApplication.Models
         [NotMapped]
         public string GenderText {
             get {
-                if (this.Gender == 1) return "Male";
-                if (this.Gender == 0) return "Female";
+                if (this.Gender) return "Male";
+                if (!this.Gender) return "Female";
                 return "Unknown";
             }
         }

@@ -27,17 +27,26 @@ namespace UniChatApplication.Controllers
         {
             ISession session = HttpContext.Session;
             string username =  session.GetString("username");
-            Account account = await _context.Account.FirstOrDefaultAsync(a => a.Username == username);
-            
-            if (account.RoleName == "Admin")
-            {
-                var profile = await _context.AdminProfile.Include(p => p.Account)
-                    .FirstOrDefaultAsync(p => p.AccountID == account.Id);
-                return View(profile);
-            }
-            
-            return RedirectToRoute("Error");
 
+            if(username != null && username != ""){
+                Account account = await _context.Account.FirstOrDefaultAsync(a => a.Username == username);
+                
+                if (account.RoleName == "Admin")
+                {
+                    AdminProfile profile = _context.AdminProfile.FirstOrDefault(p => (p.AccountID == account.Id));
+                    return View(profile);
+                }
+            }
+
+            
+            return Redirect("/Login/");
+
+        }
+
+        public IActionResult Logout(){
+            
+            HttpContext.Session.Remove("username");
+            return Redirect("/Home/");
         }
 
     }

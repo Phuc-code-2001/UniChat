@@ -1,0 +1,30 @@
+body {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.2rem;
+}
+
+.main-control {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    padding: 1rem;
+    max-width: 800px;
+    margin: auto;
+}
+
+h1 {
+    font-weight: 600;
+}
+
+table thead {
+    background-color: blueviolet;
+    color: #eee;
+}
+
+select {
+    width: 100%;
+    padding: .5rem;
+    border-radius: 5px;
+    margin-top: .5rem;
+    border: 1px solid #ced4da;
+}

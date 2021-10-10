@@ -15619,6 +15619,16 @@
   "RootNamespace": "UniChatApplication",
   "Documents": [
     {
+      "FilePath": "c:\\Users\\PhucHT\\Desktop\\productions\\UniChat\\UniChatApplication\\Views\\StudentProfile\\Delete.cshtml",
+      "TargetPath": "Views\\StudentProfile\\Delete.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\PhucHT\\Desktop\\productions\\UniChat\\UniChatApplication\\Views\\StudentProfile\\Index.cshtml",
+      "TargetPath": "Views\\StudentProfile\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\PhucHT\\Desktop\\productions\\UniChat\\UniChatApplication\\Views\\_ViewStart.cshtml",
       "TargetPath": "Views\\_ViewStart.cshtml",
       "FileKind": "mvc"
@@ -15631,6 +15641,11 @@
     {
       "FilePath": "c:\\Users\\PhucHT\\Desktop\\productions\\UniChat\\UniChatApplication\\Views\\Home\\Index.cshtml",
       "TargetPath": "Views\\Home\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\PhucHT\\Desktop\\productions\\UniChat\\UniChatApplication\\Views\\StudentProfile\\Edit.cshtml",
+      "TargetPath": "Views\\StudentProfile\\Edit.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -15654,8 +15669,18 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\PhucHT\\Desktop\\productions\\UniChat\\UniChatApplication\\Views\\StudentProfile\\Create.cshtml",
+      "TargetPath": "Views\\StudentProfile\\Create.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\PhucHT\\Desktop\\productions\\UniChat\\UniChatApplication\\Views\\Home\\Check.cshtml",
       "TargetPath": "Views\\Home\\Check.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\PhucHT\\Desktop\\productions\\UniChat\\UniChatApplication\\Views\\StudentProfile\\Details.cshtml",
+      "TargetPath": "Views\\StudentProfile\\Details.cshtml",
       "FileKind": "mvc"
     },
     {

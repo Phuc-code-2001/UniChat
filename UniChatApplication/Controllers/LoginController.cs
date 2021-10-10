@@ -7,7 +7,6 @@ using UniChatApplication.Models;
 using UniChatApplication.Data;
 using UniChatApplication.Daos;
 using Microsoft.AspNetCore.Http;
-using System.Web;
 using Microsoft.EntityFrameworkCore;
 
 namespace UniChatApplication.Controllers
@@ -42,6 +41,34 @@ namespace UniChatApplication.Controllers
                 }
                 
             }
+            else {
+
+                //read cookie from Request object  
+                string cookieValueFromReq = Request.Cookies["login"];
+                if (cookieValueFromReq != null) {
+                    List<LoginCookie> cookies = _context.LoginCookies.Where(c => c.Key == cookieValueFromReq).ToList();
+                    if (cookies.Count > 0){
+
+                        if (cookies[0].ExpirationTime > DateTime.Now){
+
+                            int userId = cookies[0].AccountID;
+                            Account user = _context.Account.Find(userId);
+                            if (user != null){
+                                HttpContext.Session.SetString("username", user.Username);
+                                return RedirectToAction("Index");
+                            }
+                        }
+                        else {
+                            _context.LoginCookies.Remove(cookies[0]);
+                            _context.SaveChanges();
+                            DeleteCookie();
+                        }
+
+                    }
+
+                }
+
+            }
 
 
             return View();
@@ -50,24 +77,50 @@ namespace UniChatApplication.Controllers
         [HttpPost]
         public IActionResult Index(string username, string password, bool remember)
         {
-
+            
             var validator = AccountDAOs.AccountValidate(username, password);
 
             if (validator["UsernameMessage"] == string.Empty && validator["PasswordMessage"] == string.Empty)
             {
 
                 Account LoginInfo = AccountDAOs.CreateAccount(username.Trim(), password.Trim(), -1);
-                List<Account> matchedAccounts = _context.Account
-                .Where(a => a.Username == LoginInfo.Username && a.Password == LoginInfo.Password).ToList();
+                List<Account> accounts = _context.Account.Where(a => a.Username == LoginInfo.Username && a.Password == LoginInfo.Password).ToList();
+                List<Account> matchedAccounts = accounts;
 
                 if (matchedAccounts.Count > 0)
                 {
+                    if (remember) {
+
+                        CookieOptions options = new CookieOptions();
+                        options.Expires = DateTime.Now.AddMinutes(30);
+                        string key;
+
+                        while(true){
+                            key = CookieDaos.CreateCookieLogin();
+                            if(_context.LoginCookies.Count(c => c.Key == key) == 0){
+                                break;
+                            }
+                        }
+
+                        Response.Cookies.Append("login", key, options);
+                        _context.LoginCookies.Add(new LoginCookie(){
+                            Key=key,
+                            ExpirationTime=DateTime.Now.AddMinutes(30),
+                            AccountID=matchedAccounts[0].Id
+                            });
+                        _context.SaveChanges();
+
+                    }
+                    else {
+                        DeleteCookie();
+                    }
                     HttpContext.Session.SetString("username", LoginInfo.Username);
+                    return RedirectToAction("Index");
                 }
                 else
                 {
                     // Thông báo tên tài khoản hoặc mật khẩu k đúng. Quay về Login
-
+                    ViewData["loginFailed"] = "Username or Password incorect..Try again.";
 
                 }
 
@@ -78,17 +131,23 @@ namespace UniChatApplication.Controllers
                 ViewData["perror"] = validator["PasswordMessage"];
             }
 
-            return RedirectToAction("Index");
+            return View("Index");
 
         }
 
         public IActionResult Logout()
         {
-            if (HttpContext.Session.GetString("username") != null)
-            {
-                HttpContext.Session.Remove("username");
-            }
+            HttpContext.Session.Remove("username");
+            DeleteCookie();
             return Redirect("/Home/");
+        }
+
+        public void DeleteCookie(){
+            string cookieValueFromReq = Request.Cookies["login"];
+            List<LoginCookie> cookies = _context.LoginCookies.Where(c => c.Key == cookieValueFromReq).ToList();
+            _context.LoginCookies.RemoveRange(cookies);
+            _context.SaveChanges();
+            Response.Cookies.Delete("login");
         }
 
     }

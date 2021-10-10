@@ -12,6 +12,8 @@ namespace UniChatApplication.Daos
     public class AccountDAOs
     {
 
+        public static string DefaultPassword = "123456";
+
         public static Account CreateAccount(string username, string password, int role){
             
             var md5Hash = MD5.Create();

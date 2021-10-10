@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace UniChatApplication.Models
 {
@@ -13,10 +10,13 @@ namespace UniChatApplication.Models
         [Key]
         public int Id { get; set; }
 
+        [Column("login_key")]
         public string Key { get; set; }
 
+        [Column("account_id")]
         public int AccountID { get; set; }
 
+        [Column("expiration_time")]
         public DateTime ExpirationTime { get; set; }
 
     }
