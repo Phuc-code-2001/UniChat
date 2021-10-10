@@ -1,0 +1,82 @@
+﻿@model UniChatApplication.Models.TeacherProfile
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<style>
+    body {
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 1.2rem;
+    }
+
+    .main-control {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        padding: 1rem;
+        max-width: 800px;
+        margin: auto;
+    }
+
+    h1 {
+        font-weight: 600;
+    }
+
+    table thead {
+        background-color: blueviolet;
+        color: #eee;
+    }
+
+    select {
+        width: 100%;
+        padding: .5rem;
+        border-radius: 5px;
+        margin-top: .5rem;
+        border: 1px solid #ced4da;
+    }
+</style>
+
+<div class="container">
+    <h1 class="text-center">Teacher Management</h1>
+    <h4>Edit TeacherProfile</h4>
+    <hr>
+    <form asp-action="Edit">
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <div class="form-group">
+            <label class="control-label">FullName</label>
+            <input type="text" class="form-control" name="editFullName" value="@Model.FullName">
+            <span class="text-danger" id="validateFullName"></span>
+        </div>
+        <div class="form-group">
+            <div>Gender</div>
+            <select name="editGender">
+                @{
+                    if (Model.GenderText == "Male")
+                    {
+                        <option value="true" selected>Male</option>
+                        <option value="false">Female</option>
+                    }
+                    else if (Model.GenderText == "Female")
+                    {
+                        <option value="true">Male</option>
+                        <option value="false" selected>Female</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">TeacherCode</label>
+            <input type="text" class="form-control" name="editStudentCode" value="@Model.TeacherCode">
+            <span class="text-danger" id="validateStudentCode"></span>
+        </div>
+        <div class="form-group">
+            <a class="btn btn-danger" asp-action="Index">Back to List</a>
+            <input type="submit" value="Save" class="btn btn-primary"/>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -9,23 +9,23 @@ using UniChatApplication.Daos;
 
 namespace UniChatApplication.Controllers
 {
-    public class StudentProfileController : Controller
+    public class TeacherProfileController : Controller
     {
         private readonly UniChatDbContext _context;
 
-        public StudentProfileController(UniChatDbContext context)
+        public TeacherProfileController(UniChatDbContext context)
         {
             _context = context;
         }
 
-        // GET: StudentProfile
+        // GET: TeacherProfile
         public async Task<IActionResult> Index()
         {
-            var uniChatDbContext = _context.StudentProfile.Include(s => s.Account).Include(s => s.Class);
+            var uniChatDbContext = _context.TeacherProfile.Include(s => s.Account);
             return View(await uniChatDbContext.ToListAsync());
         }
 
-        // GET: StudentProfile/Details/5
+        // GET: TeacherProfile/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,27 +33,26 @@ namespace UniChatApplication.Controllers
                 return Redirect("/Home/");
             }
 
-            var studentProfile = await _context.StudentProfile
+            var teacherProfile = await _context.TeacherProfile
                 .Include(s => s.Account)
-                .Include(s => s.Class)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (studentProfile == null)
+            if (teacherProfile == null)
             {
                 return Redirect("/Home/");
             }
 
-            return View(studentProfile);
+            return View(teacherProfile);
         }
 
-        // GET: StudentProfile/Create
+        // GET: TeacherProfile/Create
         public IActionResult Create()
         {
-            StudentProfile st = new StudentProfile();
+            TeacherProfile st = new TeacherProfile();
             return View(st);
         }
 
         [HttpPost]
-        public ActionResult Create(string newFullName, string newEmail, bool newGender, string newMajor, string newStudentCode)
+        public ActionResult Create(string newFullName, string newEmail, bool newGender, string newTeacherCode)
         {
             string username = "";
             for(int i = 0; i < newEmail.Length; i++){
@@ -63,17 +62,14 @@ namespace UniChatApplication.Controllers
                 else break;
             }
 
-            StudentProfile st = new StudentProfile(){
+            TeacherProfile st = new TeacherProfile(){
                         FullName=newFullName,
                         Email=newEmail,
                         Phone=null,
                         Gender=newGender,
-                        Major=newMajor,
-                        StudentCode=newStudentCode,
+                        TeacherCode=newTeacherCode,
                         Birthday=DateTime.Now.ToLocalTime(),
                         Avatar=null,
-                        ClassID=null,
-                        Class=null
                     };
 
             try {
@@ -87,7 +83,7 @@ namespace UniChatApplication.Controllers
 
             }
 
-            Account newAccount = AccountDAOs.CreateAccount(username, AccountDAOs.DefaultPassword, 1);
+            Account newAccount = AccountDAOs.CreateAccount(username, AccountDAOs.DefaultPassword, 2);
             st.Account = newAccount;
             _context.Add(st);
             _context.SaveChanges();
@@ -95,7 +91,7 @@ namespace UniChatApplication.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: StudentProfile/Edit/5
+        // GET: TeacherProfile/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -103,68 +99,67 @@ namespace UniChatApplication.Controllers
                 return Redirect("/Home/");
             }
 
-            var studentProfile = await _context.StudentProfile.FindAsync(id);
-            if (studentProfile == null)
+            var teacherProfile = await _context.TeacherProfile.FindAsync(id);
+            if (teacherProfile == null)
             {
                 return Redirect("/Home/");
             }
-            return View(studentProfile);
+
+            return View(teacherProfile);
         }
 
-        // POST: StudentProfile/Edit/5
+        // POST: TeacherProfile/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int Id, string editFullName, bool editGender, string editMajor, string editStudentCode)
+        public async Task<IActionResult> Edit(int Id, string editFullName, bool editGender, string editMajor, string editTeacherCode)
         {
             
-            var studentProfile = await _context.StudentProfile.FindAsync(Id);
-            studentProfile.FullName = editFullName;
-            studentProfile.Gender = editGender;
-            studentProfile.Major = editMajor;
-            studentProfile.StudentCode = editStudentCode;
-            _context.Update(studentProfile);
+            var teacherProfile = await _context.TeacherProfile.FindAsync(Id);
+            teacherProfile.FullName = editFullName;
+            teacherProfile.Gender = editGender;
+            teacherProfile.TeacherCode = editTeacherCode;
+            _context.Update(teacherProfile);
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
             
         }
 
-        // GET: StudentProfile/Delete/5
+        // GET: TeacherProfile/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
-                return NotFound();
+                return Redirect("/Home/");
             }
 
-            var studentProfile = await _context.StudentProfile
+            var teacherProfile = await _context.TeacherProfile
                 .Include(s => s.Account)
-                .Include(s => s.Class)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (studentProfile == null)
+            if (teacherProfile == null)
             {
-                return NotFound();
+                return Redirect("/Home/");
             }
 
-            return View(studentProfile);
+            return View(teacherProfile);
         }
 
-        // POST: StudentProfile/Delete/5
+        // POST: TeacherProfile/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var studentProfile = _context.StudentProfile.Include(p => p.Account).FirstOrDefault(p => p.Id == id);
-            _context.Account.Remove(studentProfile.Account);
-            _context.StudentProfile.Remove(studentProfile);
+            var teacherProfile = _context.TeacherProfile.Include(p => p.Account).FirstOrDefault(p => p.Id == id);
+            _context.Account.Remove(teacherProfile.Account);
+            _context.TeacherProfile.Remove(teacherProfile);
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool StudentProfileExists(int id)
+        private bool TeacherProfileExists(int id)
         {
-            return _context.StudentProfile.Any(e => e.Id == id);
+            return _context.TeacherProfile.Any(e => e.Id == id);
         }
     }
 }

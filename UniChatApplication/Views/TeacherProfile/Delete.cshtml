@@ -1,9 +1,8 @@
-﻿@model UniChatApplication.Models.StudentProfile
+﻿@model UniChatApplication.Models.TeacherProfile
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Delete";
 }
-
 <style>
     body {
         font-family: 'Times New Roman', Times, serif;
@@ -35,13 +34,13 @@
         margin: auto;
     }
 </style>
-
 <div class="container">
-
-    <h1 class="text-center">Student Management</h1>
-    <h4>Details</h4>
+    <h1 class="text-center">Teacher Management</h1>
     <hr>
-    <table class="table table-bordered">
+    <div class="p-2 text-danger">
+        <h4><i>Do you want to complete delete?</i></h4>
+    </div>
+    <table class="table table-bordered table-sm">
         <tbody>
             <tr>
                 <th>Avatar</th>
@@ -74,32 +73,16 @@
                 <td>@Model.GenderText</td>
             </tr>
             <tr>
-                <th>Major</th>
-                <td>@Model.Major</td>
-            </tr>
-            <tr>
-                <th>StudentCode</th>
-                <td>@Model.StudentCode</td>
-            </tr>
-            <tr>
-                <th>Class</th>
-                <td>
-                    @{
-                        if (Model.getClassName() != null)
-                        {
-                            <span>@Model.getClassName()</span>
-                        }
-                        else
-                        {
-                            <span>Unset</span>
-                        }
-                    }
-                </td>
+                <th>TeacherCode</th>
+                <td>@Model.TeacherCode</td>
             </tr>
         </tbody>
     </table>
-    <div class="control">
-        <a class="btn btn-danger" asp-action="Index">Back to list</a>
-        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-    </div>
+
+    <form asp-action="Delete" class="d-flex" style="gap: 1rem;">
+        <input type="hidden" asp-for="Id" />
+
+        <a class="btn btn-danger" asp-action="Index">Back to List</a>
+        <input type="submit" value="Delete" class="btn btn-outline-danger"/>
+    </form>
 </div>

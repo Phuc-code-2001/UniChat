@@ -43,10 +43,16 @@ namespace UniChatApplication.Controllers
 
         }
 
-        public IActionResult Logout(){
-            
-            HttpContext.Session.Remove("username");
-            return Redirect("/Home/");
+        public async Task<IActionResult> Details(int? id){
+
+            if(id == null) return Redirect("/Home/");
+
+            AdminProfile admin = await _context.AdminProfile.Include(a => a.Account).FirstOrDefaultAsync(m => m.Id == id);
+
+            if (admin == null) return Redirect("/Home/");
+
+            return View(admin);
+
         }
 
     }

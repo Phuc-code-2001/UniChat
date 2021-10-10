@@ -1,4 +1,4 @@
-﻿@model UniChatApplication.Models.StudentProfile
+@model UniChatApplication.Models.AdminProfile
 
 @{
     ViewData["Title"] = "Details";
@@ -38,10 +38,9 @@
 
 <div class="container">
 
-    <h1 class="text-center">Student Management</h1>
-    <h4>Details</h4>
+    <h1 class="text-center">Admin Profile</h1>
     <hr>
-    <table class="table table-bordered">
+    <table class="table table-bordered mx-auto mt-3">
         <tbody>
             <tr>
                 <th>Avatar</th>
@@ -62,10 +61,6 @@
                 <td>@Model.Email</td>
             </tr>
             <tr>
-                <th>Birthday</th>
-                <td>@Model.Birthday</td>
-            </tr>
-            <tr>
                 <th>Phone</th>
                 <td>@Model.Phone</td>
             </tr>
@@ -73,33 +68,18 @@
                 <th>Gender</th>
                 <td>@Model.GenderText</td>
             </tr>
+        </tbody>
+
+        <tfoot class="text-center">
             <tr>
-                <th>Major</th>
-                <td>@Model.Major</td>
-            </tr>
-            <tr>
-                <th>StudentCode</th>
-                <td>@Model.StudentCode</td>
-            </tr>
-            <tr>
-                <th>Class</th>
                 <td>
-                    @{
-                        if (Model.getClassName() != null)
-                        {
-                            <span>@Model.getClassName()</span>
-                        }
-                        else
-                        {
-                            <span>Unset</span>
-                        }
-                    }
+                    <a asp-action="Index" class="btn btn-outline-primary">Back To Admin Manager</a>
+                </td>
+                <td>
+                    <a class="btn btn-success ml-auto">Đổi mật khẩu</a>
                 </td>
             </tr>
-        </tbody>
+        </tfoot>
+
     </table>
-    <div class="control">
-        <a class="btn btn-danger" asp-action="Index">Back to list</a>
-        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-    </div>
 </div>

@@ -3,79 +3,105 @@
 @{
     ViewData["Title"] = "Delete";
 }
+<style>
+    body {
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 1.2rem;
+    }
 
-<h1>Delete</h1>
+    table {
+        max-width: 800px;
+    }
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>StudentProfile</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FullName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FullName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Avatar)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Avatar)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Phone)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Phone)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Gender)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Gender)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Major)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Major)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Birthday)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Birthday)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StudentCode)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StudentCode)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Account)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Account.Username)
-        </dd class>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Class)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Class.Id)
-        </dd class>
-    </dl>
-    
-    <form asp-action="Delete">
+    h1 {
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        width: 50%;
+    }
+
+    .control {
+        display: flex;
+        gap: 1rem;
+    }
+
+    img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        margin: auto;
+    }
+</style>
+<div class="container">
+    <h1 class="text-center">Student Management</h1>
+    <hr>
+    <div class="p-2 text-danger">
+        <h4><i>Do you want to complete delete?</i></h4>
+    </div>
+    <table class="table table-bordered table-sm">
+        <tbody>
+            <tr>
+                <th>Avatar</th>
+                <td>
+                    <img src="@Model.Avatar" alt="Avatar">
+                </td>
+            </tr>
+            <tr>
+                <th>Username</th>
+                <td>@Model.Account.Username</td>
+            </tr>
+            <tr>
+                <th>FullName</th>
+                <td>@Model.FullName</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>@Model.Email</td>
+            </tr>
+            <tr>
+                <th>Birthday</th>
+                <td>@Model.Birthday</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>@Model.Phone</td>
+            </tr>
+            <tr>
+                <th>Gender</th>
+                <td>@Model.GenderText</td>
+            </tr>
+            <tr>
+                <th>Major</th>
+                <td>@Model.Major</td>
+            </tr>
+            <tr>
+                <th>StudentCode</th>
+                <td>@Model.StudentCode</td>
+            </tr>
+            <tr>
+                <th>Class</th>
+                <td>
+                    @{
+                        if (Model.getClassName() != null)
+                        {
+                            <span>@Model.getClassName()</span>
+                        }
+                        else
+                        {
+                            <span>Unset</span>
+                        }
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <form asp-action="Delete" class="d-flex" style="gap: 1rem;">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+
+        <a class="btn btn-danger" asp-action="Index">Back to List</a>
+        <input type="submit" value="Delete" class="btn btn-outline-danger" />
     </form>
 </div>

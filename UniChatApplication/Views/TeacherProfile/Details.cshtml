@@ -1,4 +1,4 @@
-﻿@model UniChatApplication.Models.StudentProfile
+﻿@model UniChatApplication.Models.TeacherProfile
 
 @{
     ViewData["Title"] = "Details";
@@ -38,7 +38,7 @@
 
 <div class="container">
 
-    <h1 class="text-center">Student Management</h1>
+    <h1 class="text-center">Teacher Management</h1>
     <h4>Details</h4>
     <hr>
     <table class="table table-bordered">
@@ -74,27 +74,8 @@
                 <td>@Model.GenderText</td>
             </tr>
             <tr>
-                <th>Major</th>
-                <td>@Model.Major</td>
-            </tr>
-            <tr>
-                <th>StudentCode</th>
-                <td>@Model.StudentCode</td>
-            </tr>
-            <tr>
-                <th>Class</th>
-                <td>
-                    @{
-                        if (Model.getClassName() != null)
-                        {
-                            <span>@Model.getClassName()</span>
-                        }
-                        else
-                        {
-                            <span>Unset</span>
-                        }
-                    }
-                </td>
+                <th>TeacherCode</th>
+                <td>@Model.TeacherCode</td>
             </tr>
         </tbody>
     </table>
