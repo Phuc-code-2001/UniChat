@@ -15659,6 +15659,16 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\Views\\Subject\\Create.cshtml",
+      "TargetPath": "Views\\Subject\\Create.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\Views\\Subject\\index.cshtml",
+      "TargetPath": "Views\\Subject\\index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\Views\\Class\\Index.cshtml",
       "TargetPath": "Views\\Class\\Index.cshtml",
       "FileKind": "mvc"

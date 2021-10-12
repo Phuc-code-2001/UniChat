@@ -1,0 +1,52 @@
+@{
+    ViewData["Title"] = "Index";
+}
+@model IEnumerable<Subject>
+
+<style>
+
+    body {
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 1.2rem;
+    }
+
+    h1 {
+        font-weight: 600;
+    }
+
+    table {
+        max-width: 800px;
+        margin: auto;
+        text-align: center;
+    }
+
+</style>
+<div class="container">
+
+    <h1 class="text-center">Subject Management</h1>
+    <div class="noname">
+        <a class="btn btn-outline-primary" asp-controller="Subject" asp-action="Create">Add New Subject</a>
+    </div>
+    <hr>
+    <h4 class="text-center text-primary">List of subject</h4>
+    <table class="table table-bordered table-sm">
+        <thead>
+            <th>ID</th>
+            <th>SubjectCode</th>
+            <th>SubjectName</th>
+        </thead>
+        <tbody>
+            @foreach (Subject item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.SubjectCode</td>
+                    <td>@item.FullName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="pt-5">
+        <a class="btn btn-outline-danger btn-sm" asp-controller="Admin">Back to admin Page</a>
+    </div>
+</div>

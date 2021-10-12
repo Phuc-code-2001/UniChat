@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using UniChatApplication.Data;
 using UniChatApplication.Models;
 using UniChatApplication.Daos;
+using Microsoft.AspNetCore.Http;
 
 namespace UniChatApplication.Controllers
 {
@@ -21,6 +22,7 @@ namespace UniChatApplication.Controllers
         // GET: StudentProfile
         public async Task<IActionResult> Index()
         {
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
             var uniChatDbContext = _context.StudentProfile.Include(s => s.Account).Include(s => s.Class);
             return View(await uniChatDbContext.ToListAsync());
         }
@@ -28,6 +30,8 @@ namespace UniChatApplication.Controllers
         // GET: StudentProfile/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
             if (id == null)
             {
                 return Redirect("/Home/");
@@ -48,6 +52,7 @@ namespace UniChatApplication.Controllers
         // GET: StudentProfile/Create
         public IActionResult Create()
         {
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
             StudentProfile st = new StudentProfile();
             return View(st);
         }
@@ -98,6 +103,7 @@ namespace UniChatApplication.Controllers
         // GET: StudentProfile/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
             if (id == null)
             {
                 return Redirect("/Home/");
@@ -133,6 +139,7 @@ namespace UniChatApplication.Controllers
         // GET: StudentProfile/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
             if (id == null)
             {
                 return NotFound();

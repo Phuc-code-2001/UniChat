@@ -28,17 +28,11 @@ namespace UniChatApplication.Controllers
         // GET: Class/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return Redirect("/Home/");
 
-            var @class = await _context.Class
+            var @class = await _context.Class.Include(m => m.StudentProfiles)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (@class == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return Redirect("/Home/");
 
             return View(@class);
         }
@@ -124,7 +118,7 @@ namespace UniChatApplication.Controllers
                 return NotFound();
             }
 
-            var @class = await _context.Class
+            var @class = await _context.Class.Include(m => m.StudentProfiles)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (@class == null)
             {

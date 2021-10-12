@@ -38,7 +38,6 @@ namespace UniChatApplication.Controllers
                 }
             }
 
-            
             return Redirect("/Login/");
 
         }

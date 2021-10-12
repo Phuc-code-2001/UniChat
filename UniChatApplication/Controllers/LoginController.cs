@@ -15,6 +15,7 @@ namespace UniChatApplication.Controllers
     {
 
         readonly UniChatDbContext _context;
+        
 
         public LoginController(UniChatDbContext context)
         {
@@ -28,6 +29,7 @@ namespace UniChatApplication.Controllers
                 Account account = await _context.Account.FirstOrDefaultAsync(a => a.Username == username);
                 if (account.RoleName == "Admin"){
 
+                    HttpContext.Session.SetString("Role", "Admin");
                     return Redirect("/Admin/");
                 }
                 if (account.RoleName == "Teacher"){
@@ -138,6 +140,7 @@ namespace UniChatApplication.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Remove("username");
+            HttpContext.Session.Remove("Role");
             DeleteCookie();
             return Redirect("/Home/");
         }

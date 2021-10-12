@@ -5,15 +5,13 @@ namespace UniChatApplication.Data
 {
     public class UniChatDbContext : DbContext
     {
-        public UniChatDbContext(DbContextOptions<UniChatDbContext> options)
-            : base(options)
-        {
-
-        }
+        public UniChatDbContext(DbContextOptions<UniChatDbContext> options) : base(options) { }
 
         public DbSet<Account> Account { get; set; }
 
         public DbSet<Class> Class { get; set; }
+
+        public DbSet<Subject> Subjects { get; set; }
 
         public DbSet<AdminProfile> AdminProfile { get; set; }
 
