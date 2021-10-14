@@ -1,20 +1,9 @@
 ﻿<link href="~/css/StyleLoginIndex.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/css/cssPlus/buttonPlus.css">
 @{
     Layout = "_Layout";
 }
 
-<script>
-
-    $(document).ready(function () {
-
-        $(".login-form").submit(function (e) {
-            console.log("Submited...");
-
-        })
-
-    })
-
-</script>
 
 @*Component 1*@
 <div class="background">
@@ -25,7 +14,7 @@
         <br />
         <div class="form-body">
             <form class="login-form" method="post">
-                
+
                 @* name = username id = username *@
                 <input type="text" id="username" name="username" placeholder="Username">
 
@@ -37,6 +26,7 @@
                         </div>
                     }
                 }
+
                 @*Password id = password; name = password*@
                 <input type="password" id="password" name="password" placeholder="Password">
                 @{
@@ -49,26 +39,27 @@
                 }
 
                 @{
-                    if (ViewData["loginFailed"] != null){
+                    if (ViewData["loginFailed"] != null)
+                    {
                         <div class="alert alert-danger">
                             <strong>@ViewData["loginFailed"]</strong>
                         </div>
                     }
                 }
 
+                @* Remember me *@
                 <div class="d-flex align-items-center py-1" style="gap: 1rem">
                     <input type="checkbox" name="remember" value="true" checked>
                     <span>Remember me</span>
                 </div>
 
-
-                <div class="btn-group">
-                    <a href="/Home/" class="button-2">Cancel</a>
-                    <input class="button-1" type="submit" value="Login" />
+                @* Login button *@
+                <div>
+                    <button class="button-2 " type="submit">Login</button>
+                    <button class="button-3 ">Cancel</button>
                 </div>
 
             </form>
-
         </div>
     </div>
 </div>

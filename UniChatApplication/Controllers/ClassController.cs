@@ -56,58 +56,59 @@ namespace UniChatApplication.Controllers
                 return View();
             }
 
+            Class new_class = new Class(){Name=Name};
+            _context.Class.Add(new_class);
+            _context.SaveChanges();
+
             return RedirectToAction("Index");
         }
 
         // GET: Class/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return Redirect("/Home/");
 
-            var @class = await _context.Class.FindAsync(id);
-            if (@class == null)
-            {
-                return NotFound();
-            }
+            var @class = await _context.Class.Include(c => c.StudentProfiles).FirstOrDefaultAsync(c => c.Id == id);
+            if (@class == null) return Redirect("/Home/");
+            
+            IEnumerable<StudentProfile> students = _context.StudentProfile.Where(s => s.ClassID == null);
+            ViewData["students"] = students;
             return View(@class);
         }
 
-        // POST: Class/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Class @class)
-        {
-            if (id != @class.Id)
-            {
-                return NotFound();
+        public void AddStudent(int? stId, int? classId){
+
+            if (stId == null || classId == null) return;
+
+            StudentProfile student = _context.StudentProfile.Include(s => s.Class).FirstOrDefault(s => s.Id == stId);
+            Class _class = _context.Class.Find(classId);
+
+            if (student != null && _class != null && student.Class == null) {
+                student.ClassID = classId;
+                _context.StudentProfile.Update(student);
+                _context.SaveChanges();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(@class);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ClassExists(@class.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+            // System.Console.WriteLine($"AddStudent: {stId} -> {classId}");
+        }
+
+        [HttpPost]
+        public void RemoveStudent(int? stId, int? classId)
+        {
+            if (stId == null || classId == null) return;
+
+            StudentProfile student = _context.StudentProfile.Include(s => s.Class).FirstOrDefault(s => s.Id == stId);
+            Class _class = _context.Class.Find(classId);
+
+            if (student != null && _class != null && student.ClassID == classId) {
+                student.ClassID = null;
+                student.Class = null;
+                _context.StudentProfile.Update(student);
+                _context.SaveChanges();
             }
-            return View(@class);
+
+            // System.Console.WriteLine($"RemoveStudent: {stId} <- {classId}");
         }
 
         // GET: Class/Delete/5

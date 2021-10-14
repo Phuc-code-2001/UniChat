@@ -1,14 +1,10 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using UniChatApplication.Data;
 
 namespace UniChatApplication
@@ -27,18 +23,23 @@ namespace UniChatApplication
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<UniChatDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("UniChatDatabase")));
+            services
+                .AddDbContext<UniChatDbContext>(options =>
+                    options
+                        .UseSqlServer(Configuration
+                            .GetConnectionString("UniChatDatabase")));
 
             services.AddDistributedMemoryCache();
 
-            services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromSeconds(60 * 30);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
-            });
+            services
+                .AddSession(options =>
+                {
+                    options.IdleTimeout = TimeSpan.FromSeconds(60 * 30);
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.IsEssential = true;
+                });
 
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,6 +52,7 @@ namespace UniChatApplication
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -65,20 +67,21 @@ namespace UniChatApplication
 
             app.UseSession();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "Logout",
-                    pattern: "Login/Logout/");
+            app
+                .UseEndpoints(endpoints =>
+                {
+                    endpoints
+                        .MapControllerRoute(name: "Logout",
+                        pattern: "Login/Logout/");
 
-                endpoints.MapControllerRoute(
-                    name: "Error",
-                    pattern: "Home/Error/");
+                    endpoints
+                        .MapControllerRoute(name: "Error",
+                        pattern: "Home/Error/");
 
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+                    endpoints
+                        .MapControllerRoute(name: "default",
+                        pattern: "{controller=Home}/{action=Index}/{id?}");
+                });
         }
     }
 }

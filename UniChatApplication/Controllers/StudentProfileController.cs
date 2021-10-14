@@ -58,23 +58,24 @@ namespace UniChatApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(string newFullName, string newEmail, bool newGender, string newMajor, string newStudentCode)
+        public ActionResult Create(string fullname, string email, bool newGender, string newMajor, string stuCode)
         {
+            System.Console.WriteLine(fullname);
             string username = "";
-            for(int i = 0; i < newEmail.Length; i++){
-                if (newEmail[i] != '@'){
-                    username += newEmail[i];
+            for(int i = 0; i < email.Length; i++){
+                if (email[i] != '@'){
+                    username += email[i];
                 }
                 else break;
             }
 
             StudentProfile st = new StudentProfile(){
-                        FullName=newFullName,
-                        Email=newEmail,
+                        FullName=fullname,
+                        Email=email,
                         Phone=null,
                         Gender=newGender,
                         Major=newMajor,
-                        StudentCode=newStudentCode,
+                        StudentCode=stuCode,
                         Birthday=DateTime.Now.ToLocalTime(),
                         Avatar=null,
                         ClassID=null,
@@ -122,14 +123,14 @@ namespace UniChatApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int Id, string editFullName, bool editGender, string editMajor, string editStudentCode)
+        public async Task<IActionResult> Edit(int Id, string fullname, bool editGender, string editMajor, string stuCode)
         {
             
             var studentProfile = await _context.StudentProfile.FindAsync(Id);
-            studentProfile.FullName = editFullName;
+            studentProfile.FullName = fullname;
             studentProfile.Gender = editGender;
             studentProfile.Major = editMajor;
-            studentProfile.StudentCode = editStudentCode;
+            studentProfile.StudentCode = stuCode;
             _context.Update(studentProfile);
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));

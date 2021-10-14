@@ -42,7 +42,8 @@
                         <td>@item.Name</td>
                         <td>@item.StudentProfiles.Count</td>
                         <td class="d-flex justify-content-center" style="gap: 1rem;">
-                            <a class="btn btn-primary">Edit</a>
+                            <a asp-controller="Class" asp-action="Edit" asp-route-id="@item.Id" 
+                            class="btn btn-primary" >Edit</a>
                             <a asp-controller="Class" asp-action="Details" asp-route-id="@item.Id"
                             class="btn btn-info">Details</a>
                             <a asp-controller="Class" asp-action="Delete" asp-route-id="@item.Id"

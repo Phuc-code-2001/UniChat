@@ -4,6 +4,8 @@
     ViewData["Title"] = "Index";
 }
 
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+
 <style>
     table {
         font-family: 'Times New Roman', Times, serif;
@@ -26,7 +28,7 @@
     </div>
     <hr>
     <h3 class="text-center">List of Teachers</h3>
-    <table class="table table-bordered text-center">
+    <table class="table table-bordered text-center" id="teacher-table">
         <thead>
             <tr>
                 <th>Fullname</th>
@@ -59,3 +61,21 @@
         <a class="btn btn-sm btn-outline-danger" asp-controller="Admin" asp-action="Index">Back to Admin Page</a>
     </div>
 </div>
+<script>
+
+    $(document).ready(function(){
+
+        $('#teacher-table').DataTable({
+            "language": {
+                "lengthMenu": "_MENU_",
+                "zeroRecords": "No data matching",
+                "info": "_PAGE_/_PAGES_",
+                "infoEmpty": "",
+                "infoFiltered": ""
+            }
+        });
+    })
+
+</script>
+@* Datatable link scripts *@
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
