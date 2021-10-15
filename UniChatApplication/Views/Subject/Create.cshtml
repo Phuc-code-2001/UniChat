@@ -4,45 +4,75 @@
 
 @model Subject
 
-<style>
+<link rel="stylesheet" href="~/css/SubjectManagement/StyleCreate.css">
+<link rel="stylesheet" href="~/css/cssPlus/buttonPlus.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="~/js/FormValidator.js"></script>
 
-    body {
-        font-family: 'Times New Roman', Times, serif;
-        font-size: 1.2rem;
-    }
+<div class="main-control">
+    <form action="" method="POST" class="form" id="form-1">
+        <h1 class="align-center heading">Add New Subject</h1>
+        <hr>
+        <div class="spacer"></div>
 
-    h1 {
-        font-weight: 600;
-    }
+        <!-- name = subCode = id -->
+        <div class="form-group">
+            <label for="subCode" class="form-label" required>Subject Code</label>
+            <input id="subCode" asp-for="SubjectCode" type="text" placeholder="Ex: IOT102" class="form-control">
+            <span class="form-message"></span>
+        </div>
 
-    form {
-        max-width: 800px;
-        margin: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
+        <!-- name = subName = id -->
+        <div class="form-group">
+            <label for="subName" class="form-label" required>Full Name</label>
+            <input id="subName" asp-for="FullName" type="text" placeholder="Ex: Internet Of Thing" class="form-control">
+            <span class="form-message"></span>
+        </div>
 
-    input {
-        padding: .5rem 1rem;
-        border-radius: 5px;
-    }
+        <hr>
 
-</style>
+        <!-- button submit -->
+        <button type="submit" class="form-submit button-2">
+            <i class="fa fa-check"></i>
+            <span>Add</span>
+        </button>
+        <hr>
+        <!-- button back to menu -->
+        <a asp-action="Index" id="btn-cancel" class="button-3 text-decoration-none">
+            <i class="fa fa-times"></i>
+            <span>Back to List</span>
+        </a>
 
-<div class="container">
-
-    <h1 class="text-center">Subject Management</h1>
-    <h5>Add New Subject</h5>
-    <hr>
-    <form asp-action="Create">
-        <input type="text" asp-for="SubjectCode" placeholder="SubjectCode">
-        <span class="text-danger" asp-validation-for="SubjectCode"></span>
-        <input type="text" asp-for="FullName" placeholder="FullName">
-        <span class="text-danger" asp-validation-for="FullName"></span>
-        <button class="btn btn-success" type="submit">Add</button>
+        <hr>
     </form>
-    <div class="pt-5">
-        <a class="btn btn-danger" asp-controller="Subject" asp-action="Index">Back to Index</a>
-    </div>
+
 </div>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Mong muốn của chúng ta
+        Validator({
+            form: '#form-1',
+            formGroupSelector: '.form-group',
+            errorSelector: '.form-message',
+            rules: [
+
+                Validator.isRequired('#subCode', 'Please enter code of subject!'),
+                Validator.minLength('#subCode', 6),
+                Validator.isSubCode('#subCode',),
+
+                Validator.isRequired('#subName', 'Please enter name of subject!'),
+                Validator.maxLength('#subName', 50),
+                Validator.isName('#subName', "Please enter only letters"),
+
+            ],
+            onSubmit: function (data) {
+                // Call API
+                console.log(data);
+            }
+        });
+
+    });
+
+</script>

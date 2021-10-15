@@ -17,5 +17,8 @@ namespace UniChatApplication.Models
         [InverseProperty("Class")]
         public List<StudentProfile> StudentProfiles { get; set; }
 
+        [InverseProperty("Class")]
+        public List<RoomChat> RoomChats { get; set;}
+
     }
 }

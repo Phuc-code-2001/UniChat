@@ -104,7 +104,7 @@ function Validator(options) {
 
             return values;
           },
-          {});
+            {});
           options.onSubmit(formValues);
         }
         // Trường hợp submit với hành vi mặc định
@@ -165,7 +165,6 @@ Validator.isEmail = function (selector, message) {
   return {
     selector: selector,
     test: function (value) {
-      // var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
       var regex = /^\w+([\.-]?\w+)*@*(fpt\.edu\.vn)+$/;
 
       return regex.test(value)
@@ -185,22 +184,21 @@ Validator.isStuCode = function (selector, message) {
       return regex.test(value)
         ? undefined
         : message ||
-            "Please only enter in the standard form: 2 letters + 6 digits";
+        "Please only enter in the standard form: 2 letters + 6 digits";
     },
   };
 };
 
-//check teacher code  gồm 8 chữ số và bắt đầu bằng số 0
-Validator.isStuCode = function (selector, message) {
+//check teacher code  gồm 8 chữ số
+Validator.isTeacherCode = function (selector, message) {
   return {
     selector: selector,
     test: function (value) {
-      var regex = /^[a-zA-Z]{2}(\d{6})$/;
+      var regex = /^(\d{8})$/;
 
       return regex.test(value)
         ? undefined
-        : message ||
-            "Please only enter in the standard form: 2 letters + 6 digits";
+        : message || "Please enter only 8 digits!";
     },
   };
 };
@@ -218,7 +216,36 @@ Validator.isName = function (selector, message) {
     },
   };
 };
-//check Student code có 8 ký tự
+
+//Class có 2 kí tự đầu là chữ cái và 4 kí tự sau là số 0-9
+Validator.isNameClass = function (selector, message) {
+  return {
+    selector: selector,
+    test: function (value) {
+      var regex = /^[a-zA-Z]{2}[0-9]{4}$/;
+
+      return regex.test(value)
+        ? undefined
+        : message || "Please only enter in the standard form: 2 letters + 4 digits";
+    },
+  };
+};
+
+//Subject code có 3 kí tự đầu là chữ cái và 3 kí tự sau là số 0-9
+Validator.isSubCode = function (selector, message) {
+  return {
+    selector: selector,
+    test: function (value) {
+      var regex = /^[a-zA-Z]{3}[0-9]{3}$/;
+
+      return regex.test(value)
+        ? undefined
+        : message || "Please only enter in the standard form: 3 letters + 3 digits";
+    },
+  };
+};
+
+//check input có đúng số lượng kí tự theo tham số truyền vào
 Validator.minLength = function (selector, min, message) {
   return {
     selector: selector,
@@ -229,6 +256,8 @@ Validator.minLength = function (selector, min, message) {
     },
   };
 };
+
+//giới hạn số kí tự cho input
 Validator.maxLength = function (selector, max, message) {
   return {
     selector: selector,
@@ -240,13 +269,14 @@ Validator.maxLength = function (selector, max, message) {
   };
 };
 
+//confirm lại giá trị nhập vào
 Validator.isConfirmed = function (selector, getConfirmValue, message) {
   return {
     selector: selector,
     test: function (value) {
       return value === getConfirmValue()
         ? undefined
-        : message || "Input invalid!";
+        : message || "Giá trị nhập vào không chính xác";
     },
   };
 };

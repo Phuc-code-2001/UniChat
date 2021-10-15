@@ -1,13 +1,8 @@
-﻿* {
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
     font-family: monaco, Consolas, Lucida Console, monospace;
-}
-
-html {
-    color: #333;
-    font-size: 100%;
 }
 
 select {
