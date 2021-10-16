@@ -3,105 +3,78 @@
 @{
     ViewData["Title"] = "Delete";
 }
-<style>
-    body {
-        font-family: 'Times New Roman', Times, serif;
-        font-size: 1.2rem;
-    }
 
-    table {
-        max-width: 800px;
-    }
+<link rel="stylesheet" href="~/css/StudentManagement/StyleDelete.css">
+<link rel="stylesheet" href="~/css/cssPlus/buttonPlus.css">
 
-    h1 {
-        font-weight: 600;
-    }
-
-    th,
-    td {
-        width: 50%;
-    }
-
-    .control {
-        display: flex;
-        gap: 1rem;
-    }
-
-    img {
-        width: 100px;
-        height: 100px;
-        object-fit: cover;
-        margin: auto;
-    }
-</style>
 <div class="container">
     <h1 class="text-center">Student Management</h1>
     <hr>
     <div class="p-2 text-danger">
         <h4><i>Do you want to complete delete?</i></h4>
     </div>
-    <table class="table table-bordered table-sm">
-        <tbody>
-            <tr>
-                <th>Avatar</th>
-                <td>
-                    <img src="@Model.Avatar" alt="Avatar">
-                </td>
-            </tr>
-            <tr>
-                <th>Username</th>
-                <td>@Model.Account.Username</td>
-            </tr>
-            <tr>
-                <th>FullName</th>
-                <td>@Model.FullName</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>@Model.Email</td>
-            </tr>
-            <tr>
-                <th>Birthday</th>
-                <td>@Model.Birthday</td>
-            </tr>
-            <tr>
-                <th>Phone</th>
-                <td>@Model.Phone</td>
-            </tr>
-            <tr>
-                <th>Gender</th>
-                <td>@Model.GenderText</td>
-            </tr>
-            <tr>
-                <th>Major</th>
-                <td>@Model.Major</td>
-            </tr>
-            <tr>
-                <th>StudentCode</th>
-                <td>@Model.StudentCode</td>
-            </tr>
-            <tr>
-                <th>Class</th>
-                <td>
-                    @{
-                        if (Model.getClassName() != null)
-                        {
-                            <span>@Model.getClassName()</span>
+
+    <div class="d-flex" style="gap: 1rem;">
+        <div class="avatar-box">
+            <img src="~/images/4521373.jpg" alt="">
+        </div>
+        <table class="table table-bordered table-sm">
+            <tbody>
+                <tr>
+                    <th>Username</th>
+                    <td>@Model.Account.Username</td>
+                </tr>
+                <tr>
+                    <th>FullName</th>
+                    <td>@Model.FullName</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>@Model.Email</td>
+                </tr>
+                <tr>
+                    <th>Birthday</th>
+                    <td>@Model.Birthday</td>
+                </tr>
+                <tr>
+                    <th>Phone</th>
+                    <td>@Model.Phone</td>
+                </tr>
+                <tr>
+                    <th>Gender</th>
+                    <td>@Model.GenderText</td>
+                </tr>
+                <tr>
+                    <th>Major</th>
+                    <td>@Model.Major</td>
+                </tr>
+                <tr>
+                    <th>StudentCode</th>
+                    <td>@Model.StudentCode</td>
+                </tr>
+                <tr>
+                    <th>Class</th>
+                    <td>
+                        @{
+                            if (Model.getClassName() != null)
+                            {
+                                <span>@Model.getClassName()</span>
+                            }
+                            else
+                            {
+                                <span>Unset</span>
+                            }
                         }
-                        else
-                        {
-                            <span>Unset</span>
-                        }
-                    }
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <form asp-action="Delete" class="d-flex" style="gap: 1rem;">
         <input type="hidden" asp-for="Id" />
 
-        <a class="btn btn-danger" asp-action="Index">Back to List</a>
-        <input type="submit" value="Delete" class="btn btn-outline-danger" />
+        <a class="button-2 text-white text-decoration-none" asp-action="Index">Back to List</a>
+        <input type="submit" value="Delete" class="button-3 text-white text-decoration-none" />
     </form>
 </div>

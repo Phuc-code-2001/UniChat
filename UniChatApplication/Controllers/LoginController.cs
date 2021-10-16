@@ -65,9 +65,7 @@ namespace UniChatApplication.Controllers
                             _context.SaveChanges();
                             DeleteCookie();
                         }
-
                     }
-
                 }
 
             }
