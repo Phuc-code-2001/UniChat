@@ -3,83 +3,68 @@
 @{
     ViewData["Title"] = "Details";
 }
+<link rel="stylesheet" href="~/css/StyleAdminProfile.css">
+<link rel="stylesheet" href="~/css/cssPlus/buttonPlus.css">
 
-<style>
-    body {
-        font-family: 'Times New Roman', Times, serif;
-        font-size: 1.2rem;
-    }
+<div class="background">
 
-    table {
-        max-width: 800px;
-    }
+    <div class="container">
+        <br>
 
-    h1 {
-        font-weight: 600;
-    }
+        <div class="box-header">
+            <h1 class="text-center">
+                Admin Profile
+            </h1>
+        </div>
 
-    th,
-    td {
-        width: 50%;
-    }
+        <br>
 
-    .control {
-        display: flex;
-        gap: 1rem;
-    }
+        <div class="row">
+            @* Avatar and username *@
+            <div class="col-sm-4">
+                <div class="box d-flex flex-column align-items-center text-center">
 
-    img {
-        width: 100px;
-        height: 100px;
-        object-fit: cover;
-        margin: auto;
-    }
-</style>
+                    <img src="@Model.Avatar" alt="Avatar" class="rounded-circle">
+                    <td>@Model.Account.Username</td>
+                </div>
+            </div>
 
-<div class="container">
+            @* Profile *@
+            <div class="col-sm-8 ">
+                <div class="box d-flex align-items-center">
+                    <div class="w-100">
 
-    <h1 class="text-center">Admin Profile</h1>
-    <hr>
-    <table class="table table-bordered mx-auto mt-3">
-        <tbody>
-            <tr>
-                <th>Avatar</th>
-                <td>
-                    <img src="@Model.Avatar" alt="Avatar">
-                </td>
-            </tr>
-            <tr>
-                <th>Username</th>
-                <td>@Model.Account.Username</td>
-            </tr>
-            <tr>
-                <th>FullName</th>
-                <td>@Model.FullName</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>@Model.Email</td>
-            </tr>
-            <tr>
-                <th>Phone</th>
-                <td>@Model.Phone</td>
-            </tr>
-            <tr>
-                <th>Gender</th>
-                <td>@Model.GenderText</td>
-            </tr>
-        </tbody>
+                        <div class="d-flex">
+                            <h6 class="col-sm-4">Full Name: </h6>
+                            <span class="col-sm-6 ">@Model.FullName</span>
+                        </div>
 
-        <tfoot class="text-center">
-            <tr>
-                <td>
-                    <a asp-action="Index" class="btn btn-outline-primary">Back To Admin Manager</a>
-                </td>
-                <td>
-                    <a class="btn btn-success ml-auto">Đổi mật khẩu</a>
-                </td>
-            </tr>
-        </tfoot>
+                        <hr>
+                        <div class="d-flex">
+                            <h6 class="col-sm-4">Email: </h6>
+                            <span class="col-sm-6 ">@Model.Email</span>
+                        </div>
 
-    </table>
+                        <hr>
+                        <div class="d-flex">
+                            <h6 class="col-sm-4">Phone: </h6>
+                            <span class="col-sm-6 ">@Model.Phone</span>
+                        </div>
+
+                        <hr>
+                        <div class="d-flex">
+                            <h6 class="col-sm-4">Gender: </h6>
+                            <span class="col-sm-6 ">@Model.GenderText</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex">
+                            <a class="button-1 text-decoration-none text-white">Đổi mật khẩu</a>
+                            <a asp-action="Index" class="button-2 text-decoration-none text-white ml-auto">Admin
+                                Page</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

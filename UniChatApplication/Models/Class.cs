@@ -11,11 +11,14 @@ namespace UniChatApplication.Models
         [Key]
         public int Id { get; set; }
         
-        
+    
         public string Name { get; set; }
 
         [InverseProperty("Class")]
         public List<StudentProfile> StudentProfiles { get; set; }
+
+        [InverseProperty("Class")]
+        public List<RoomChat> RoomChats { get; set;}
 
     }
 }

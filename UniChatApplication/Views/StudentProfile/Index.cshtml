@@ -4,61 +4,94 @@
     ViewData["Title"] = "Index";
 }
 
-<style>
-    body {
-        font-family: 'Times New Roman', Times, serif;
-    }
+@* Link CSS *@
+<link rel="stylesheet" href="~/css/StudentManagement/StyleIndex.css">
+<link rel="stylesheet" href="~/css/cssPlus/buttonPlus.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
 
-    table thead {
-        background-color: #22f;
-        color: #fff;
-    }
+<div class="background">
+    <div class="container">
+        <br>
+        <div class="box">
+            <h1 class="text-center">Student Management</h1>
+            <hr>
+            <div>
+                <div class="row text-center">
+                    <div class="col-sm-6">
+                        <a class="button-2 w-50 text-decoration-none text-white" asp-action="Create">Create</a>
+                    </div>
+                    <div class="col-sm-6">
+                        <a class="button-3 w-50 text-decoration-none text-white" asp-controller="Admin"
+                            asp-action="Index">Back to Admin</a>
+                    </div>
+                </div>
 
-    h1 {
-        font-weight: 600;
-    }
-</style>
+            </div>
+            <hr>
 
-<div class="container">
-    <h1 class="text-center">Student Management</h1>
-    <div class="create py-2">
-        <a class="btn btn-outline-primary" asp-action="Create">Create</a>
+            <h2 class="text-center">List Of Students</h2>
+            <table class="table table-bordered text-center" id="student-table">
+                <thead>
+                    <tr>
+                        <th>Fullname</th>
+                        <th>Email</th>
+                        <th>Username</th>
+                        <th>Gender</th>
+                        <th>Major</th>
+                        <th>StudentCode</th>
+                        <th>Configure</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.FullName</td>
+                            <td>@item.Email</td>
+                            <td>@item.Account.Username</td>
+                            <td>@item.GenderText</td>
+                            <td>@item.Major</td>
+                            <td>@item.StudentCode</td>
+                            <td class="d-flex" style="gap: 1rem;">
+                                <a class="button-2 text-decoration-none text-white" asp-action="Edit"
+                                asp-route-id="@item.Id">
+                                    <ion-icon name="create-outline"></ion-icon>
+                                </a>
+                                <a class="button-1 text-decoration-none text-white" asp-action="Details"
+                                asp-route-id="@item.Id">
+                                    <ion-icon name="information-circle-outline"></ion-icon>
+                                </a>
+                                <a class="button-3 text-decoration-none text-white" asp-action="Delete"
+                                asp-route-id="@item.Id">
+                                    <ion-icon name="trash-outline"></ion-icon>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
-    <hr>
-    <h3 class="text-center">List of Students</h3>
-    <table class="table table-bordered text-center">
-        <thead>
-            <tr>
-                <th>Fullname</th>
-                <th>Email</th>
-                <th>Username</th>
-                <th>Gender</th>
-                <th>Major</th>
-                <th>StudentCode</th>
-                <th>Configure</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.FullName</td>
-                    <td>@item.Email</td>
-                    <td>@item.Account.Username</td>
-                    <td>@item.GenderText</td>
-                    <td>@item.Major</td>
-                    <td>@item.StudentCode</td>
-                    <td class="d-flex" style="gap: 1rem;">
-                        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                        <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <div class="d-flex">
-        <a class="btn btn-sm btn-outline-danger" asp-controller="Admin" asp-action="Index">Back to Admin Page</a>
-    </div>
-
 </div>
+
+<script>
+
+    $(document).ready(function(){
+
+        $('#student-table').DataTable({
+            "language": {
+                "lengthMenu": "_MENU_",
+                "zeroRecords": "No data matching",
+                "info": "_PAGE_/_PAGES_",
+                "infoEmpty": "",
+                "infoFiltered": ""
+            }
+        });
+    })
+
+</script>
+@* Datatable link scripts *@
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+@* ionicon link scripts *@
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>

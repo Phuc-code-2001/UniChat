@@ -57,22 +57,22 @@ namespace UniChatApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(string newFullName, string newEmail, bool newGender, string newTeacherCode)
+        public ActionResult Create(string fullname, string email, bool newGender, string teacherCode)
         {
             string username = "";
-            for(int i = 0; i < newEmail.Length; i++){
-                if (newEmail[i] != '@'){
-                    username += newEmail[i];
+            for(int i = 0; i < email.Length; i++){
+                if (email[i] != '@'){
+                    username += email[i];
                 }
                 else break;
             }
 
             TeacherProfile st = new TeacherProfile(){
-                        FullName=newFullName,
-                        Email=newEmail,
+                        FullName=fullname,
+                        Email=email,
                         Phone=null,
                         Gender=newGender,
-                        TeacherCode=newTeacherCode,
+                        TeacherCode=teacherCode,
                         Birthday=DateTime.Now.ToLocalTime(),
                         Avatar=null,
                     };
@@ -114,18 +114,16 @@ namespace UniChatApplication.Controllers
             return View(teacherProfile);
         }
 
-        // POST: TeacherProfile/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int Id, string editFullName, bool editGender, string editMajor, string editTeacherCode)
+        public async Task<IActionResult> Edit(int Id, string fullname, bool editGender, string teacherCode)
         {
             
             var teacherProfile = await _context.TeacherProfile.FindAsync(Id);
-            teacherProfile.FullName = editFullName;
+            teacherProfile.FullName = fullname;
             teacherProfile.Gender = editGender;
-            teacherProfile.TeacherCode = editTeacherCode;
+            teacherProfile.TeacherCode = teacherCode;
             _context.Update(teacherProfile);
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));

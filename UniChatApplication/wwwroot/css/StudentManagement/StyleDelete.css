@@ -1,0 +1,41 @@
+* {
+    font-family: monaco,Consolas,Lucida Console,monospace;;
+}
+
+body {
+    background-color: #e0f7fa;
+}
+
+.container {
+    margin-top: 50px;
+    padding: 2rem;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+.avatar-box {
+    max-width: 400px;
+    max-height: 400px;
+    padding-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-box img {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border: 2px solid blue;
+    border-radius: 100rem;
+}
+
+.table-bordered {
+    border: 2px solid blue;
+    border-radius: 10px;
+}
+
+h1 {
+    color: var(--primary);
+}

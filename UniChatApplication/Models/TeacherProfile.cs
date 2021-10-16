@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -40,6 +41,9 @@ namespace UniChatApplication.Models
                 return "Unknown";
             }
         }
+
+        [InverseProperty("TeacherProfile")]
+        public List<RoomChat> RoomChats { get; set; }
 
     }
 }

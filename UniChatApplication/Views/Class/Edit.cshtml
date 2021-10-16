@@ -4,31 +4,185 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
 
-<h4>Class</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<style>
+    body {
+        font-family: 'Times New Roman', Times, serif;
+    }
+
+    h1 {
+        font-weight: 600;
+    }
+
+    .students {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .students>* {
+        flex: 1;
+    }
+
+    .student-list,
+    .student-class {
+        padding: 0 1rem;
+        text-align: center;
+    }
+</style>
+
+<div class="container-fluid">
+
+    <h1 class="text-center">Class Management</h1>
+    <div class="d-flex flex-column" style="gap: .5rem;">
+        <div>
+            <a asp-controller="Class" asp-action="Index" class="btn btn-outline-danger">Back</a>
+        </div>
+        <h4 class="text-primary">@Model.Name</h4>
+    </div>
+    <hr>
+    <div class="students">
+        <div class="student-list">
+            <h4 class="text-center text-success">List of students of UniChat System</h4>
+            <table class="table table-bordered" id="student-list">
+                <thead>
+                    <tr>
+                        <th>RollNo</th>
+                        <th>Avatar</th>
+                        <th>FullName</th>
+                        <th>Major</th>
+                        <th>Operation</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-list">
+
+                    @foreach (StudentProfile item in ViewBag.students)
+                    {
+                        <tr id="@item.Id">
+                            <td>@item.StudentCode</td>
+                            <td>
+
+                            </td>
+                            <td>@item.FullName</td>
+                            <td>@item.Major</td>
+                            <td>
+                                <span command="Add" obj="@item.Id" class="btn btn-primary btn-sm">Add</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="student-class">
+            <h4 class="text-center text-info">List of students of @Model.Name</h4>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>RollNo</th>
+                        <th>Avatar</th>
+                        <th>FullName</th>
+                        <th>Major</th>
+                        <th>Operation</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-class">
+                    @foreach (StudentProfile item in Model.StudentProfiles)
+                    {
+                        <tr>
+                            <td>@item.StudentCode</td>
+                            <td>
+
+                            </td>
+                            <td>@item.FullName</td>
+                            <td>@item.Major</td>
+                            <td>
+                                <span command="Remove" obj="@item.Id" class="btn btn-danger btn-sm">Remove</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<script>
+
+    $(document).ready(function () {
+
+        $('#student-list').DataTable({
+            "language": {
+                "lengthMenu": "_MENU_",
+                "zeroRecords": "No data matching",
+                "info": "_PAGE_/_PAGES_",
+                "infoEmpty": "",
+                "infoFiltered": ""
+            }
+        });
+
+
+
+        $("td span").click(function () {
+
+            let span = $(this);
+            let studentId = $(this).attr("obj");
+            let row = $(this).parents("tr");
+
+            if (span.attr("command") == "Add") {
+
+                $.ajax({
+                    url: '/Class/AddStudent/',
+                    type: 'POST',
+                    data: { stId: studentId, classId: @Model.Id },
+                    success: function (data, textStatus, xhr) {
+
+                        span.attr("command", "Remove");
+                        span.attr("class", "btn btn-danger btn-sm");
+                        span.text("Remove");
+                        row.appendTo($("#tbody-class"));
+
+                        console.log("Success!");
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) {
+
+                        console.log("Failed!");
+                    }
+                });
+
+            }
+            else if (span.attr("command") == "Remove") {
+
+                $.ajax({
+                    url: '/Class/RemoveStudent/',
+                    type: 'POST',
+                    data: { stId: studentId, classId: @Model.Id },
+                    success: function (data, textStatus, xhr) {
+
+                        span.attr("command", "Add");
+                        span.attr("class", "btn btn-primary btn-sm");
+                        span.text("Add");
+                        row.appendTo($("#tbody-list"));
+                        $(".dataTables_empty").remove();
+
+                        console.log("Success!");
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) {
+
+                        console.log("Failed!");
+                    }
+                });
+            }
+
+
+
+
+        });
+
+    });
+
+</script>
 
 @section Scripts {
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

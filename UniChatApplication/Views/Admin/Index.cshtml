@@ -1,5 +1,6 @@
 ﻿@model UniChatApplication.Models.AdminProfile
-<link href="~/css/StyleAdminIndex.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/css/StyleAdminIndex.css">
+<link rel="stylesheet" href="~/css/cssPlus/buttonPlus.css">
 
 @*Component 1*@
 <nav class="navbar navbar bg-light justify-content-between">
@@ -8,11 +9,11 @@
     </span>
     <div class="d-flex" style="gap: 1rem;">
         <a class="text-decoration-none text-white button-1" asp-controller="Admin" asp-action="Details" asp-route-id="@Model.Id" >Profile</a>
-        <a class="text-decoration-none text-white button-2" asp-area="" asp-controller="Login" asp-action="Logout">Log out</a>
+        <a class="text-decoration-none text-white button-3" asp-area="" asp-controller="Login" asp-action="Logout">Log out</a>
     </div>
 </nav>
 
-<br />
+<br/>
 
 <div class="row">
     @*Component 2*@
@@ -21,7 +22,7 @@
             <div class="card-body">
                 <h5 class="card-title">Student Management</h5>
                 <p class="card-text"> Allow admin to View, Search, Create, Edit, Delete student for unichat system. </p>
-                <a class="text-decoration-none text-white button-1" asp-area="" asp-controller="StudentProfile" asp-action="Index">Go</a>
+                <a class="text-decoration-none text-white button-2" asp-area="" asp-controller="StudentProfile" asp-action="Index">Go</a>
             </div>
         </div>
     </div>
@@ -31,7 +32,7 @@
             <div class="card-body">
                 <h5 class="card-title">Teacher Management</h5>
                 <p class="card-text"> Allow admin to View, Search, Create, Edit, Delete teacher for unichat system.</p>
-                <a class="text-decoration-none text-white button-1" asp-area="" asp-controller="TeacherProfile" asp-action="Index">Go</a>
+                <a class="text-decoration-none text-white button-2" asp-area="" asp-controller="TeacherProfile" asp-action="Index">Go</a>
             </div>
         </div>
     </div>
@@ -41,7 +42,7 @@
             <div class="card-body">
                 <h5 class="card-title">Class Management</h5>
                 <p class="card-text"> Allow admin to manage classes. </p>
-                <a class="text-decoration-none text-white button-1" asp-area="" asp-controller="Class" asp-action="Index">Go</a>
+                <a class="text-decoration-none text-white button-2" asp-area="" asp-controller="Class" asp-action="Index">Go</a>
             </div>
         </div>
     </div>
@@ -51,7 +52,7 @@
             <div class="card-body">
                 <h5 class="card-title">Subject Management</h5>
                 <p class="card-text">Allow admin to manage subjects.</p>
-                <a class="text-decoration-none text-white button-1" asp-controller="Subject" asp-action="Index">Go</a>
+                <a class="text-decoration-none text-white button-2" asp-controller="Subject" asp-action="Index">Go</a>
             </div>
         </div>
     </div>
