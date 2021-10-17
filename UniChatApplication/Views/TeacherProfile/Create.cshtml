@@ -1,7 +1,7 @@
 ﻿@model UniChatApplication.Models.TeacherProfile
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Teacher - Create";
 }
 
 <link rel="stylesheet" href="~/css/cssPlus/buttonPlus.css">
@@ -15,32 +15,32 @@
         <hr>
 
         <div class="spacer"></div>
-
+        <p class="text-danger">@ViewBag.Error</p>
         <!-- name = id = fullname -->
         <div class="form-group">
             <label for="fullname" class="form-label" required>Full Name</label>
-            <input id="fullname" name="fullname" type="text" placeholder="Ex: Nguyễn Khánh Duy" class="form-control">
-            <span class="form-message"></span>
+            <input type="text" id="fullname" asp-for="FullName" placeholder="Ex: Nguyễn Khánh Duy" class="form-control">
+            <span class="form-message" asp-validation-for="FullName"></span>
         </div>
 
         <!-- name = id = email -->
         <div class="form-group">
             <label for="email" class="form-label">Email</label>
-            <input id="email" name="email" type="text" placeholder="Ex: email@fpt.edu.vn" class="form-control">
-            <span class="form-message"></span>
+            <input type="email" id="email" asp-for="Email" placeholder="Ex: email@fpt.edu.vn" class="form-control">
+            <span class="form-message" asp-validation-for="Email"></span>
         </div>
 
         <!-- name = id = teacherCode -->
         <div class="form-group">
             <label for="teacherCode" class="form-label">Teacher Code</label>
-            <input id="teacherCode" name="teacherCode" type="text" placeholder="Ex: 00000519" class="form-control">
-            <span class="form-message"></span>
+            <input type="text" id="teacherCode" asp-for="TeacherCode" placeholder="Ex: 00000519" class="form-control">
+            <span class="form-message" asp-validation-for="TeacherCode"></span>
         </div>
 
         <!-- name = newGender -->
         <div class="form-group">
             <label class="form-label">Gender</label>
-            <select name="newGender">
+            <select asp-for="Gender">
                 <option value="true">Male</option>
                 <option value="false">Female</option>
             </select>

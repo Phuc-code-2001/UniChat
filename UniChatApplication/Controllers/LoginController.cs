@@ -22,8 +22,10 @@ namespace UniChatApplication.Controllers
             _context = context;
         }
 
+        // Mapping to Login View
         public async Task<IActionResult> Index()
         {
+            // Use session to detect login. Check Role
             string username = HttpContext.Session.GetString("username");
             if (username != null){
                 Account account = await _context.Account.FirstOrDefaultAsync(a => a.Username == username);
@@ -34,12 +36,14 @@ namespace UniChatApplication.Controllers
                 }
                 if (account.RoleName == "Teacher"){
                     
-                    return Redirect("/Teacher/");
+                    HttpContext.Session.SetString("Role", "Teacher");
+                    return Redirect("/Clients/");
                 }
 
                 if (account.RoleName == "Student"){
-
-                    return Redirect("/Student/");
+                    
+                     HttpContext.Session.SetString("Role", "Student");
+                    return Redirect("/Clients/");
                 }
                 
             }
@@ -74,6 +78,7 @@ namespace UniChatApplication.Controllers
             return View();
         }
 
+        // Get data from view to login
         [HttpPost]
         public IActionResult Index(string username, string password, bool remember)
         {
@@ -90,7 +95,7 @@ namespace UniChatApplication.Controllers
                 if (matchedAccounts.Count > 0)
                 {
                     if (remember) {
-
+                        // Set login cookie
                         CookieOptions options = new CookieOptions();
                         options.Expires = DateTime.Now.AddMinutes(30);
                         string key;
@@ -114,6 +119,8 @@ namespace UniChatApplication.Controllers
                     else {
                         DeleteCookie();
                     }
+
+                    // Set login session
                     HttpContext.Session.SetString("username", LoginInfo.Username);
                     return RedirectToAction("Index");
                 }
@@ -135,6 +142,7 @@ namespace UniChatApplication.Controllers
 
         }
 
+        // Logout function
         public IActionResult Logout()
         {
             HttpContext.Session.Remove("username");
@@ -143,6 +151,7 @@ namespace UniChatApplication.Controllers
             return Redirect("/Home/");
         }
 
+        // Use to delete login cookie
         public void DeleteCookie(){
             string cookieValueFromReq = Request.Cookies["login"];
             List<LoginCookie> cookies = _context.LoginCookies.Where(c => c.Key == cookieValueFromReq).ToList();

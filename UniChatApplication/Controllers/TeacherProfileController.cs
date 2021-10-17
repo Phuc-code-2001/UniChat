@@ -7,6 +7,7 @@ using UniChatApplication.Data;
 using UniChatApplication.Models;
 using UniChatApplication.Daos;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 
 namespace UniChatApplication.Controllers
 {
@@ -19,152 +20,113 @@ namespace UniChatApplication.Controllers
             _context = context;
         }
 
-        // GET: TeacherProfile
-        public async Task<IActionResult> Index()
+        // Mapping to Index view of Teacher Management
+        public IActionResult Index()
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
-            var uniChatDbContext = _context.TeacherProfile.Include(s => s.Account);
-            return View(await uniChatDbContext.ToListAsync());
+
+            IEnumerable<TeacherProfile> teachers = ProfileDAOs.getAllTeachers(_context).ToList();
+            return View(teachers);
         }
 
-        // GET: TeacherProfile/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // Mapping to detail page of Teacher Management
+        public IActionResult Details(int? id)
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
-            
-            if (id == null)
-            {
-                return Redirect("/Home/");
-            }
+            if (id == null) return Redirect("/Home/");
 
-            var teacherProfile = await _context.TeacherProfile
-                .Include(s => s.Account)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (teacherProfile == null)
-            {
-                return Redirect("/Home/");
-            }
+            TeacherProfile teacher = ProfileDAOs.getAllTeachers(_context).FirstOrDefault(m => m.Id == id);
+            if (teacher == null) return Redirect("/Home/");
 
-            return View(teacherProfile);
+            return View(teacher);
         }
 
-        // GET: TeacherProfile/Create
+        // Mapping to Create View of Student Management
         public IActionResult Create()
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
-            TeacherProfile st = new TeacherProfile();
-            return View(st);
+            return View();
         }
 
+        // Use to get data from create view to create teacher account and profile.
         [HttpPost]
-        public ActionResult Create(string fullname, string email, bool newGender, string teacherCode)
+        public ActionResult Create(TeacherProfile teacher)
         {
-            string username = "";
-            for(int i = 0; i < email.Length; i++){
-                if (email[i] != '@'){
-                    username += email[i];
-                }
-                else break;
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
+
+            string username = AccountDAOs.getUsenameFromEmail(teacher.Email);
+            if (AccountDAOs.AccountIsExisted(_context, username)){
+                ViewData["Error"] = $"Account {username} existed...";
+                return View(teacher);
             }
+            teacher.Birthday = DateTime.Now.Date;
 
-            TeacherProfile st = new TeacherProfile(){
-                        FullName=fullname,
-                        Email=email,
-                        Phone=null,
-                        Gender=newGender,
-                        TeacherCode=teacherCode,
-                        Birthday=DateTime.Now.ToLocalTime(),
-                        Avatar=null,
-                    };
-
-            try {
-                if (_context.Account.Any(a => a.Username == username)){
-                    ViewData["Error"] = $"Account {username} existed...";
-                    
-                    return View(st);
-                }
-            }
-            catch(Exception){
-
-            }
-
-            Account newAccount = AccountDAOs.CreateAccount(username, AccountDAOs.DefaultPassword, 2);
-            st.Account = newAccount;
-            _context.Add(st);
+            teacher.Account = AccountDAOs.CreateAccount(username, AccountDAOs.DefaultPassword, 1);
+            _context.Add(teacher);
             _context.SaveChanges();
-            
             return RedirectToAction("Index");
         }
 
-        // GET: TeacherProfile/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // Mapping to Edit View of Teacher Management
+        public IActionResult Edit(int? id)
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
-            if (id == null)
-            {
-                return Redirect("/Home/");
-            }
+            if (id == null) return Redirect("/Home/");
 
-            var teacherProfile = await _context.TeacherProfile.FindAsync(id);
-            if (teacherProfile == null)
-            {
-                return Redirect("/Home/");
-            }
+            TeacherProfile teacherProfile = ProfileDAOs.getAllTeachers(_context).FirstOrDefault(p => p.Id == id);
+            if (teacherProfile == null) return Redirect("/Home/");
 
             return View(teacherProfile);
         }
 
-        
+        // Use to get data from edit view to edit information for a teacher
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int Id, string fullname, bool editGender, string teacherCode)
+        public IActionResult Edit(int? id, TeacherProfile teacher)
         {
             
-            var teacherProfile = await _context.TeacherProfile.FindAsync(Id);
-            teacherProfile.FullName = fullname;
-            teacherProfile.Gender = editGender;
-            teacherProfile.TeacherCode = teacherCode;
-            _context.Update(teacherProfile);
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
+            if (id == null) return Redirect("/Home/");
+
+            TeacherProfile profile = ProfileDAOs.getAllTeachers(_context).FirstOrDefault(p => p.Id == id);
+            if (profile == null) return Redirect("/Home/");
+            profile.FullName = teacher.FullName;
+            profile.TeacherCode = teacher.TeacherCode;
+            profile.Gender = teacher.Gender;
+
+            _context.Update(profile);
             _context.SaveChanges();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
             
         }
 
-        // GET: TeacherProfile/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // Mapping to delete view, show information to confirm delete
+        public IActionResult Delete(int? id)
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
-            if (id == null)
-            {
-                return Redirect("/Home/");
-            }
+            if (id == null) return Redirect("/Home/");
 
-            var teacherProfile = await _context.TeacherProfile
-                .Include(s => s.Account)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (teacherProfile == null)
-            {
-                return Redirect("/Home/");
-            }
+            TeacherProfile teacherProfile = ProfileDAOs.getAllTeachers(_context).FirstOrDefault(p => p.Id == id);
+            if (teacherProfile == null) return Redirect("/Home/");
 
             return View(teacherProfile);
         }
 
-        // POST: TeacherProfile/Delete/5
+        // Confirm delete student
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int? id)
         {
-            var teacherProfile = _context.TeacherProfile.Include(p => p.Account).FirstOrDefault(p => p.Id == id);
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
+            if (id == null) return Redirect("/Home/");
+
+            TeacherProfile teacherProfile = ProfileDAOs.getAllTeachers(_context).FirstOrDefault(p => p.Id == id);
             _context.Account.Remove(teacherProfile.Account);
             _context.TeacherProfile.Remove(teacherProfile);
             _context.SaveChanges();
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction("Index");
         }
 
-        private bool TeacherProfileExists(int id)
-        {
-            return _context.TeacherProfile.Any(e => e.Id == id);
-        }
     }
 }

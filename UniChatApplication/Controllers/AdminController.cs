@@ -23,17 +23,14 @@ namespace UniChatApplication.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        // Mapping Index
+        public IActionResult Index()
         {
-            ISession session = HttpContext.Session;
-            string username =  session.GetString("username");
 
-            if(username != null && username != ""){
-                Account account = await _context.Account.FirstOrDefaultAsync(a => a.Username == username);
-                
-                if (account.RoleName == "Admin")
-                {
-                    AdminProfile profile = _context.AdminProfile.FirstOrDefault(p => (p.AccountID == account.Id));
+            Account loginAccount = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
+            if(loginAccount != null){
+                if(loginAccount.RoleName == "Admin"){
+                    AdminProfile profile = (AdminProfile) ProfileDAOs.GetProfile(_context, loginAccount);
                     return View(profile);
                 }
             }
@@ -42,14 +39,13 @@ namespace UniChatApplication.Controllers
 
         }
 
-        public async Task<IActionResult> Details(int? id){
+        // Mapping to Admin Profile
+        public IActionResult Details(int? id){
 
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
             if(id == null) return Redirect("/Home/");
-
-            AdminProfile admin = await _context.AdminProfile.Include(a => a.Account).FirstOrDefaultAsync(m => m.Id == id);
-
+            AdminProfile admin =  _context.AdminProfile.Include(a => a.Account).FirstOrDefault(m => m.Id == id);
             if (admin == null) return Redirect("/Home/");
-
             return View(admin);
 
         }

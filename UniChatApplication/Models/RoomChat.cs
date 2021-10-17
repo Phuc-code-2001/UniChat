@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace UniChatApplication.Models
 {
@@ -26,5 +27,9 @@ namespace UniChatApplication.Models
         public int TeacherId { get; set; }
 
         public TeacherProfile TeacherProfile { get; set; }
+
+        [InverseProperty("RoomChat")]
+        public IQueryable<RoomMessage> Messages { get; set; }
+
     }
 }

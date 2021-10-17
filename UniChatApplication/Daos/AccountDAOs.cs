@@ -6,6 +6,7 @@ using UniChatApplication.Models;
 using UniChatApplication.Data;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 
 namespace UniChatApplication.Daos
 {
@@ -45,12 +46,7 @@ namespace UniChatApplication.Daos
         }
 
         public static bool AccountIsExisted(UniChatDbContext context, string username){
-            try {
-                return context.Account.Where(a => a.Username == username).ToList().Count > 0;
-            }
-            catch (Exception){
-                return true;
-            }
+            return context.Account.Any(a => a.Username == username);
         }
 
         public static Dictionary<string, string> AccountValidate(string username, string password){
@@ -64,6 +60,33 @@ namespace UniChatApplication.Daos
 
             return result;
 
+        }
+
+        public static Account getLoginAccount(UniChatDbContext context, ISession session){
+
+            string username = session.GetString("username");
+
+            if (username != null && username != "")
+            {
+                Account account =
+                    context
+                        .Account
+                        .FirstOrDefault(a => a.Username == username);
+                return account;
+            }
+            
+            return null;
+        }
+
+        public static string getUsenameFromEmail(string email){
+            string username = "";
+            for(int i = 0; i < email.Length; i++){
+                if (email[i] != '@'){
+                    username += email[i];
+                }
+                else break;
+            }
+            return username;
         }
 
     }

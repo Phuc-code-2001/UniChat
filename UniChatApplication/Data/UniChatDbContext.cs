@@ -19,6 +19,10 @@ namespace UniChatApplication.Data
 
         public DbSet<StudentProfile> StudentProfile { get; set; }
 
-        public DbSet<LoginCookie> LoginCookies {get; set;}
+        public DbSet<LoginCookie> LoginCookies {get; set; }
+
+        public DbSet<RoomChat> RoomChats { get; set; }
+
+        public DbSet<RoomMessage> RoomMessages { get; set; }
     }
 }

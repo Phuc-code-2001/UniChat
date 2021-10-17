@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Subject - Create";
 }
 
 @model Subject
@@ -14,19 +14,19 @@
         <h1 class="align-center heading">Add New Subject</h1>
         <hr>
         <div class="spacer"></div>
-
+        <p asp-validation-summary="ModelOnly" class="text-danger">@ViewBag.Error</p>
         <!-- name = subCode = id -->
         <div class="form-group">
-            <label for="subCode" class="form-label" required>Subject Code</label>
+            <label for="subCode" class="form-label">Subject Code</label>
             <input id="subCode" asp-for="SubjectCode" type="text" placeholder="Ex: IOT102" class="form-control">
-            <span class="form-message"></span>
+            <span class="form-message" asp-validation-for="SubjectCode"></span>
         </div>
 
         <!-- name = subName = id -->
         <div class="form-group">
             <label for="subName" class="form-label" required>Full Name</label>
             <input id="subName" asp-for="FullName" type="text" placeholder="Ex: Internet Of Thing" class="form-control">
-            <span class="form-message"></span>
+            <span class="form-message" asp-validation-for="FullName"></span>
         </div>
 
         <hr>
@@ -60,17 +60,12 @@
 
                 Validator.isRequired('#subCode', 'Please enter code of subject!'),
                 Validator.minLength('#subCode', 6),
-                Validator.isSubCode('#subCode',),
+                Validator.maxLength('#subCode', 10),
+                Validator.isSubCode('#subCode'),
 
                 Validator.isRequired('#subName', 'Please enter name of subject!'),
                 Validator.maxLength('#subName', 50),
-                Validator.isName('#subName', "Please enter only letters"),
-
             ],
-            onSubmit: function (data) {
-                // Call API
-                console.log(data);
-            }
         });
 
     });

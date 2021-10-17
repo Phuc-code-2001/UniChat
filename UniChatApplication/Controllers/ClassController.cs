@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using UniChatApplication.Daos;
 using UniChatApplication.Data;
 using UniChatApplication.Models;
 
@@ -19,69 +21,81 @@ namespace UniChatApplication.Controllers
             _context = context;
         }
 
-        // GET: Class
-        public async Task<IActionResult> Index()
+        // Mapping to ClassManagement - Index
+        public IActionResult Index()
         {
-            return View(await _context.Class.Include(c => c.StudentProfiles).ToListAsync());
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
+
+            IEnumerable<Class> classes = ClassDAOs.getAllClasses(_context).ToList();
+            return View(classes);
         }
 
         // GET: Class/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
-            if (id == null) return Redirect("/Home/");
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
+            if(id == null) return Redirect("/Home/");
 
-            var @class = await _context.Class.Include(m => m.StudentProfiles)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (id == null) return Redirect("/Home/");
+            Class c = ClassDAOs.getAllClasses(_context).FirstOrDefault(c => c.Id == id);
+            if(c == null) return Redirect("/Home/");
+            foreach(RoomChat item in c.RoomChats){
+                item.Subject = _context.Subjects.FirstOrDefault(s => s.Id == item.SubjectId);
+            }
 
-            return View(@class);
+            return View(c);
         }
 
-        // GET: Class/Create
+        // Mapping to ClassManagement - Create
         public IActionResult Create()
         {
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
+
             return View();
         }
 
+        // Get data from view and create Class
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(string Name)
+        public IActionResult Create(Class c)
         {
-            
-            if (_context.Class.Any(c => c.Name == Name)){
-                ViewData["Error"] = $"Class {Name} existed...";
-                return View();
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
+
+            if (ClassDAOs.isExistedClass(_context, c.Name)){
+                ViewData["Error"] = $"Class {c.Name} existed.";
+                return View(c);
             }
 
-            Class new_class = new Class(){Name=Name};
-            _context.Class.Add(new_class);
+            _context.Class.Add(c);
             _context.SaveChanges();
 
             return RedirectToAction("Index");
         }
 
-        // GET: Class/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // Mapping to ClassManagement - Edit
+        public IActionResult Edit(int? id)
         {
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
             if (id == null) return Redirect("/Home/");
 
-            var @class = await _context.Class.Include(c => c.StudentProfiles).FirstOrDefaultAsync(c => c.Id == id);
-            if (@class == null) return Redirect("/Home/");
+            Class c = ClassDAOs.getAllClasses(_context).FirstOrDefault(c => c.Id == id);
+            if (c == null) return Redirect("/Home/");
             
-            IEnumerable<StudentProfile> students = _context.StudentProfile.Where(s => s.ClassID == null);
+            IEnumerable<StudentProfile> students = ProfileDAOs.getAllStudents(_context).Where(s => s.ClassID == null);
             ViewData["students"] = students;
-            return View(@class);
+
+            return View(c);
         }
 
+        // Use to add a student to a class
         [HttpPost]
         public void AddStudent(int? stId, int? classId){
 
             if (stId == null || classId == null) return;
 
-            StudentProfile student = _context.StudentProfile.Include(s => s.Class).FirstOrDefault(s => s.Id == stId);
-            Class _class = _context.Class.Find(classId);
+            StudentProfile student = ProfileDAOs.getAllStudents(_context).FirstOrDefault(s => s.Id == stId);
+            Class c = _context.Class.FirstOrDefault(c => c.Id == classId);
 
-            if (student != null && _class != null && student.Class == null) {
+            if (student != null && c != null && student.Class == null) {
                 student.ClassID = classId;
                 _context.StudentProfile.Update(student);
                 _context.SaveChanges();
@@ -90,15 +104,16 @@ namespace UniChatApplication.Controllers
             // System.Console.WriteLine($"AddStudent: {stId} -> {classId}");
         }
 
+        // Use to remove a student to a class
         [HttpPost]
         public void RemoveStudent(int? stId, int? classId)
         {
             if (stId == null || classId == null) return;
 
-            StudentProfile student = _context.StudentProfile.Include(s => s.Class).FirstOrDefault(s => s.Id == stId);
-            Class _class = _context.Class.Find(classId);
+            StudentProfile student = ProfileDAOs.getAllStudents(_context).FirstOrDefault(s => s.Id == stId);
+            Class c =_context.Class.FirstOrDefault(c => c.Id == classId);
 
-            if (student != null && _class != null && student.ClassID == classId) {
+            if (student != null && c != null && student.ClassID == classId) {
                 student.ClassID = null;
                 student.Class = null;
                 _context.StudentProfile.Update(student);
@@ -108,38 +123,39 @@ namespace UniChatApplication.Controllers
             // System.Console.WriteLine($"RemoveStudent: {stId} <- {classId}");
         }
 
-        // GET: Class/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // Mapping to ClassManagment - Delete
+        public IActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
+            if(id == null) return Redirect("/Home/");
+
+            Class c = ClassDAOs.getAllClasses(_context).FirstOrDefault(c => c.Id == id);
+            if(c == null) return Redirect("/Home/");
+
+            foreach(RoomChat item in c.RoomChats){
+                item.Subject = _context.Subjects.FirstOrDefault(s => s.Id == item.SubjectId);
             }
 
-            var @class = await _context.Class.Include(m => m.StudentProfiles)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (@class == null)
-            {
-                return NotFound();
-            }
-
-            return View(@class);
+            return View(c);
         }
 
-        // POST: Class/Delete/5
+        
+        // Use to delete a class
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int? id)
         {
-            var @class = await _context.Class.FindAsync(id);
-            _context.Class.Remove(@class);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
+            if(id == null) return Redirect("/Home/");
+
+            Class c = ClassDAOs.getAllClasses(_context).FirstOrDefault(c => c.Id == id);
+            if(c == null) return Redirect("/Home/");
+
+            _context.Class.Remove(c);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
-        private bool ClassExists(int id)
-        {
-            return _context.Class.Any(e => e.Id == id);
-        }
     }
 }

@@ -21,6 +21,7 @@ namespace UniChatApplication.Controllers
             _context = context;
         }
 
+        // Mapping to Home View
         public async Task<IActionResult> Index()
         {
 
@@ -43,7 +44,6 @@ namespace UniChatApplication.Controllers
                 
             }
 
-
             return View();
             
         }
@@ -55,6 +55,7 @@ namespace UniChatApplication.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        // Use for debug, test
         public async Task<IActionResult> Check()
         {
 

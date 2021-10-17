@@ -7,6 +7,7 @@ using UniChatApplication.Data;
 using UniChatApplication.Models;
 using UniChatApplication.Daos;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 
 namespace UniChatApplication.Controllers
 {
@@ -19,160 +20,111 @@ namespace UniChatApplication.Controllers
             _context = context;
         }
 
-        // GET: StudentProfile
-        public async Task<IActionResult> Index()
+        // Mapping to Index view of Student Management
+        public IActionResult Index()
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
-            var uniChatDbContext = _context.StudentProfile.Include(s => s.Account).Include(s => s.Class);
-            return View(await uniChatDbContext.ToListAsync());
+            IEnumerable<StudentProfile> students = ProfileDAOs.getAllStudents(_context).ToList();
+            return View(students);
         }
 
-        // GET: StudentProfile/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // Mapping to detail page of Student Management
+        public IActionResult Details(int? id)
         {
-
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
-            if (id == null)
-            {
-                return Redirect("/Home/");
-            }
+            if (id == null) return Redirect("/Home/");
 
-            var studentProfile = await _context.StudentProfile
-                .Include(s => s.Account)
-                .Include(s => s.Class)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (studentProfile == null)
-            {
-                return Redirect("/Home/");
-            }
+            StudentProfile student = ProfileDAOs.getAllStudents(_context).FirstOrDefault(m => m.Id == id);
+            if (student == null) return Redirect("/Home/");
 
-            return View(studentProfile);
+            return View(student);
         }
 
-        // GET: StudentProfile/Create
+        // Mapping to Create View of Student Management
         public IActionResult Create()
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
-            StudentProfile st = new StudentProfile();
-            return View(st);
+            return View();
         }
 
+        // Use to get data from create view to create student account and profile.
         [HttpPost]
-        public ActionResult Create(string fullname, string email, bool newGender, string newMajor, string stuCode)
+        public ActionResult Create(StudentProfile student)
         {
-            System.Console.WriteLine(fullname);
-            string username = "";
-            for(int i = 0; i < email.Length; i++){
-                if (email[i] != '@'){
-                    username += email[i];
-                }
-                else break;
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
+
+            string username = AccountDAOs.getUsenameFromEmail(student.Email);
+            if (AccountDAOs.AccountIsExisted(_context, username)){
+                ViewData["Error"] = $"Account {username} existed...";
+                return View(student);
             }
+            student.Birthday = DateTime.Now.Date;
 
-            StudentProfile st = new StudentProfile(){
-                        FullName=fullname,
-                        Email=email,
-                        Phone=null,
-                        Gender=newGender,
-                        Major=newMajor,
-                        StudentCode=stuCode,
-                        Birthday=DateTime.Now.ToLocalTime(),
-                        Avatar=null,
-                        ClassID=null,
-                        Class=null
-                    };
-
-            try {
-                if (_context.Account.Any(a => a.Username == username)){
-                    ViewData["Error"] = $"Account {username} existed...";
-                    
-                    return View(st);
-                }
-            }
-            catch(Exception){
-
-            }
-
-            Account newAccount = AccountDAOs.CreateAccount(username, AccountDAOs.DefaultPassword, 1);
-            st.Account = newAccount;
-            _context.Add(st);
+            student.Account = AccountDAOs.CreateAccount(username, AccountDAOs.DefaultPassword, 1);
+            _context.Add(student);
             _context.SaveChanges();
-            
             return RedirectToAction("Index");
         }
 
-        // GET: StudentProfile/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // Mapping to Edit View of Student Management
+        public IActionResult Edit(int? id)
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
-            if (id == null)
-            {
-                return Redirect("/Home/");
-            }
+            if (id == null) return Redirect("/Home/");
 
-            var studentProfile = await _context.StudentProfile.FindAsync(id);
-            if (studentProfile == null)
-            {
-                return Redirect("/Home/");
-            }
+            StudentProfile studentProfile = ProfileDAOs.getAllStudents(_context).FirstOrDefault(p => p.Id == id);
+            if (studentProfile == null) return Redirect("/Home/");
+
             return View(studentProfile);
         }
 
-        // POST: StudentProfile/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // Use to get data from edit view to edit information for a student
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int Id, string fullname, bool editGender, string editMajor, string stuCode)
-        {
-            
-            var studentProfile = await _context.StudentProfile.FindAsync(Id);
-            studentProfile.FullName = fullname;
-            studentProfile.Gender = editGender;
-            studentProfile.Major = editMajor;
-            studentProfile.StudentCode = stuCode;
-            _context.Update(studentProfile);
-            _context.SaveChanges();
-            return RedirectToAction(nameof(Index));
-            
-        }
-
-        // GET: StudentProfile/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Edit(int? id, StudentProfile student)
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return Redirect("/Home/");
 
-            var studentProfile = await _context.StudentProfile
-                .Include(s => s.Account)
-                .Include(s => s.Class)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (studentProfile == null)
-            {
-                return NotFound();
-            }
+            StudentProfile profile = ProfileDAOs.getAllStudents(_context).FirstOrDefault(p => p.Id == id);
+            if (profile == null) return Redirect("/Home/");
+            profile.FullName = student.FullName;
+            profile.StudentCode = student.StudentCode;
+            profile.Major = student.Major;
+            profile.Gender = student.Gender;
+
+            _context.Update(profile);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        // Mapping to delete view, show information to confirm delete
+        public IActionResult Delete(int? id)
+        {
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
+            if (id == null) return Redirect("/Home/");
+
+            StudentProfile studentProfile = ProfileDAOs.getAllStudents(_context).FirstOrDefault(p => p.Id == id);
+            if (studentProfile == null) return Redirect("/Home/");
 
             return View(studentProfile);
         }
 
-        // POST: StudentProfile/Delete/5
+        // Confirm delete student
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int? id)
         {
-            var studentProfile = _context.StudentProfile.Include(p => p.Account).FirstOrDefault(p => p.Id == id);
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
+            if (id == null) return Redirect("/Home/");
+
+            StudentProfile studentProfile = ProfileDAOs.getAllStudents(_context).FirstOrDefault(p => p.Id == id);
             _context.Account.Remove(studentProfile.Account);
             _context.StudentProfile.Remove(studentProfile);
             _context.SaveChanges();
-            return RedirectToAction(nameof(Index));
-        }
 
-        private bool StudentProfileExists(int id)
-        {
-            return _context.StudentProfile.Any(e => e.Id == id);
+            return RedirectToAction("Index");
         }
+        
     }
 }

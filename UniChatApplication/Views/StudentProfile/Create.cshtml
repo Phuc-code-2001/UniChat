@@ -1,7 +1,7 @@
 ﻿@model UniChatApplication.Models.StudentProfile
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Student - Create";
 }
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -14,36 +14,32 @@
         <h1 class="align-center heading">Create Student Account</h1>
         <hr>
         <div class="spacer"></div>
-        @{
-            if (ViewData["Error"] != null && ViewData["Error"].ToString() != "") {
-                <span class="text-danger">@ViewBag.Error</span>
-            }
-        }
+        <p class="text-danger">@ViewBag.Error</p>
         <!-- name = id = fullname -->
         <div class="form-group">
-            <label for="fullname" class="form-label" required>Full Name</label>
-            <input id="fullname" name="fullname" type="text" placeholder="Ex: Nguyễn Khánh Duy" class="form-control">
-            <span class="form-message"></span>
+            <label for="fullname" class="form-label">Full Name</label>
+            <input type="text" id="fullname" asp-for="FullName"  placeholder="Ex: Nguyễn Khánh Duy" class="form-control">
+            <span class="form-message" asp-validation-for="FullName"></span>
         </div>
 
         <!-- name = email -->
         <div class="form-group">
             <label for="email" class="form-label">Email</label>
-            <input id="email" name="email" type="text" placeholder="Ex: email@fpt.edu.vn" class="form-control">
-            <span class="form-message"></span>
+            <input type="email" id="email" asp-for="Email" placeholder="Ex: email@fpt.edu.vn" class="form-control">
+            <span class="form-message" asp-validation-for="Email"></span>
         </div>
 
         <!-- name = id = stuCode -->
         <div class="form-group">
-            <label for="" class="form-label">Student Code</label>
-            <input id="stuCode" name="stuCode" type="text" placeholder="Ex: CE150519" class="form-control">
-            <span class="form-message"></span>
+            <label for="stuCode" class="form-label">Student Code</label>
+            <input type="text" id="stuCode" asp-for="StudentCode" placeholder="Ex: CE150519" class="form-control">
+            <span class="form-message" asp-validation-for="StudentCode"></span>
         </div>
 
         <!-- name = newGender -->
         <div class="form-group">
-            <label for="" class="form-label">Gender</label>
-            <select name="newGender">
+            <label for="gender" class="form-label">Gender</label>
+            <select asp-for="Gender" id="gender">
                 <option value="true">Male</option>
                 <option value="false">Female</option>
             </select>
@@ -51,8 +47,8 @@
 
         <!-- name= newMajor -->
         <div class="form-group">
-            <label for="" class="form-label">Major</label>
-            <select name="newMajor">
+            <label for="major" class="form-label">Major</label>
+            <select asp-for="Major" id="major">
                 <option value="IOT">INTERNET OF THING</option>
                 <option value="SE">SOFTWARE ENGINEERING</option>
                 <option value="Unset">UNSET</option>
