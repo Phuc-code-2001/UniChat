@@ -1,7 +1,7 @@
 ﻿@model UniChatApplication.Models.TeacherProfile
 
 @{
-    ViewData["Title"] = "Details"; 
+    ViewData["Title"] = "Teacher - ViewDetail"; 
 }
 <link rel="stylesheet" href="~/css/TeacherManagement/StyleDetails.css">
 <link rel="stylesheet" href="~/css/cssPlus/buttonPlus.css">
@@ -49,7 +49,7 @@
                         <hr />
                         <div class="d-flex">
                             <h6 class="col-sm-4">Birthday: </h6>
-                            <span class="col-sm-6 ">@Model.Birthday</span>
+                            <span class="col-sm-6 ">@Model.Birthday.ToShortDateString()</span>
                         </div>
 
                         <hr>

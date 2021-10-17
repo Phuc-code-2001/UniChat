@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace UniChatApplication.Models
 {
@@ -11,7 +12,7 @@ namespace UniChatApplication.Models
         public int Id { get; set; }
 
         [Column("code")]
-        [Required]
+        [Required(ErrorMessage = "Please enter Subject Code!")]
         [MaxLength(10)]
         public string SubjectCode { get; set; }
         
@@ -20,7 +21,7 @@ namespace UniChatApplication.Models
         public string FullName { get; set; }
 
         [InverseProperty("Subject")]
-        public List<RoomChat> RoomChats { get; set; }
+        public ICollection<RoomChat> RoomChats { get; set; }
 
     }
 }

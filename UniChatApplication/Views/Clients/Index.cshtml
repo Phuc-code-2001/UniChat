@@ -1,0 +1,30 @@
+@model Account
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container">
+    @{
+        if (Model.RoleName == "Teacher")
+        {
+            <h2>@ViewBag.Profile.TeacherCode</h2>
+        }
+        else if (Model.RoleName == "Student")
+        {
+            <h2>@ViewBag.Profile.StudentCode</h2>
+        }
+    }
+
+    <ul>
+        @{
+            foreach (RoomChat item in ViewBag.RoomChats)
+            {
+                <li>
+                    <a asp-action="RoomChat" asp-route-id="@item.Id">@item.Class.Name - @item.Subject.FullName</a>
+                </li>
+            }
+        }
+    </ul>
+
+</div>

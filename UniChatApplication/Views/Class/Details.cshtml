@@ -1,81 +1,44 @@
 ﻿@model UniChatApplication.Models.Class
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "ViewDetail - Class";
 }
-
-<style>
-
-    body {
-        font-family: 'Times New Roman', Times, serif;
-        padding: 1rem;
-    }
-
-    h1 {
-        font-weight: 600;
-    }
-
-    .title {
-        display: flex;
-    }
-
-    .content {
-        display: flex;
-        gap: 1rem;
-    }
-
-    .left-content, .right-content {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
-
-</style>
+<link rel="stylesheet" href="~/css/cssPlus/buttonPlus.css">
+<link rel="stylesheet" href="~/css/ClassManagement/StyleDetails.css">
 
 <div class="container">
 
-    <h1 class="text-center">Class Management</h1>
+    <h1 class="text-primary text-center">Class Management</h1>
     <h4 class="text-center">Detail for a class</h4>
-    <div class="title">
-        <a class="btn btn-outline-danger" asp-action="Index">Back to Index</a>
-    </div>
+    <a class="button-3 text-white text-decoration-none" asp-action="Index">Back to List</a>
     <hr>
     <div class="content">
         <div class="left-content">
-            <h4 class="text-primary">@Model.Name</h4>
-            <hr>
             <div class="boxchatlist">
-                <h4>Roomchat</h4>
-                <ol style="margin-left: 3rem;">
-                    <li>SubjectName
-                        <ul style="margin-left: 3rem;">
-                            <li>GroupName</li>
-                            <li>GroupName</li>
-                            <li>GroupName</li>
-                        </ul>
-                    </li>
-                    <li>SubjectName
-                        <ul style="margin-left: 3rem;">
-                            <li>GroupName</li>
-                            <li>GroupName</li>
-                            <li>GroupName</li>
-                        </ul>
-                    </li>
-                    <li>SubjectName
-                        <ul style="margin-left: 3rem;">
-                            <li>GroupName</li>
-                            <li>GroupName</li>
-                            <li>GroupName</li>
-                        </ul>
-                    </li>
+                <h4 class="text-center text-info">Roomchats</h4>
+                <ol>
+                    @foreach (RoomChat item in Model.RoomChats)
+                    {
+                        <li>
+                            <h6>
+                                <a asp-controller="RoomChat" asp-action="Details" asp-route-id="@item.Id">
+                                    @item.Subject.SubjectCode - @item.Subject.FullName
+                                </a>
+                            </h6>
+                            <ul>
+                                <li>GroupName</li>
+                                <li>GroupName</li>
+                                <li>GroupName</li>
+                            </ul>
+                        </li>
+                    }
                 </ol>
             </div>
         </div>
         <div class="right-content">
             <h4 class="text-center text-info">List of students of this class</h4>
-            <hr>
-            <table class="table table-bordered table-sm">
-                <thead>
+            <table class="table table-bordered text-center">
+                <thead class="bg-info">
                     <th>Avatar</th>
                     <th>StudentCode</th>
                     <th>FullName</th>
@@ -100,4 +63,7 @@
         </div>
     </div>
 
+    <hr>
+    <h3 class="text-primary text-center">@Model.Name</h3>
+    
 </div>

@@ -1,7 +1,7 @@
 ﻿@model UniChatApplication.Models.TeacherProfile
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Teacher - Delete";
 }
 
 <link rel="stylesheet" href="~/css/TeacherManagement/StyleDelete.css">
@@ -34,7 +34,7 @@
                 </tr>
                 <tr>
                     <th>Birthday</th>
-                    <td>@Model.Birthday</td>
+                    <td>@Model.Birthday.ToShortDateString()</td>
                 </tr>
                 <tr>
                     <th>Phone</th>
@@ -53,9 +53,7 @@
     </div>
 
 
-    <form asp-action="Delete" class="d-flex" style="gap: 1rem;">
-        <input type="hidden" asp-for="Id" />
-
+    <form method="post" class="d-flex" style="gap: 1rem;">
         <a class="button-2 text-white text-decoration-none" asp-action="Index">Back to List</a>
         <input type="submit" value="Delete" class="button-3 text-white text-decoration-none"/>
     </form>

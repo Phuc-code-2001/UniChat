@@ -1,0 +1,84 @@
+@{
+    ViewData["Title"] = "RoomChat";
+}
+@model RoomChat
+<style>
+    .container {
+        margin-top: 100px;
+        display: flex;
+        gap: .5rem;
+    }
+
+    .box-chat {
+        background-color: #eee;
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        padding: 1rem;
+    }
+
+    #send-form {
+        display: flex;
+        gap: .5rem;
+    }
+</style>
+
+<div class="container">
+
+    <div class="room-list">
+        <ul>
+            @{
+                foreach (RoomChat item in ViewBag.RoomChats)
+                {
+                    <li>
+                        <a asp-action="RoomChat" asp-route-id="@item.Id">@item.Class.Name - @item.Subject.FullName</a>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+    <div class="box-chat">
+        <ul id="box-chat-message">
+
+        </ul>
+        <form action="" method="POST" id="send-form">
+            <input type="hidden" name="author" value="@ViewBag.LoginUser.Username">
+            <input type="text" name="message">
+            <input type="submit" value="Send">
+        </form>
+    </div>
+</div>
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+        connection.on("GetRoomMessage", function (username, message) {
+            let li = document.createElement("li");
+            document.getElementById("box-chat-message").appendChild(li);
+            if(username == "@ViewBag.LoginUser.Username") {
+                li.textContent = `${"Me"}: ${message}`;
+            }
+            else{
+                li.textContent = `${username}: ${message}`;
+            }
+        });
+
+        connection.start().then(function () {
+            connection.invoke("JoinRoom", @Model.Id);
+        })
+
+        $("#send-form").submit(function (e) {
+            let username = $("input[name='author']").val();
+            let message = $("input[name='message']").val();
+            connection.invoke("SendMessage", username, message, @Model.Id);
+
+            e.preventDefault();
+        })
+
+    })
+
+</script>

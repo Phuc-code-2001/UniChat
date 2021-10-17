@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using System.Linq;
 
 namespace UniChatApplication.Models
 {
@@ -15,10 +15,10 @@ namespace UniChatApplication.Models
         public string Name { get; set; }
 
         [InverseProperty("Class")]
-        public List<StudentProfile> StudentProfiles { get; set; }
+        public ICollection<StudentProfile> StudentProfiles { get; set; }
 
         [InverseProperty("Class")]
-        public List<RoomChat> RoomChats { get; set;}
+        public ICollection<RoomChat> RoomChats { get; set; }
 
     }
 }

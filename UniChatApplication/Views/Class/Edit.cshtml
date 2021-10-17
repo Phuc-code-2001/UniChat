@@ -1,51 +1,23 @@
 ﻿@model UniChatApplication.Models.Class
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit - Class";
 }
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+<link rel="stylesheet" href="~/css/cssPlus/buttonPlus.css">
+<link rel="stylesheet" href="~/css/ClassManagement/StyleEdit.css">
 
-<style>
-    body {
-        font-family: 'Times New Roman', Times, serif;
-    }
-
-    h1 {
-        font-weight: 600;
-    }
-
-    .students {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    .students>* {
-        flex: 1;
-    }
-
-    .student-list,
-    .student-class {
-        padding: 0 1rem;
-        text-align: center;
-    }
-</style>
-
-<div class="container-fluid">
-
-    <h1 class="text-center">Class Management</h1>
-    <div class="d-flex flex-column" style="gap: .5rem;">
-        <div>
-            <a asp-controller="Class" asp-action="Index" class="btn btn-outline-danger">Back</a>
-        </div>
-        <h4 class="text-primary">@Model.Name</h4>
-    </div>
+<div class="container">
+    <h1 class="text-center text-primary">Class Management</h1>
+    <hr>
+    <a asp-action="Index" class="button-3 text-white text-decoration-none">Back to List</a>
     <hr>
     <div class="students">
         <div class="student-list">
-            <h4 class="text-center text-success">List of students of UniChat System</h4>
+            <h5 class="text-center text-success">List of students of UniChat System</h5>
             <table class="table table-bordered" id="student-list">
-                <thead>
+                <thead class="bg-success text-white">
                     <tr>
                         <th>RollNo</th>
                         <th>Avatar</th>
@@ -73,10 +45,11 @@
                 </tbody>
             </table>
         </div>
+
         <div class="student-class">
-            <h4 class="text-center text-info">List of students of @Model.Name</h4>
-            <table class="table table-bordered">
-                <thead>
+            <h5 class="text-center text-info">List of students of @Model.Name</h5>
+            <table class="table table-bordered" id="student-class">
+                <thead class="bg-info text-white">
                     <tr>
                         <th>RollNo</th>
                         <th>Avatar</th>
@@ -104,6 +77,10 @@
             </table>
         </div>
     </div>
+
+    <hr>
+    <h3 class="text-primary text-center">@Model.Name</h3>
+
 </div>
 
 <script>
@@ -111,6 +88,16 @@
     $(document).ready(function () {
 
         $('#student-list').DataTable({
+            "language": {
+                "lengthMenu": "_MENU_",
+                "zeroRecords": "No data matching",
+                "info": "_PAGE_/_PAGES_",
+                "infoEmpty": "",
+                "infoFiltered": ""
+            }
+        });
+
+        $('#student-class').DataTable({
             "language": {
                 "lengthMenu": "_MENU_",
                 "zeroRecords": "No data matching",
@@ -139,13 +126,14 @@
                         span.attr("command", "Remove");
                         span.attr("class", "btn btn-danger btn-sm");
                         span.text("Remove");
-                        row.appendTo($("#tbody-class"));
-
-                        console.log("Success!");
+                        row.clone().appendTo($("#tbody-class"));
+                        row.remove();
+                        console.log("AddStudent Success!");
+                        location.reload();
                     },
                     error: function (jqXhr, textStatus, errorMessage) {
 
-                        console.log("Failed!");
+                        console.log("AddStudent Failed!");
                     }
                 });
 
@@ -161,20 +149,19 @@
                         span.attr("command", "Add");
                         span.attr("class", "btn btn-primary btn-sm");
                         span.text("Add");
-                        row.appendTo($("#tbody-list"));
+                        row.clone().appendTo($("#tbody-list"));
+                        row.remove();
                         $(".dataTables_empty").remove();
 
-                        console.log("Success!");
+                        console.log("RemoveStudent Success!");
+                        location.reload();
                     },
                     error: function (jqXhr, textStatus, errorMessage) {
 
-                        console.log("Failed!");
+                        console.log("RemoveStudent Failed!");
                     }
                 });
             }
-
-
-
 
         });
 

@@ -1,7 +1,7 @@
 ﻿@model UniChatApplication.Models.TeacherProfile
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Teacher - Edit";
 }
 <link rel="stylesheet" href="~/css/TeacherManagement/StyleEdit.css">
 <link rel="stylesheet" href="~/css/cssPlus/buttonPlus.css">
@@ -10,30 +10,30 @@
 
 
 <div class="main-control-edit">
-    <form asp-action="Edit" method="POST" class="form" id="form-1">
+    <form method="POST" class="form" id="form-1">
         <h1 class="align-center heading text-primary">Edit Teacher Information</h1>
         <hr>
 
         <div class="spacer"></div>
-        <input type="hidden" name="Id" value="@Model.Id">
+        
         <!-- name = id = fullname -->
         <div class="form-group">
-            <label for="fullname" class="form-label" required>Full Name</label>
-            <input id="fullname" name="fullname" type="text" value="@Model.FullName" placeholder="Ex: Nguyễn Khánh Duy" class="form-control">
-            <span class="form-message"></span>
+            <label for="fullname" class="form-label">Full Name</label>
+            <input id="fullname" asp-for="FullName" type="text" placeholder="Ex: Nguyễn Khánh Duy" class="form-control">
+            <span class="form-message" asp-validation-for="FullName"></span>
         </div>
 
         <!-- name = id = teacherCode -->
         <div class="form-group">
             <label for="teacherCode" class="form-label">Teacher Code</label>
-            <input id="teacherCode" name="teacherCode" type="text" value="@Model.TeacherCode" placeholder="Ex: 00000519" class="form-control">
-            <span class="form-message"></span>
+            <input type="text" id="teacherCode" asp-for="TeacherCode" placeholder="Ex: 00000519" class="form-control">
+            <span class="form-message" asp-validation-for="TeacherCode"></span>
         </div>
 
-        <!-- name = newGender -->
+        <!-- name = Gender -->
         <div class="form-group">
-            <label for="" class="form-label">Gender</label>
-            <select name="editGender">
+            <label for="Gender" class="form-label">Gender</label>
+            <select asp-for="Gender" id="Gender">
                 <option value="true">Male</option>
                 @{
                     if(Model.GenderText == "Female"){

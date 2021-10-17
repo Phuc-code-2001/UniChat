@@ -1,7 +1,7 @@
 ﻿@model UniChatApplication.Models.StudentProfile
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Student - Edit";
 }
 
 <link rel="stylesheet" href="~/css/cssPlus/buttonPlus.css">
@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <div class="main-control-edit">
-    <form action="" method="POST" class="form" id="form-1">
+    <form method="POST" class="form" id="form-1">
         <h1 class="align-center heading">Edit Information Student</h1>
         <hr>
         <div class="spacer"></div>
@@ -18,21 +18,21 @@
         <!-- name = id = fullname -->
         <div class="form-group">
             <label for="fullname" class="form-label" required>Full Name</label>
-            <input id="fullname" name="fullname" type="text" placeholder="Ex: Nguyễn Khánh Duy" class="form-control" value="@Model.FullName">
-            <span class="form-message"></span>
+            <input id="fullname" asp-for="FullName" type="text" placeholder="Ex: Nguyễn Khánh Duy" class="form-control">
+            <span class="form-message" asp-validation-for="FullName"></span>
         </div>
 
         <!-- name = id = stuCode -->
         <div class="form-group">
-            <label for="" class="form-label">Student Code</label>
-            <input id="stuCode" name="stuCode" type="text" placeholder="Ex: CE150519" class="form-control" value="@Model.StudentCode">
-            <span class="form-message"></span>
+            <label for="stuCode" class="form-label">Student Code</label>
+            <input type="text" id="stuCode" asp-for="StudentCode" placeholder="Ex: CE150519" class="form-control">
+            <span class="form-message" asp-validation-for="StudentCode"></span>
         </div>
 
         <!-- name = editGender -->
         <div class="form-group">
-            <label for="" class="form-label">Gender</label>
-            <select name="editGender">
+            <label for="Gender" class="form-label">Gender</label>
+            <select asp-for="Gender" id="Gender">
                 <option value="true">Male</option>
                 @{
                     if(Model.GenderText == "Female"){
@@ -46,10 +46,10 @@
             </select>
         </div>
 
-        <!-- name= editMajor -->
+        <!-- name= Major -->
         <div class="form-group">
-            <label for="editMajor" class="form-label">Major</label>
-            <select name="editMajor" id="editMajor">
+            <label for="Major" class="form-label">Major</label>
+            <select asp-for="Major" id="Major">
                 
                 @{
                     if(Model.Major == "IOT"){
@@ -68,8 +68,6 @@
                         <option value="Unset" selected>UNSET</option>
                     }
                 }
-                
-                
             </select>
         </div>
         <hr>
@@ -88,8 +86,6 @@
         </a>
 
     </form>
-
-
 
 </div>
 
