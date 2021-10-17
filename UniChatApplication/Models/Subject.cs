@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UniChatApplication.Models
 {
+    // get set data from table "subject"
     [Table("subject")]
     public class Subject
     {

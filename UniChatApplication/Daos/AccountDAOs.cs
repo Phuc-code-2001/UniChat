@@ -30,7 +30,7 @@ namespace UniChatApplication.Daos
             return new Account(){Username = username, Password=hashed, RoleID=role};
 
         }
-
+        // Add account
         public static bool AddAccount(UniChatDbContext context, Account account){
             try
             {
@@ -43,7 +43,7 @@ namespace UniChatApplication.Daos
                 return false;
             }
         }
-
+        // check account existing
         public static bool AccountIsExisted(UniChatDbContext context, string username){
             try {
                 return context.Account.Where(a => a.Username == username).ToList().Count > 0;
@@ -52,7 +52,7 @@ namespace UniChatApplication.Daos
                 return true;
             }
         }
-
+        // validation login
         public static Dictionary<string, string> AccountValidate(string username, string password){
 
             var result = new Dictionary<string, string>();

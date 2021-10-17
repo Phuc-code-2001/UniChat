@@ -1,4 +1,4 @@
-// Đối tượng `Validator`
+// Obj `Validator`
 function Validator(options) {
   function getParent(element, selector) {
     while (element.parentElement) {
@@ -11,7 +11,7 @@ function Validator(options) {
 
   var selectorRules = {};
 
-  // Hàm thực hiện validate
+  // Function that performs validation
   function validate(inputElement, rule) {
     var errorElement = getParent(
       inputElement,
@@ -19,11 +19,11 @@ function Validator(options) {
     ).querySelector(options.errorSelector);
     var errorMessage;
 
-    // Lấy ra các rules của selector
+    // Get selector rules
     var rules = selectorRules[rule.selector];
 
-    // Lặp qua từng rule & kiểm tra
-    // Nếu có lỗi thì dừng việc kiểm
+    // Loop through each rule & check
+    // If there is an error, stop checking
     for (var i = 0; i < rules.length; ++i) {
       switch (inputElement.type) {
         case "radio":
@@ -53,16 +53,16 @@ function Validator(options) {
     return !errorMessage;
   }
 
-  // Lấy element của form cần validate
+  // Get the element of the form to be validated
   var formElement = document.querySelector(options.form);
   if (formElement) {
-    // Khi submit form
+    // When submitting the form
     formElement.onsubmit = function (e) {
       e.preventDefault();
 
       var isFormValid = true;
 
-      // Lặp qua từng rules và validate
+      // Loop through each rule and validate
       options.rules.forEach(function (rule) {
         var inputElement = formElement.querySelector(rule.selector);
         var isValid = validate(inputElement, rule);
@@ -72,7 +72,7 @@ function Validator(options) {
       });
 
       if (isFormValid) {
-        // Trường hợp submit với javascript
+        // The case of submitting with javascript
         if (typeof options.onSubmit === "function") {
           var enableInputs = formElement.querySelectorAll("[name]");
           var formValues = Array.from(enableInputs).reduce(function (
@@ -107,16 +107,16 @@ function Validator(options) {
             {});
           options.onSubmit(formValues);
         }
-        // Trường hợp submit với hành vi mặc định
+        // Submit case with default behavior
         else {
           formElement.submit();
         }
       }
     };
 
-    // Lặp qua mỗi rule và xử lý (lắng nghe sự kiện blur, input, ...)
+    // Loop through each rule and process (listen for blur, input, ...)
     options.rules.forEach(function (rule) {
-      // Lưu lại các rules cho mỗi input
+      // Save the rules for each input
       if (Array.isArray(selectorRules[rule.selector])) {
         selectorRules[rule.selector].push(rule.test);
       } else {
@@ -126,12 +126,12 @@ function Validator(options) {
       var inputElements = formElement.querySelectorAll(rule.selector);
 
       Array.from(inputElements).forEach(function (inputElement) {
-        // Xử lý trường hợp blur khỏi input
+        // Handle blur from input
         inputElement.onblur = function () {
           validate(inputElement, rule);
         };
 
-        // Xử lý mỗi khi người dùng nhập vào input
+        // Handle every time the user enters input
         inputElement.oninput = function () {
           var errorElement = getParent(
             inputElement,
@@ -147,10 +147,10 @@ function Validator(options) {
   }
 }
 
-// Định nghĩa rules
-// Nguyên tắc của các rules:
-// 1. Khi có lỗi => Trả ra message lỗi
-// 2. Khi hợp lệ => Không trả ra cái gì cả (undefined)
+// Definition of rules
+// Principle of the rules:
+// 1. When there is an error => Return error message
+// 2. When valid => Returns nothing (undefined)
 Validator.isRequired = function (selector, message) {
   return {
     selector: selector,
@@ -160,7 +160,7 @@ Validator.isRequired = function (selector, message) {
   };
 };
 
-//check email có đuôi @fpt.edu.vn
+// Check email with the extension @fpt.edu.vn
 Validator.isEmail = function (selector, message) {
   return {
     selector: selector,
@@ -174,7 +174,7 @@ Validator.isEmail = function (selector, message) {
   };
 };
 
-//check Student code  gồm 2 chữ cái + 6 chữ số
+// check Student code consists of 2 letters + 6 digits
 Validator.isStuCode = function (selector, message) {
   return {
     selector: selector,
@@ -189,7 +189,7 @@ Validator.isStuCode = function (selector, message) {
   };
 };
 
-//check teacher code  gồm 8 chữ số
+// check teacher code contains 8 digits
 Validator.isTeacherCode = function (selector, message) {
   return {
     selector: selector,
@@ -203,7 +203,7 @@ Validator.isTeacherCode = function (selector, message) {
   };
 };
 
-//Full name chỉ gồm chữ cái
+// Full name contains only letters
 Validator.isName = function (selector, message) {
   return {
     selector: selector,
@@ -217,7 +217,7 @@ Validator.isName = function (selector, message) {
   };
 };
 
-//Class có 2 kí tự đầu là chữ cái và 4 kí tự sau là số 0-9
+// Class has the first 2 characters as letters and the last 4 characters as numbers 0-9
 Validator.isNameClass = function (selector, message) {
   return {
     selector: selector,
@@ -231,7 +231,7 @@ Validator.isNameClass = function (selector, message) {
   };
 };
 
-//Subject code có 3 kí tự đầu là chữ cái và 3 kí tự sau là số 0-9
+// Subject code has the first 3 characters as letters and the last 3 characters as numbers 0-9
 Validator.isSubCode = function (selector, message) {
   return {
     selector: selector,
@@ -245,7 +245,7 @@ Validator.isSubCode = function (selector, message) {
   };
 };
 
-//check input có đúng số lượng kí tự theo tham số truyền vào
+// check input has the correct number of characters according to the input parameter
 Validator.minLength = function (selector, min, message) {
   return {
     selector: selector,
@@ -257,7 +257,7 @@ Validator.minLength = function (selector, min, message) {
   };
 };
 
-//giới hạn số kí tự cho input
+// limit the number of characters for input
 Validator.maxLength = function (selector, max, message) {
   return {
     selector: selector,
@@ -269,7 +269,7 @@ Validator.maxLength = function (selector, max, message) {
   };
 };
 
-//confirm lại giá trị nhập vào
+// confirm the input value again
 Validator.isConfirmed = function (selector, getConfirmValue, message) {
   return {
     selector: selector,

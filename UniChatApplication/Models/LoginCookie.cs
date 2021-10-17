@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UniChatApplication.Models
 {
+    // get set data from table "login_cookie"
     [Table("login_cookie")]
     public class LoginCookie
     {

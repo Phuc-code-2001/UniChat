@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UniChatApplication.Models
 {
+    // get set data from table "room_chat"
     [Table("room_chat")]
     public class RoomChat
     {

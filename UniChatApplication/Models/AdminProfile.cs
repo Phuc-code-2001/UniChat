@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UniChatApplication.Models
 {
+    // get set data from table "admin_profile"
     [Table("admin_profile")]
     public class AdminProfile : Profile
     {

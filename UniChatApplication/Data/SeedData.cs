@@ -18,7 +18,7 @@ namespace UniChatApplication.Data
                         ));
 
             if (context.AdminProfile.Any()) return;
-
+            // 5 default admin account
             List<AdminProfile> admins =
                 new List<AdminProfile>()
                 {
