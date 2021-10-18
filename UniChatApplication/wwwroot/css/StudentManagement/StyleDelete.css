@@ -1,4 +1,7 @@
 * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family: monaco,Consolas,Lucida Console,monospace;;
 }
 
@@ -15,8 +18,7 @@ body {
 }
 
 .avatar-box {
-    max-width: 400px;
-    max-height: 400px;
+    flex: 1;
     padding-bottom: 1rem;
     display: flex;
     align-items: center;
@@ -24,14 +26,15 @@ body {
 }
 
 .avatar-box img {
-    width: 250px;
-    height: 250px;
+    width: 350px;
+    height: 350px;
     object-fit: cover;
     border: 2px solid blue;
     border-radius: 100rem;
 }
 
 .table-bordered {
+    flex: 1;
     border: 2px solid blue;
     border-radius: 10px;
 }

@@ -7,6 +7,7 @@ using UniChatApplication.Data;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace UniChatApplication.Daos
 {
@@ -87,6 +88,18 @@ namespace UniChatApplication.Daos
                 else break;
             }
             return username;
+        }
+
+        public static IQueryable<Account> getAllStudentAccount(UniChatDbContext context) {
+            return context.Account
+                    .Include(a => a.RoomMessages)
+                    .Where(a => a.RoleName == "Student");
+        }
+
+        public static IQueryable<Account> getAllTeacherAccount(UniChatDbContext context) {
+            return context.Account
+                    .Include(a => a.RoomMessages)
+                    .Where(a => a.RoleName == "Teacher");
         }
 
     }

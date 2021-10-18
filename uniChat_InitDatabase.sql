@@ -92,6 +92,7 @@ create table dbo.room_message (
 	account_id int,
 	room_id int,
 	content varchar(500) not null,
+	datetime time_message not null,
 	foreign key (room_id) references dbo.room_chat (id) on delete cascade,
 	foreign key (account_id) references dbo.account (id) on delete set null,
 );

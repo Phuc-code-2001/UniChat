@@ -3,34 +3,27 @@
 @{
     ViewData["Title"] = "AdminProfile";
 }
-<link rel="stylesheet" href="~/css/StyleAdminProfile.css">
 <link rel="stylesheet" href="~/css/cssPlus/buttonPlus.css">
+<link rel="stylesheet" href="~/css/StyleAdminProfile.css">
 
 <div class="background">
-
     <div class="container">
         <br>
-
         <div class="box-header">
-            <h1 class="text-center">
-                Admin Profile
-            </h1>
+            <h1 class="text-center">Admin Profile</h1>
         </div>
-
         <br>
-
         <div class="row">
             @* Avatar and username *@
-            <div class="col-sm-4">
-                <div class="box d-flex flex-column align-items-center text-center">
-
-                    <img src="@Model.Avatar" alt="Avatar" class="rounded-circle">
-                    <td>@Model.Account.Username</td>
+            <div class="col-lg-4">
+                <div class="box">
+                    <img src="~/images/4521373.jpg" alt="avatar" class="rounded-circle">
+                    <h4 class="text-info">@Model.Account.Username</h4>
                 </div>
             </div>
-
+            
             @* Profile *@
-            <div class="col-sm-8 ">
+            <div class="col-lg-8 ">
                 <div class="box d-flex align-items-center">
                     <div class="w-100">
 

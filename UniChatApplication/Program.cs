@@ -19,6 +19,7 @@ namespace UniChatApplication
             try
             {
                 SeedData.InitialAdminAccount(host.Services.CreateScope().ServiceProvider);
+                SeedData.ResetDataServer(host.Services.CreateScope().ServiceProvider);
             }
             catch (Exception)
             {

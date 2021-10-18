@@ -3,34 +3,57 @@
 @{
     ViewData["Title"] = "RoomChat - ViewDetail";
 }
+<link rel="stylesheet" href="~/css/cssPlus/buttonPlus.css">
+<link rel="stylesheet" href="~/css/RoomChatManagement/StyleDetails.css">
 
-<h1>Details</h1>
+<div class="container">
 
-<div>
-    <h4>RoomChat</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Class)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Class.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Subject)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Subject.FullName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TeacherProfile)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TeacherProfile.FullName)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <h1 class="text-primary text-center">Class Management</h1>
+    <h4 class="text-center">Detail for a roomchat</h4>
+    <a class="button-3 text-white text-decoration-none" asp-action="Index">Back to List</a>
+    <hr>
+    <div class="content">
+        <div class="left-content">
+            <h4 class="text-center text-info">Roomchat</h4>
+            <ul>
+                <li>ID: @Model.Id</li>
+                <li>ClassName: @Model.Class.Name</li>
+                <li>Subject: @Model.Subject.SubjectCode - @Model.Subject.FullName</li>
+                <li>Lecture: @Model.TeacherProfile.FullName</li>
+            </ul>
+            <h4 class="text-center text-info">Groups in this room</h4>
+            <ul>
+                <li>...</li>
+                <li>...</li>
+                <li>....</li>
+            </ul>
+        </div>
+        <div class="right-content">
+            <h4 class="text-center text-info">List of students of this room</h4>
+            <table class="table table-bordered text-center">
+                <thead class="bg-info">
+                    <th>Avatar</th>
+                    <th>StudentCode</th>
+                    <th>FullName</th>
+                </thead>
+                <tbody>
+                    @foreach (StudentProfile item in Model.Class.StudentProfiles)
+                    {
+                        <tr>
+                            <td>
+                                <img src="" alt="avatar">
+                            </td>
+                            <td>
+                                @item.StudentCode
+                            </td>
+                            <td>
+                                @item.FullName
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
