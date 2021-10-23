@@ -29,6 +29,9 @@ namespace UniChatApplication.Models
             }
         }
 
+        [NotMapped]
+        public Profile Profile { get; set; }
+
         [InverseProperty("Account")]
         public ICollection<RoomMessage> RoomMessages { get; set; }
 

@@ -16,7 +16,7 @@ namespace UniChatApplication.Daos
         }
 
         public static IEnumerable<RoomMessage> messagesOfRoom(UniChatDbContext _context, int RoomID){
-            return getAll(_context).Where(m => m.RoomID == RoomID);
+            return getAll(_context).Where(m => m.RoomID == RoomID).OrderBy(m => m.TimeMessage);
         }
 
         public static List<RoomMessage> getSlice(List<RoomMessage> _list, int a, int b){

@@ -1,0 +1,22 @@
+@model IEnumerable<RoomDeadLine>
+
+@{
+    ViewData["Title"] = "RoomDeadline Management";
+}
+
+<div class="container">
+
+    <h2>Index - RoomID: @ViewBag.RoomId</h2>
+    <p>
+        <a asp-action="Create" asp-route-RoomId="@ViewBag.RoomId">Create</a>
+    </p>
+    <ul class="list">
+
+        @foreach (RoomDeadLine item in Model)
+        {
+            <li><i>@item.ExpirationTime.ToLongTimeString()</i> - @item.Content</li>
+        }
+
+    </ul>
+
+</div>

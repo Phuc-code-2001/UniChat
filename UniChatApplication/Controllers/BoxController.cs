@@ -5,6 +5,7 @@ using UniChatApplication.Models;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
+using System;
 
 namespace UniChatApplication.Controllers
 {
@@ -24,28 +25,16 @@ namespace UniChatApplication.Controllers
             if (HttpContext.Session.GetString("Role") != "Student"
             && HttpContext.Session.GetString("Role") != "Teacher") return Redirect("/Home/");
 
-            List<RoomChat> roomChats;
+            Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
+            Profile LoginProfile = ProfileDAOs.GetProfile(_context, LoginUser);
 
-            Account loginAccount = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
-            if(loginAccount.RoleName == "Teacher"){
+            IEnumerable<RoomChat> RoomChats = RoomChatDAOs.getAllRoomChats(_context)
+                                                .Where(room => (room.TeacherProfile.AccountID == LoginUser.Id) || (room.Class.StudentProfiles.Any(student => student.AccountID == LoginUser.Id)));
+            
 
-                TeacherProfile profile = (TeacherProfile) ProfileDAOs.GetProfile(_context, loginAccount);
-                roomChats = RoomChatDAOs.getAllRoomChats(_context)
-                                .Where(r => r.TeacherProfile.Id == profile.Id).ToList();
-
-                ViewData["Profile"] = profile;
-
-            }
-            // LoginAccount == "Student"
-            else {
-                StudentProfile profile = (StudentProfile) ProfileDAOs.GetProfile(_context, loginAccount);
-                roomChats = RoomChatDAOs.getAllRoomChats(_context)
-                                .Where(r => r.Class.StudentProfiles.Any(s => s.Id == profile.Id)).ToList();
-
-                ViewData["Profile"] = profile;
-            }
-            ViewData["LoginUser"] = loginAccount;
-            return View(roomChats);
+            ViewData["RoomChats"] = RoomChats;
+            ViewData["LoginUser"] = LoginUser;
+            return View(LoginProfile);
         }
 
 
@@ -55,38 +44,66 @@ namespace UniChatApplication.Controllers
             && HttpContext.Session.GetString("Role") != "Teacher") return Redirect("/Home/");
             if(id == null) return Redirect("/Home/");
 
-            List<RoomChat> roomChats = null;
-            RoomChat roomChat = null;
+            Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
+            Profile LoginProfile = ProfileDAOs.GetProfile(_context, LoginUser);
 
-            Account loginAccount = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
-            if(loginAccount.RoleName == "Teacher"){
+            IEnumerable<RoomChat> RoomChats = RoomChatDAOs.getAllRoomChats(_context)
+                                                .Where(room => (room.TeacherProfile.AccountID == LoginUser.Id) || (room.Class.StudentProfiles.Any(student => student.AccountID == LoginUser.Id)));
+            
+            RoomChat RoomChat = RoomChats.FirstOrDefault(room => room.Id == id);
+            if (RoomChat == null) return Redirect("/Home/");
 
-                TeacherProfile profile = (TeacherProfile) ProfileDAOs.GetProfile(_context, loginAccount);
-                roomChats = RoomChatDAOs.getAllRoomChats(_context)
-                                .Where(r => r.TeacherProfile.Id == profile.Id).ToList();
+            if(LoginUser.RoleName == "Student") ViewData["LoginProfile"] = (StudentProfile) LoginProfile;
+            if(LoginUser.RoleName == "Teacher") ViewData["LoginProfile"] = (TeacherProfile) LoginProfile;
 
-                ViewData["Profile"] = profile;
+            ViewData["LoginUser"] = LoginUser;
+            ViewData["RoomChats"] = RoomChats;
+            ViewData["MessagePin"] = RoomMessagePinDAOs.GetMessagePinOfRoom(_context, RoomChat.Id);
 
+            ViewData["Messages"] = RoomMessageDAOs.messagesOfRoom(_context, RoomChat.Id);
+
+            return View(RoomChat);
+        }
+
+        public string PinMessage(int roomMessageId){
+            
+            RoomMessage message = RoomMessageDAOs.getAll(_context).FirstOrDefault(m => m.Id == roomMessageId);
+            if (message == null) return "";
+
+
+            bool CheckMessageBelongRoomOfUser = false; 
+
+            Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
+            Profile LoginProfile = ProfileDAOs.GetProfile(_context, LoginUser);
+
+            if(LoginUser.RoleName == "Teacher") {
+                CheckMessageBelongRoomOfUser = ((TeacherProfile) LoginProfile).RoomChats
+                .Any(room => room.Id == message.RoomID);
             }
-            // LoginAccount == "Student"
+            // RoleName = "Student"
             else {
-                StudentProfile profile = (StudentProfile) ProfileDAOs.GetProfile(_context, loginAccount);
-                roomChats = RoomChatDAOs.getAllRoomChats(_context)
-                                .Where(r => r.Class.StudentProfiles.Any(s => s.Id == profile.Id)).ToList();
-
-                ViewData["Profile"] = profile;
+                CheckMessageBelongRoomOfUser = ((StudentProfile) LoginProfile).Class.RoomChats
+                .Any(room => room.Id == message.RoomID);
             }
 
-            roomChat = roomChats.FirstOrDefault(r => r.Id == id);
-            if (roomChat == null) return Redirect("/Home/");
+            if (!CheckMessageBelongRoomOfUser) return "";
 
-            foreach(RoomMessage item in roomChat.Messages){
-                item.Account = _context.Account.Find(item.AccountID);
+            RoomMessagePin messagePin = RoomMessagePinDAOs.GetAllMessagePinOfRoom(_context, message.RoomID).FirstOrDefault(m => m.RoomMessage.Id == roomMessageId);
+
+            if(messagePin == null){                
+                _context.RoomMessagePins.Add( new RoomMessagePin(){
+                    RoomMessageId = roomMessageId,
+                    Time = DateTime.Now
+                });
+                _context.SaveChanges();
             }
-
-            ViewData["RoomChat"] = roomChat;
-            ViewData["LoginUser"] = loginAccount;
-            return View(roomChats);
+            else {
+                messagePin.Time = DateTime.Now;
+                _context.RoomMessagePins.Update(messagePin);
+                _context.SaveChanges();
+            }
+            
+            return message.Content;
         }
 
     }

@@ -66,7 +66,7 @@ namespace UniChatApplication.Controllers
             }
             teacher.Birthday = DateTime.Now.Date;
 
-            teacher.Account = AccountDAOs.CreateAccount(username, AccountDAOs.DefaultPassword, 1);
+            teacher.Account = AccountDAOs.CreateAccount(username, AccountDAOs.DefaultPassword, 2);
             _context.Add(teacher);
             _context.SaveChanges();
             return RedirectToAction("Index");

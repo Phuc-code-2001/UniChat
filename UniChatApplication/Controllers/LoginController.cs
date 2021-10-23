@@ -15,6 +15,7 @@ namespace UniChatApplication.Controllers
     {
 
         readonly UniChatDbContext _context;
+        public static ISession session;
         
 
         public LoginController(UniChatDbContext context)
@@ -29,6 +30,9 @@ namespace UniChatApplication.Controllers
             string username = HttpContext.Session.GetString("username");
             if (username != null){
                 Account account = await _context.Account.FirstOrDefaultAsync(a => a.Username == username);
+
+                LoginController.session = HttpContext.Session;
+                
                 if (account.RoleName == "Admin"){
 
                     HttpContext.Session.SetString("Role", "Admin");

@@ -5,7 +5,6 @@
 namespace AspNetCore
 {
     #line hidden
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -26,8 +25,15 @@ using UniChatApplication.Models;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 3 "C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\Views\_ViewImports.cshtml"
+using System;
+
+#line default
+#line hidden
+#nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"d8105239e58092bd9b628b509a4dada172a17801", @"/Views/Clients/RoomChat.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"117675200237a5f49f8acab2be1560d50c609162", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"549e0f71a3f10529379e72fd7551066208bb08e7", @"/Views/_ViewImports.cshtml")]
     public class Views_Clients_RoomChat : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<RoomChat>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("asp-action", "RoomChat", global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);
@@ -106,7 +112,7 @@ using UniChatApplication.Models;
 #line hidden
 #nullable disable
             WriteLiteral("                    <li>\r\n                        ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d8105239e58092bd9b628b509a4dada172a178016180", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d8105239e58092bd9b628b509a4dada172a178016336", async() => {
 #nullable restore
 #line 34 "C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\Views\Clients\RoomChat.cshtml"
                                                                     Write(item.Class.Name);
@@ -160,7 +166,7 @@ using UniChatApplication.Models;
 #line hidden
 #nullable disable
             WriteLiteral("        </ul>\r\n    </div>\r\n    <div class=\"box-chat\">\r\n        <ul id=\"box-chat-message\">\r\n\r\n        </ul>\r\n        ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d8105239e58092bd9b628b509a4dada172a178019273", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d8105239e58092bd9b628b509a4dada172a178019429", async() => {
                 WriteLiteral("\r\n            <input type=\"hidden\" name=\"author\"");
                 BeginWriteAttribute("value", " value=\"", 996, "\"", 1031, 1);
 #nullable restore
@@ -190,7 +196,7 @@ WriteAttributeValue("", 1004, ViewBag.LoginUser.Username, 1004, 27, false);
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n    </div>\r\n</div>\r\n\r\n");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("script", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d8105239e58092bd9b628b509a4dada172a1780111464", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("script", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d8105239e58092bd9b628b509a4dada172a1780111620", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();

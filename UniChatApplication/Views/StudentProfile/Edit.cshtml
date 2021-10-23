@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <div class="main-control-edit">
-    <form method="POST" class="form" id="form-1">
+    <form asp-action="Edit" method="POST" class="form" id="form-1">
         <h1 class="align-center heading">Edit Information Student</h1>
         <hr>
         <div class="spacer"></div>
@@ -34,15 +34,7 @@
             <label for="Gender" class="form-label">Gender</label>
             <select asp-for="Gender" id="Gender">
                 <option value="true">Male</option>
-                @{
-                    if(Model.GenderText == "Female"){
-                        <option value="false" selected>Female</option>
-                    }
-                    else if (Model.GenderText == "Male"){
-                        <option value="false">Female</option>
-                    }
-                }
-                
+                <option value="false">Female</option>
             </select>
         </div>
 
