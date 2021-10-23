@@ -1,0 +1,115 @@
+@{
+    ViewData["Title"] = "BoxChat";
+}
+
+@model Profile
+
+
+
+<link rel="stylesheet" href="~/css/Box/StyleIndex.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="background">
+    <div class="container">
+        @* User tools include: profile and logout *@
+        <div class="setting-tray">
+            <div class="d-flex justify-content-between align-items-center">
+                @* Profile *@
+                <button class="btn btn-success"> <i class="fa fa-user"></i> </button>
+                <span class="text-primary brand">UniChat</span>
+                @* Logout *@
+                <a asp-controller="Login" asp-action="Logout" class="btn btn-danger"> <i class="fa fa-power-off"></i> </a>
+            </div>
+        </div>
+        <br>
+        <div class="main-box">
+
+            <div class="profile-box">
+                <h4 class="text-success">My Profile</h4>
+
+                @{
+
+                    if (ViewBag.LoginUser.RoleName == "Student"){
+                        StudentProfile p = (StudentProfile) Model;
+
+                        <div class="avatar-box">
+                            <img src="~/images/4521373.jpg" alt="...">
+                        </div>
+                        <span><b>FullName</b><span>@p.FullName</span></span>
+                        <span><b>Username</b><span>@p.Account.Username</span></span>
+                        <span><b>StudentCode</b><span>@p.StudentCode</span></span>
+                        <span><b>Class</b><span>@p.Class.Name</span></span>
+                        <span><b>Major</b><span>@p.Major</span></span>
+                        <span><b>Gender</b><span>@p.GenderText</span></span>
+                        <span><b>Email</b><span>@p.Email</span></span>
+                        <span><b>Phone</b><span>@p.Phone</span></span>
+                        <span><b>Birthday</b><span>@p.Birthday.ToShortDateString()</span></span>
+
+                    }
+                    else if (ViewBag.LoginUser.RoleName == "Teacher") {
+                        TeacherProfile p = (TeacherProfile) Model;
+
+                        <div class="avatar-box">
+                            <img src="~/images/4521373.jpg" alt="...">
+                        </div>
+                        <span><b>FullName</b><span>@p.FullName</span></span>
+                        <span><b>Username</b><span>@p.Account.Username</span></span>
+                        <span><b>Gender</b><span>@p.GenderText</span></span>
+                        <span><b>Email</b><span>@p.Email</span></span>
+                        <span><b>Phone</b><span>@p.Phone</span></span>
+                        <span><b>TeacherCode</b><span>@p.TeacherCode</span></span>
+                        <span><b>Birthday</b><span>@p.Birthday.ToShortDateString()</span></span>
+                    }
+                }
+
+                
+            </div>
+
+            <div class="chat-list">
+                <div class="group">
+                    <h4 class="text-success">My Class</h4>
+                    <ul class="list">
+                        @foreach (RoomChat item in ViewBag.RoomChats)
+                        {
+                            <li>
+                                @if (ViewBag.LoginUser.RoleName == "Teacher")
+                                {
+                                    <span>@item.Class.Name - </span>
+                                }
+                                <a asp-action="RoomChat" asp-route-id="@item.Id">@item.Subject.SubjectCode - @item.Subject.FullName</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                @if (ViewBag.LoginUser.RoleName == "Student")
+                {
+                    <div class="group">
+                        <hr>
+                        <h4 class="text-success">My Group</h4>
+                        <ul class="list">
+                            <li><a href="#">PRN211</a></li>
+                            <li><a href="#">PRN211</a></li>
+                            <li><a href="#">PRN211</a></li>
+                        </ul>
+                    </div>
+                }
+            </div>
+            <div class="deadline-list">
+                <h4 class="text-success text-center">My Deadline</h4>
+                <ul class="list">
+                    <li>.............. : 06-06-2021 8:00</li>
+                    <li>.............. : 06-06-2021 8:00</li>
+                    <li>.............. : 06-06-2021 8:00</li>
+                </ul>
+            </div>
+            <div class="notification-list">
+                <h4 class="text-success text-center">Notifications</h4>
+                <ul class="list">
+                    <li>06-06-2021 8:00 : ................</li>
+                    <li>06-06-2021 8:00 : ................</li>
+                    <li>06-06-2021 8:00 : ................</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

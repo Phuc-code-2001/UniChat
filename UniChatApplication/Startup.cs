@@ -28,7 +28,8 @@ namespace UniChatApplication
                 .AddDbContext<UniChatDbContext>(options =>
                     options
                         .UseSqlServer(Configuration
-                            .GetConnectionString("UniChatDatabase")));
+                            .GetConnectionString("UniChatDatabase"),
+                            o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
             services.AddDistributedMemoryCache();
 

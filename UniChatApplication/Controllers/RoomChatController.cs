@@ -60,14 +60,17 @@ namespace UniChatApplication.Controllers
             
             if (ModelState.IsValid)
             {
-                string ClassName = _context.Class.First(c => c.Id == roomChat.ClassId).Name;
-                string SubjectName = _context.Subjects.First(s => s.Id == roomChat.SubjectId).FullName;
-                try{
+                string ClassName = _context.Class.Find(roomChat.ClassId)?.Name;
+                string SubjectName = _context.Subjects.Find(roomChat.SubjectId)?.FullName;
+
+                if(ClassName == null || SubjectName == null) return Redirect("/Home/");
+
+                if (!RoomChatDAOs.RoomChatExists(_context, roomChat.ClassId, roomChat.SubjectId)) {
                     _context.RoomChats.Add(roomChat);
                     _context.SaveChanges();
                     return RedirectToAction("Index");
                 }
-                catch (Exception){
+                else {
                     ViewData["Error"] = $"RoomChat with Class {ClassName} and Subject {SubjectName} existed.";
                 }
             }
@@ -123,22 +126,13 @@ namespace UniChatApplication.Controllers
         }
 
         // GET: RoomChat/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
+            if (id == null) return Redirect("/Home/");
 
-            var roomChat = await _context.RoomChats
-                .Include(r => r.Class)
-                .Include(r => r.Subject)
-                .Include(r => r.TeacherProfile)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (roomChat == null)
-            {
-                return NotFound();
-            }
+            RoomChat roomChat = RoomChatDAOs.getAllRoomChats(_context).FirstOrDefault(m => m.Id == id);
+            if (roomChat == null) return Redirect("/Home/");
 
             return View(roomChat);
         }
@@ -146,17 +140,17 @@ namespace UniChatApplication.Controllers
         // POST: RoomChat/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int? id)
         {
-            var roomChat = await _context.RoomChats.FindAsync(id);
-            _context.RoomChats.Remove(roomChat);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
+            if (id == null) return Redirect("/Home/");
 
-        private bool RoomChatExists(int id)
-        {
-            return _context.RoomChats.Any(e => e.Id == id);
+            RoomChat roomChat = _context.RoomChats.Find(id);
+            if(roomChat == null) return Redirect("/Home/");
+            _context.RoomChats.Remove(roomChat);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace UniChatApplication.Models
         public TeacherProfile TeacherProfile { get; set; }
 
         [InverseProperty("RoomChat")]
-        public IQueryable<RoomMessage> Messages { get; set; }
+        public ICollection<RoomMessage> Messages { get; set; }
 
     }
 }

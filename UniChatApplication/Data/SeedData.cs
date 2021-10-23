@@ -12,7 +12,7 @@ namespace UniChatApplication.Data
     {
         public static void InitialAdminAccount(IServiceProvider serviceProvider)
         {
-            var context =
+            UniChatDbContext context =
                 new UniChatDbContext(serviceProvider
                         .GetRequiredService<DbContextOptions<UniChatDbContext>>(
                         ));
@@ -67,5 +67,26 @@ namespace UniChatApplication.Data
             context.AddRange(admins);
             context.SaveChanges();
         }
+
+
+        public static void ResetDataServer(IServiceProvider serviceProvider){
+
+            UniChatDbContext context =
+                new UniChatDbContext(serviceProvider
+                        .GetRequiredService<DbContextOptions<UniChatDbContext>>(
+                        ));
+
+            // Reset Login Cookie
+            List<LoginCookie> cookies = new List<LoginCookie>();
+            foreach (LoginCookie item in context.LoginCookies)
+            {
+                if (item.ExpirationTime <= DateTime.Now){
+                    cookies.Add(item);
+                }
+            }
+            context.LoginCookies.RemoveRange(cookies);
+            context.SaveChanges();
+        }
+
     }
 }

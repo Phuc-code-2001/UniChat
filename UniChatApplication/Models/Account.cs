@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UniChatApplication.Models
@@ -27,6 +28,12 @@ namespace UniChatApplication.Models
                 return "Unknown";
             }
         }
+
+        [NotMapped]
+        public Profile Profile { get; set; }
+
+        [InverseProperty("Account")]
+        public ICollection<RoomMessage> RoomMessages { get; set; }
 
     }
 }

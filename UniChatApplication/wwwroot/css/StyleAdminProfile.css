@@ -1,13 +1,14 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: monaco, Consolas, Lucida Console,
 }
 
 
 /* Main CSS */
 
 h1 {
-    font-family: monaco, Consolas, Lucida Console, monospace;
     color: #0d47a1;
 }
 
@@ -24,14 +25,27 @@ h1 {
 }
 
 .box {
+    height: 375px;
     background-color: white;
-    padding: 2em;
+    padding: 2rem;
     border: 2px solid black;
     border-radius: 5px;
-    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
 }
 
 .box:hover {
     box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
     transform: translateY(-2px);
+}
+
+.box img {
+    width: 250px;
+    height: 250px;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    margin: auto;
 }

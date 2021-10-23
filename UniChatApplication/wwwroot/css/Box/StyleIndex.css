@@ -1,0 +1,97 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: monaco, Consolas, Lucida Console, monospace;
+}
+
+
+/* Background */
+
+
+/* .background {
+    background-image: url('/wwwroot/images/background-main.jpg');
+    background-repeat: no-repeat;
+    height: 100vh;
+} */
+
+.brand {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.setting-tray {
+    background: #eee;
+    margin: 0.5rem;
+    padding: 0.2rem;
+    border-radius: 5px;
+}
+
+.setting-tray i {
+    font-size: 1rem;
+}
+
+.main-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.main-box > * {
+    flex: 1;
+    min-width: 450px;
+    border-radius: 10px;
+    border: 1px solid black;
+    padding: 1rem;
+}
+
+.profile-box {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.profile-box > div, .profile-box > span {
+    border-bottom: 1px solid blue;
+
+}
+
+.profile-box > span {
+    display: flex;
+    gap: 1rem;
+}
+.profile-box > span > b {
+    flex: 1;
+    text-align: center;
+}
+.profile-box > span > span {
+    flex: 2;
+    text-align: center;
+}
+
+.avatar-box {
+    width: 100%;
+    max-height: 250px;
+    padding-bottom: .5rem;
+    text-align: center;
+}
+
+.avatar-box > img {
+    max-width: 250px;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    padding-left: 3rem;
+}
+
+.chat-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}

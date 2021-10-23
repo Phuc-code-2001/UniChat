@@ -9,16 +9,15 @@
 
 <div class="container">
     <h1 class="text-center">Student Management</h1>
+    <h4 class="text-center">Delete a student</h4>
+    <a class="button-3 text-white text-decoration-none" asp-action="Index">Back to List</a>
     <hr>
-    <div class="p-2 text-danger">
-        <h4><i>Do you want to complete delete?</i></h4>
-    </div>
 
-    <div class="d-flex" style="gap: 1rem;">
+    <div class="d-flex flex-wrap" style="gap: 1rem;">
         <div class="avatar-box">
             <img src="~/images/4521373.jpg" alt="">
         </div>
-        <table class="table table-bordered table-sm">
+        <table class="table table-bordered">
             <tbody>
                 <tr>
                     <th>Username</th>
@@ -60,8 +59,11 @@
         </table>
     </div>
 
-    <form class="d-flex" method="post" style="gap: 1rem;">
-        <a class="button-2 text-white text-decoration-none" asp-action="Index">Back to List</a>
-        <input type="submit" value="Delete" class="button-3 text-white text-decoration-none" />
-    </form>
+    <div class="p-2 text-danger">
+        <h4 class="text-danger">Do you want to complete delete the student "@Model.FullName"?</h4>
+        <hr>
+        <form method="post">
+            <input type="submit" value="Confirm" class="button-3 text-white text-decoration-none" />
+        </form>
+    </div>
 </div>

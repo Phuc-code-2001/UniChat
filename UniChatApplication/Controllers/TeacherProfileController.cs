@@ -35,10 +35,15 @@ namespace UniChatApplication.Controllers
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
             if (id == null) return Redirect("/Home/");
 
-            TeacherProfile teacher = ProfileDAOs.getAllTeachers(_context).FirstOrDefault(m => m.Id == id);
-            if (teacher == null) return Redirect("/Home/");
+            TeacherProfile teacherProfile = ProfileDAOs.getAllTeachers(_context).FirstOrDefault(m => m.Id == id);
+            if (teacherProfile == null) return Redirect("/Home/");
 
-            return View(teacher);
+            foreach(RoomChat item in teacherProfile.RoomChats){
+                item.Class = ClassDAOs.getAllClasses(_context).FirstOrDefault(c => c.Id == item.ClassId);
+                item.Subject = SubjectDAOs.getAllSubject(_context).FirstOrDefault(s => s.Id == item.SubjectId);
+            }
+
+            return View(teacherProfile);
         }
 
         // Mapping to Create View of Student Management
@@ -61,7 +66,7 @@ namespace UniChatApplication.Controllers
             }
             teacher.Birthday = DateTime.Now.Date;
 
-            teacher.Account = AccountDAOs.CreateAccount(username, AccountDAOs.DefaultPassword, 1);
+            teacher.Account = AccountDAOs.CreateAccount(username, AccountDAOs.DefaultPassword, 2);
             _context.Add(teacher);
             _context.SaveChanges();
             return RedirectToAction("Index");
@@ -108,6 +113,11 @@ namespace UniChatApplication.Controllers
 
             TeacherProfile teacherProfile = ProfileDAOs.getAllTeachers(_context).FirstOrDefault(p => p.Id == id);
             if (teacherProfile == null) return Redirect("/Home/");
+
+            foreach(RoomChat item in teacherProfile.RoomChats){
+                item.Class = ClassDAOs.getAllClasses(_context).FirstOrDefault(c => c.Id == item.ClassId);
+                item.Subject = SubjectDAOs.getAllSubject(_context).FirstOrDefault(s => s.Id == item.SubjectId);
+            }
 
             return View(teacherProfile);
         }

@@ -22,26 +22,10 @@ namespace UniChatApplication.Controllers
         }
 
         // Mapping to Home View
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-
-            string username = HttpContext.Session.GetString("username");
-            if (username != null){
-                Account account = await _context.Account.FirstOrDefaultAsync(a => a.Username == username);
-                if (account.RoleName == "Admin"){
-
-                    return Redirect("/Admin/");
-                }
-                if (account.RoleName == "Teacher"){
-                    
-                    return Redirect("/Teacher/");
-                }
-
-                if (account.RoleName == "Student"){
-
-                    return Redirect("/Student/");
-                }
-                
+            if (HttpContext.Session.GetString("username") != null){
+                return Redirect("/Login/");
             }
 
             return View();
