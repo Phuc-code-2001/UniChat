@@ -1,3 +1,4 @@
+create database FALL2021_SWP201;
 use FALL2021_SWP201;
 
 create table dbo.class(
@@ -15,7 +16,7 @@ create table dbo.account(
 create table dbo.admin_profile (
 	id int primary key identity(1, 1),
 	fullname nvarchar(50) not null,
-	avatar nvarchar(255) default '~/profiles/admin_profiles/default.jpg',
+	avatar nvarchar(255) not null default '/media/profiles/default.png',
 	email nvarchar(50),
 	phone nvarchar(11),
 	gender bit,
@@ -26,7 +27,7 @@ create table dbo.admin_profile (
 create table dbo.teacher_profile(
 	id int primary key identity(1, 1),
 	fullname nvarchar(50) not null,
-	avatar nvarchar(255) default '~/profiles/teacher_profiles/default.jpg',
+	avatar nvarchar(255) not null default '/media/profiles/default.png',
 	email nvarchar(50),
 	phone nvarchar(11),
 	gender bit,
@@ -39,7 +40,7 @@ create table dbo.teacher_profile(
 create table dbo.student_profile(
 	id int primary key identity(1, 1),
 	fullname nvarchar(50) not null,
-	avatar nvarchar(255) default '~/profiles/student_profiles/default.jpg',
+	avatar nvarchar(255) not null default '/media/profiles/default.png',
 	email nvarchar(50),
 	phone nvarchar(11),
 	gender bit,

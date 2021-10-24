@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UniChatApplication.Models
@@ -6,6 +7,10 @@ namespace UniChatApplication.Models
     [Table("admin_profile")]
     public class AdminProfile : Profile
     {
+
+        public AdminProfile(){
+            this.Avatar = Profile.defaultAvatar;
+        }
 
         [Key]
         public int Id { get; set; }

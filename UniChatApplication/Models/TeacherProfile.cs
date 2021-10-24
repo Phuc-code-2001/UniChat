@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -9,6 +10,10 @@ namespace UniChatApplication.Models
     [Table("teacher_profile")]
     public class TeacherProfile : Profile
     {
+
+        public TeacherProfile(){
+            this.Avatar = Profile.defaultAvatar;
+        }
 
         [Key]
         public int Id { get; set; }
