@@ -1,0 +1,45 @@
+@model IEnumerable<RoomDeadLine>
+
+@{
+    ViewData["Title"] = "RoomDeadline Management";
+}
+
+<div class="container">
+
+    <h2>DeadLine Management</h2>
+    <hr>
+    <h4>RoomChat : <span class="text-primary">@ViewBag.RoomChat.Class.Name - @ViewBag.RoomChat.Subject.FullName</span>
+    </h4>
+    <br>
+    <a class="btn btn-outline-danger" asp-controller="Box" asp-action="RoomChat" asp-route-id="@ViewBag.roomChat.Id">Back to chat</a>
+    <a class="btn btn-outline-primary" asp-action="Create" asp-route-RoomId="@ViewBag.RoomChat.Id">Create</a>
+    <hr>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Number</th>
+                <th>Content</th>
+                <th>Expiration Time</th>
+                <th>Operation</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 0;
+                foreach (RoomDeadLine item in Model)
+                {   
+                    i++;
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.Content</td>
+                        <td>@item.ExpirationTime</td>
+                        <td>
+                            <a href="#">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+</div>

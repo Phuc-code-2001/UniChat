@@ -33,12 +33,21 @@
                         StudentProfile p = (StudentProfile) Model;
 
                         <div class="avatar-box">
-                            <img src="~/images/4521373.jpg" alt="...">
+                            <img src="@p.Avatar" alt="...">
                         </div>
                         <span><b>FullName</b><span>@p.FullName</span></span>
                         <span><b>Username</b><span>@p.Account.Username</span></span>
                         <span><b>StudentCode</b><span>@p.StudentCode</span></span>
-                        <span><b>Class</b><span>@p.Class.Name</span></span>
+                        <span><b>Class</b>
+                            @{
+                                if (p.Class != null){
+                                    <span>@p.Class.Name</span>
+                                }
+                                else {
+                                    <span>Undefined</span>
+                                }
+                            }
+                        </span>
                         <span><b>Major</b><span>@p.Major</span></span>
                         <span><b>Gender</b><span>@p.GenderText</span></span>
                         <span><b>Email</b><span>@p.Email</span></span>
@@ -50,7 +59,7 @@
                         TeacherProfile p = (TeacherProfile) Model;
 
                         <div class="avatar-box">
-                            <img src="~/images/4521373.jpg" alt="...">
+                            <img src="@p.Avatar" alt="...">
                         </div>
                         <span><b>FullName</b><span>@p.FullName</span></span>
                         <span><b>Username</b><span>@p.Account.Username</span></span>
@@ -77,6 +86,9 @@
                                     <span>@item.Class.Name - </span>
                                 }
                                 <a asp-action="RoomChat" asp-route-id="@item.Id">@item.Subject.SubjectCode - @item.Subject.FullName</a>
+                                <p>
+                                    <a asp-controller="RoomDeadLine" asp-action="View" asp-route-RoomId="@item.Id">Deadline management</a>
+                                </p>
                             </li>
                         }
                     </ul>

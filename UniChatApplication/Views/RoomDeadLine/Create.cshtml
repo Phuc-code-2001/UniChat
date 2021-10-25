@@ -3,14 +3,56 @@
 }
 
 @model RoomDeadLine
+
+<style>
+
+    form {
+        width: min(100%, 650px);
+        padding: 25px;
+        background-color: skyblue;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    label {
+        font-weight: 600;
+        font-size: 1.2rem;
+    }
+
+    input, textarea {
+        border-radius: 5px;
+    }
+
+    textarea {
+        padding: 1rem;
+    }
+
+</style>
+
 <div class="container">
 
-    <h2>Create new deadline for RoomId: @Model.RoomId</h2>
 
-    <form asp-action="Create" method="post" class="d-flex flex-column" style="gap: .5rem;">
+    <h2>Create new deadline</h2>
+    <hr>
+    <h4>RoomChat : <span class="text-primary">@Model.RoomChat.Class.Name - @Model.RoomChat.Subject.FullName</span>
+    </h4>
+    <br>
+
+    <form asp-action="Create" asp-route-RoomId="@Model.RoomId" method="Post">
+        @if (ViewBag.Error != null){
+            <div class="alert alert-danger bg-white alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>@ViewBag.Error</strong>
+            </div>
+        }
+        <label asp-for="Content"></label>
         <textarea asp-for="Content" cols="30" rows="10"></textarea>
-        <input type="datetime" asp-for="ExpirationTime">
-        <input type="submit" value="Create">
+        <label asp-for="ExpirationTime"></label>
+        <input type="datetime-local" name="ExpirationTime" value="@ViewBag.ExpirationTime">
+        <input type="submit" class="btn btn-primary" value="Create">
     </form>
+    <hr>
+    <a class="btn btn-danger" asp-action="View" asp-route-RoomId="@Model.RoomId">Back</a>
 
 </div>

@@ -20,21 +20,29 @@ namespace UniChatApplication.Controllers
         }
 
         // View All RoomDeadLine of a room
-        public IActionResult ViewAll(int? RoomId)
+        public IActionResult View(int RoomId)
         {
-            if (RoomId == null) return Redirect("/Home/");
-            IEnumerable<RoomDeadLine> deadlines = RoomDeadLineDAOs.GetAllOfRoom(_context, (int) RoomId);
+            RoomChat roomChat = RoomChatDAOs.getAllRoomChats(_context).FirstOrDefault(r => r.Id == RoomId);
+            if (roomChat == null) return Redirect("/Home/");
+
+            Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
+            if (LoginUser == null) return Redirect("/Home/");
+
+            bool CheckRoomOfUser = roomChat.TeacherProfile.AccountID == LoginUser.Id
+                                || roomChat.Class.StudentProfiles.Any(s => s.AccountID == LoginUser.Id);
+                                
+            if(!CheckRoomOfUser) return Redirect("/Home/");
+
+            IEnumerable<RoomDeadLine> deadlines = RoomDeadLineDAOs.GetAllOfRoom(_context, RoomId);
             
-            ViewData["RoomId"] = RoomId;
+            ViewData["RoomChat"] = roomChat;
 
             return View(deadlines);
         }
 
         // Mapping to view that create a new room deadline
-        public IActionResult Create(int? RoomId)
+        public IActionResult Create(int RoomId)
         {
-            
-            if (RoomId == null) return Redirect("/Home/");
             
             RoomChat roomChat = RoomChatDAOs.getAllRoomChats(_context).FirstOrDefault(r => r.Id == RoomId);
             if (roomChat == null) return Redirect("/Home/");
@@ -48,10 +56,11 @@ namespace UniChatApplication.Controllers
             if(!CheckRoomOfUser) return Redirect("/Home/");
 
             RoomDeadLine newRoomDeadLine = new RoomDeadLine(){
-                RoomId = (int) RoomId,
-                ExpirationTime = DateTime.Now
+                RoomId = RoomId,
+                RoomChat = roomChat
             };
-
+            
+            ViewData["ExpirationTime"] = DateTime.Now.ToString("yyyy-MM-dd HH:mm").Replace(' ','T');
             return View(newRoomDeadLine);
         }
 
@@ -60,14 +69,33 @@ namespace UniChatApplication.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(RoomDeadLine deadline){
 
-            if(ModelState.IsValid){
+            int RoomId = deadline.RoomId;
 
+            RoomChat roomChat = RoomChatDAOs.getAllRoomChats(_context).FirstOrDefault(r => r.Id == RoomId);
+            if (roomChat == null) return Redirect("/Home/");
+
+            Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
+            if (LoginUser == null) return Redirect("/Home/");
+
+            bool CheckRoomOfUser = roomChat.TeacherProfile.AccountID == LoginUser.Id
+                                || roomChat.Class.StudentProfiles.Any(s => s.AccountID == LoginUser.Id);
+                                
+            if(!CheckRoomOfUser) return Redirect("/Home/");
+
+            
+
+            if(deadline.Content != null && deadline.Content.Trim() != ""){
+
+                deadline.Content = deadline.Content.Trim();
                 _context.RoomDeadLines.Add(deadline);
                 _context.SaveChanges();
-                return RedirectToAction("RoomChat", "Box", deadline.RoomId);
+                return Redirect($"/RoomDeadLine/View?RoomId={RoomId}");
 
             }
+            ViewData["Error"] = "Content of deadline can not be blank...";
+            ViewData["ExpirationTime"] = DateTime.Now.ToString("yyyy-MM-dd HH:mm").Replace(' ','T');
 
+            deadline.RoomChat = roomChat;
             return View(deadline);
 
         }

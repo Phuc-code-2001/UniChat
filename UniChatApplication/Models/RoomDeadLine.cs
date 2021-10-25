@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UniChatApplication.Models
 {
-    [Table("room_deadline")]
+    [Table("room_dealine")]
     public class RoomDeadLine
     {
         [Key]
