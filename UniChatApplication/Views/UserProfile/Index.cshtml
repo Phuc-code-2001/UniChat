@@ -1,0 +1,111 @@
+@{
+    ViewData["Title"] = "UserProfile";
+}
+
+@model Profile
+
+<style>
+
+    @* Css tạm cho cái avatar *@
+
+    .avatar-section {
+        padding: 1rem;
+        background-color: skyblue;
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        width: fit-content;
+    }
+
+    .avatar-box {
+        width: 250px;
+        height: 250px;
+        border-radius: 100rem; @* Tròn kiểu pro *@
+    }
+
+    .avatar-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+</style>
+
+<div class="container">
+
+    @* Css lại cho thằng này *@
+    <div class="avatar-section">
+        <div class="avatar-box">
+            <img src="@Model.Avatar" alt="">
+        </div>
+        <form class="avatar-form" enctype="multipart/form-data" asp-action="UpdateAvatar" method="POST">
+            <input class="file-info" type="file" accept=".png,.jpg" name="imageFile">
+            <input class="file-info btn btn-info" type="submit" value="Ok">
+        </form>
+    </div>
+
+    @if (Model.Account.RoleName == "Teacher")
+    {
+        TeacherProfile profile = (TeacherProfile) Model;
+        @* Design TeacherProfile here *@
+        @* Avatar *@
+        @* FullName *@
+        @* Email *@
+        @* TeacherCode *@
+        @* Gender *@
+        @* Phone *@
+        @* Birthday *@
+
+        @* Tao để tạm bằng thẻ ul *@
+        <h4>Teacher</h4>
+        <ul>
+            <li>FullName: @profile.FullName</li>
+            <li>Email: @profile.Email</li>
+            <li>TeacherCode: @profile.TeacherCode</li>
+            <li>Gender: @profile.GenderText</li>
+            <li>Phone: @profile.Phone</li>
+            <li>Birthday: @profile.Birthday.ToShortDateString()</li>
+        </ul>
+    }
+    else if (Model.Account.RoleName == "Student")
+    {
+        StudentProfile profile = (StudentProfile) Model;
+        @* Design StudentProfile here *@
+        @* Avatar *@
+        @* FullName *@
+        @* Major *@
+        @* Class *@
+        @* StudentCode *@
+        @* Email *@
+        @* Gender *@
+        @* Phone *@
+        @* Birthday *@
+
+        @* Tao để tạm bằng thẻ ul *@
+        <h4>Student</h4>
+        <ul>
+            <li>FullName: @profile.FullName</li>
+            <li>Major: @profile.Major</li>
+            <li>StudentCode: @profile.StudentCode</li>
+            <li>Class: @profile.Class.Name</li>
+            <li>Email: @profile.Email</li>
+            <li>Gender: @profile.GenderText</li>
+            <li>Phone: @profile.Phone</li>
+            <li>Birthday: @profile.Birthday.ToShortDateString()</li>
+        </ul>
+    }
+
+    @if(Model.Account.Id == ViewBag.LoginUser.Id)
+    {
+        @* Design control box here include Edit btn, ChangePass btn *@
+
+        @* Tao làm tạm mấy nút ở đây *@
+        <div class="btn-group">
+            <a asp-controller="Home" class="btn btn-danger">Back</a>
+            <button class="btn btn-primary">Edit</button>
+            <a class="btn btn-outline-success">Update Password</a>
+        </div>
+
+    }
+
+</div>

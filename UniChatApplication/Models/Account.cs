@@ -29,11 +29,17 @@ namespace UniChatApplication.Models
             }
         }
 
-        [NotMapped]
-        public Profile Profile { get; set; }
+        public StudentProfile StudentProfile { get; set; }
 
+        public TeacherProfile TeacherProfile { get; set; }
+
+        public AdminProfile AdminProfile { get; set; }
+        
         [InverseProperty("Account")]
         public ICollection<RoomMessage> RoomMessages { get; set; }
+
+        [InverseProperty("Account")]
+        public ICollection<GroupMessage> GroupMessages { get; set; }
 
     }
 }

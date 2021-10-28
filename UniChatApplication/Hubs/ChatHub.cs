@@ -36,6 +36,7 @@ namespace UniChatApplication.Hubs
             Account loginUser = AccountDAOs.getLoginAccount(_context, session);
             
             RoomChat room = RoomChatDAOs.getAllRoomChats(_context).FirstOrDefault(r => r.Id == roomId);
+
             if(loginUser.Id == userId 
             && (room.Class.StudentProfiles.Any(p => p.AccountID == userId)
             || room.TeacherProfile.AccountID == userId)){
@@ -47,7 +48,24 @@ namespace UniChatApplication.Hubs
                     TimeMessage = DateTime.Now
                 });
 
-                await Clients.Group($"RoomChat-{roomId}").SendAsync("GetRoomMessage", loginUser.Username, message);
+                RoomMessage roomMessage = await _context.RoomMessages.OrderBy(r => r.Id).LastAsync();
+                int messageId = roomMessage.Id;
+                
+                string avatar = "";
+                if (loginUser.RoleName == "Teacher"){
+                    avatar = ((TeacherProfile) ProfileDAOs.GetProfile(_context, loginUser)).Avatar;
+                }
+                else if (loginUser.RoleName == "Student"){
+                    avatar = ((StudentProfile) ProfileDAOs.GetProfile(_context, loginUser)).Avatar;
+                }
+
+                await Clients.Group($"RoomChat-{roomId}").SendAsync(
+                    "GetRoomMessage",
+                    loginUser.Username,
+                    message,
+                    messageId,
+                    avatar
+                );
             }
         }
     }

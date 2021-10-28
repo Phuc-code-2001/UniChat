@@ -158,8 +158,8 @@ create table dbo.room_dealine (
 
 create table dbo.group_dealine (
 	id int primary key identity(1, 1),
-	room_id int not null,
+	group_id int not null,
 	content nvarchar(500) not null,
 	expiration_time datetime,
-	foreign key (room_id) references dbo.room_chat (id) on delete cascade,
+	foreign key (group_id) references dbo.group_chat (id) on delete cascade,
 );

@@ -32,5 +32,10 @@ namespace UniChatApplication.Models
         [InverseProperty("RoomChat")]
         public ICollection<RoomMessage> Messages { get; set; }
 
+        public ICollection<RoomDeadLine> DeadLines { get; set; }
+
+        [InverseProperty("RoomChat")]
+        public ICollection<GroupChat> GroupChats { get; set; }
+
     }
 }

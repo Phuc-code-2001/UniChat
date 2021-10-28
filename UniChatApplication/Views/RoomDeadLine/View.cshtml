@@ -7,39 +7,103 @@
 <div class="container">
 
     <h2>DeadLine Management</h2>
-    <hr>
-    <h4>RoomChat : <span class="text-primary">@ViewBag.RoomChat.Class.Name - @ViewBag.RoomChat.Subject.FullName</span>
+    
+    <h4>
+        <span>RoomChat:</span>
+        <span class="text-primary">@ViewBag.RoomChat.Class.Name - @ViewBag.RoomChat.Subject.FullName</span>
     </h4>
-    <br>
-    <a class="btn btn-outline-danger" asp-controller="Box" asp-action="RoomChat" asp-route-id="@ViewBag.roomChat.Id">Back to chat</a>
-    <a class="btn btn-outline-primary" asp-action="Create" asp-route-RoomId="@ViewBag.RoomChat.Id">Create</a>
-    <hr>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Number</th>
-                <th>Content</th>
-                <th>Expiration Time</th>
-                <th>Operation</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                int i = 0;
-                foreach (RoomDeadLine item in Model)
-                {   
-                    i++;
-                    <tr>
-                        <td>@i</td>
-                        <td>@item.Content</td>
-                        <td>@item.ExpirationTime</td>
-                        <td>
-                            <a href="#">Delete</a>
-                        </td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
+    
+    <div>
+        <a class="btn btn-outline-danger" asp-controller="Box" asp-action="RoomChat" asp-route-id="@ViewBag.roomChat.Id">Back</a>
+        @if (ViewBag.LoginUser.RoleName == "Teacher"){
+            <a class="btn btn-outline-primary" asp-action="Create" asp-route-RoomId="@ViewBag.RoomChat.Id">Create</a>
+        }
+    </div>
 
+    <div>
+        <h6>New DeadLine List</h6>
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Content</th>
+                    <th>Expiration Time</th>
+                    @if (ViewBag.LoginUser.RoleName == "Teacher"){
+                        <th>Delete</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int i = 0;
+                    foreach (RoomDeadLine item in Model)
+                    {   
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.Content</td>
+                            <td>@item.ExpirationTime</td>
+                            @if(ViewBag.LoginUser.RoleName == "Teacher"){
+                                <td>
+                                    <a class="btn btn-danger" name="delete" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    <a class="btn btn-success" name="edit" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <h6>Old DeadLine List</h6>
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Content</th>
+                    <th>Expiration Time</th>
+                    @if (ViewBag.LoginUser.RoleName == "Teacher"){
+                        <th>Delete</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    i = 0;
+                    foreach (RoomDeadLine item in ViewBag.OldDeadLineList)
+                    {   
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.Content</td>
+                            <td>@item.ExpirationTime</td>
+
+                            @if(ViewBag.LoginUser.RoleName == "Teacher"){
+                                <td>
+                                    <a class="btn btn-danger" name="delete" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    <a class="btn btn-success" name="edit" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
+
+
+<script>
+
+    $(document).ready(function(){
+
+        $("a[name='delete']").click(function(e){
+            if (!confirm("Do you want to delete the deadline?")){
+                e.preventDefault();
+            }
+        })
+        
+    })
+
+</script>

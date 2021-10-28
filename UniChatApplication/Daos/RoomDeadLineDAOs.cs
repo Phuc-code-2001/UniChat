@@ -12,7 +12,19 @@ namespace UniChatApplication.Daos
         public static IEnumerable<RoomDeadLine> GetAll(UniChatDbContext context){
             return context.RoomDeadLines.Include(d => d.RoomChat)
                                         .Include(d => d.RoomChat.Class)
-                                        .Include(d => d.RoomChat.Subject);
+                                        .Include(d => d.RoomChat.Subject)
+                                        .Include(d => d.RoomChat.TeacherProfile);
+        }
+
+        public static IEnumerable<RoomDeadLine> GetLimit(UniChatDbContext context, int limit)
+        {
+            return context.RoomDeadLines.Include(d => d.RoomChat)
+                                        .Include(d => d.RoomChat.Class)
+                                        .Include(d => d.RoomChat.Class.StudentProfiles)
+                                        .Include(d => d.RoomChat.Subject)
+                                        .Include(d => d.RoomChat.TeacherProfile)
+                                        .OrderBy(d => d.Id)
+                                        .Take(limit);
         }
 
         public static IEnumerable<RoomDeadLine> GetAllOfRoom(UniChatDbContext context, int RoomId){

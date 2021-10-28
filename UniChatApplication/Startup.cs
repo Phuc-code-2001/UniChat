@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,6 +38,8 @@ namespace UniChatApplication
                 .AddSession(options =>
                 {
                     options.IdleTimeout = TimeSpan.FromSeconds(60 * 30);
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    options.Cookie.SameSite = SameSiteMode.Strict;
                     options.Cookie.HttpOnly = true;
                     options.Cookie.IsEssential = true;
                 });

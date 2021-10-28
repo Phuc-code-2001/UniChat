@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: monaco, Consolas, Lucida Console,
+    font-family: monaco, Consolas, Lucida Console, monospace;
 }
 
 
@@ -25,7 +25,6 @@ h1 {
 }
 
 .box {
-    height: 375px;
     background-color: white;
     padding: 2rem;
     border: 2px solid black;
@@ -33,7 +32,6 @@ h1 {
     display: flex;
     flex-direction: column;
     text-align: center;
-    gap: 1rem;
 }
 
 .box:hover {
@@ -41,7 +39,48 @@ h1 {
     transform: translateY(-2px);
 }
 
-.box img {
+span.txtInfo {
+    height: 40.25px;
+    vertical-align: middle;
+}
+
+.avatar-form {
+    box-shadow: 0 0 5px 1px #333;
+}
+
+.avatar-form input.file-info {
+    border: none;
+    outline: none;
+    height: 100%;
+}
+
+.avatar-form input.file-info:hover {
+    box-shadow: 0 0 5px 1px blue;
+    font-weight: 600;
+}
+
+.avatar-box {
+    position: relative;
+}
+
+.avatar-box .btn-edit-avatar {
+    position: absolute;
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #5468ff;
+    width: 40px;
+    height: 40px;
+    top: 191px;
+    left: 192px;
+    border-radius: 100rem;
+    box-shadow: 0 0 5px 1px #eee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.avatar-box img {
     width: 250px;
     height: 250px;
     max-width: 100%;

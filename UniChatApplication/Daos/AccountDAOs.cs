@@ -69,10 +69,11 @@ namespace UniChatApplication.Daos
 
             if (username != null && username != "")
             {
-                Account account =
-                    context
-                        .Account
-                        .FirstOrDefault(a => a.Username == username);
+                Account account = context.Account
+                                    .Include(m => m.AdminProfile)
+                                    .Include(m => m.StudentProfile)
+                                    .Include(m => m.TeacherProfile)
+                                    .FirstOrDefault(a => a.Username == username);
                 return account;
             }
             

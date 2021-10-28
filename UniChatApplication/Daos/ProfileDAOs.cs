@@ -11,26 +11,22 @@ namespace UniChatApplication.Daos
         {
             if (account.RoleName == "Student")
             {
-                StudentProfile profile =
-                    context
-                        .StudentProfile
-                        .Include(p => p.Account)
-                        .Include(p => p.Class)
-                        .Include(p => p.Class.RoomChats)
-                        .Include(p => p.Class.StudentProfiles)
-                        .Where(p => p.AccountID == account.Id)
-                        .FirstOrDefault();
+                StudentProfile profile = context.StudentProfile
+                                        .Include(p => p.Account)
+                                        .Include(p => p.Class)
+                                        .Include(p => p.Class.RoomChats)
+                                        .Include(p => p.Class.StudentProfiles)
+                                        .Where(p => p.AccountID == account.Id)
+                                        .FirstOrDefault();
                 return profile;
             }
             if (account.RoleName == "Teacher")
             {
-                TeacherProfile profile =
-                    context
-                        .TeacherProfile
-                        .Include(p => p.Account)
-                        .Include(p => p.RoomChats)
-                        .Where(p => p.AccountID == account.Id)
-                        .FirstOrDefault();
+                TeacherProfile profile = context.TeacherProfile
+                                        .Include(p => p.Account)
+                                        .Include(p => p.RoomChats)
+                                        .Where(p => p.AccountID == account.Id)
+                                        .FirstOrDefault();
                 return profile; 
             }
             if (account.RoleName == "Admin"){

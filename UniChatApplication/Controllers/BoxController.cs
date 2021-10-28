@@ -31,9 +31,14 @@ namespace UniChatApplication.Controllers
             IEnumerable<RoomChat> RoomChats = RoomChatDAOs.getAllRoomChats(_context)
                                                 .Where(room => (room.TeacherProfile.AccountID == LoginUser.Id) || (room.Class.StudentProfiles.Any(student => student.AccountID == LoginUser.Id)));
             
+            IEnumerable<RoomDeadLine> roomDeadLineList = RoomDeadLineDAOs.GetAll(_context)
+                                                            .Where(r => RoomChats.Any(rc => rc.Id == r.RoomId))
+                                                            .OrderByDescending(r => r.ExpirationTime).Take(8);
 
             ViewData["RoomChats"] = RoomChats;
             ViewData["LoginUser"] = LoginUser;
+            ViewData["RoomDeadLineList"] = roomDeadLineList;
+
             return View(LoginProfile);
         }
 
@@ -60,11 +65,12 @@ namespace UniChatApplication.Controllers
             ViewData["RoomChats"] = RoomChats;
             ViewData["MessagePin"] = RoomMessagePinDAOs.GetMessagePinOfRoom(_context, RoomChat.Id);
 
-            ViewData["Messages"] = RoomMessageDAOs.messagesOfRoom(_context, RoomChat.Id);
-
+            ViewData["Messages"] =  RoomMessageDAOs.messagesOfRoom(_context, RoomChat.Id);
+            
             return View(RoomChat);
         }
 
+        // Use to pin message into chat room
         public string PinMessage(int roomMessageId){
             
             RoomMessage message = RoomMessageDAOs.getAll(_context).FirstOrDefault(m => m.Id == roomMessageId);
@@ -88,6 +94,7 @@ namespace UniChatApplication.Controllers
 
             if (!CheckMessageBelongRoomOfUser) return "";
 
+            
             RoomMessagePin messagePin = RoomMessagePinDAOs.GetAllMessagePinOfRoom(_context, message.RoomID).FirstOrDefault(m => m.RoomMessage.Id == roomMessageId);
 
             if(messagePin == null){                

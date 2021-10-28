@@ -462,3 +462,6 @@ C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Vie
 C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\Box\RoomChat.cshtml.g.cs
 C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\RoomDeadLine\Create.cshtml.g.cs
 C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\RoomDeadLine\View.cshtml.g.cs
+C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\RoomDeadLine\Edit.cshtml.g.cs
+C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\UserProfile\Index.cshtml.g.cs
+C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\Admin\UpdatePassword.cshtml.g.cs
