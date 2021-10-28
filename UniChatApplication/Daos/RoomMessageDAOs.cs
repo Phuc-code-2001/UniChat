@@ -12,24 +12,15 @@ namespace UniChatApplication.Daos
 
 
         public static IEnumerable<RoomMessage> getAll(UniChatDbContext _context){
-            return _context.RoomMessages.Include(m => m.Account).Include(m => m.RoomChat);
+            return _context.RoomMessages
+                            .Include(m => m.Account)
+                            .Include(m => m.Account.StudentProfile)
+                            .Include(m => m.Account.TeacherProfile)
+                            .Include(m => m.RoomChat);
         }
 
         public static IEnumerable<RoomMessage> messagesOfRoom(UniChatDbContext _context, int RoomID){
             return getAll(_context).Where(m => m.RoomID == RoomID).OrderBy(m => m.TimeMessage);
-        }
-
-        public static List<RoomMessage> getSlice(List<RoomMessage> _list, int a, int b){
-            int size = _list.Count();
-            List<RoomMessage> result = new List<RoomMessage>();
-            if (a < 0 || b < 0 || b < a) return result;
-
-            for(int i = a; i < b && i < size; i++) {
-                result.Add(_list[i]);
-            }
-
-            return result;
-
         }
 
         public static bool Add(UniChatDbContext _context, RoomMessage message){

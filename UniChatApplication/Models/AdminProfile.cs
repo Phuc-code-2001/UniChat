@@ -13,17 +13,17 @@ namespace UniChatApplication.Models
         }
 
         [Key]
-        public int Id { get; set; }
+        public override int Id { get; set; }
         
-        public string FullName { get; set; }
+        public override string FullName { get; set; }
 
-        public string Avatar { get; set; }
+        public override string Avatar { get; set; }
 
-        public string Email { get; set; }
+        public override string Email { get; set; }
 
-        public string Phone { get; set; }
+        public override string Phone { get; set; }
 
-        public bool Gender { get; set; }
+        public override bool Gender { get; set; }
 
         [Column("account_id")]
         [ForeignKey("Account")]

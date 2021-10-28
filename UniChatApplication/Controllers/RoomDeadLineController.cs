@@ -33,11 +33,15 @@ namespace UniChatApplication.Controllers
                                 
             if(!CheckRoomOfUser) return Redirect("/Home/");
 
-            IEnumerable<RoomDeadLine> deadlines = RoomDeadLineDAOs.GetAllOfRoom(_context, RoomId);
+            IEnumerable<RoomDeadLine> deadlineList = RoomDeadLineDAOs.GetAllOfRoom(_context, RoomId);
+            IEnumerable<RoomDeadLine> newDeadLineList = deadlineList.Where(d => d.ExpirationTime > DateTime.Now);
+            IEnumerable<RoomDeadLine> oldDeadLineList = deadlineList.Where(d => d.ExpirationTime <= DateTime.Now);
             
             ViewData["RoomChat"] = roomChat;
+            ViewData["LoginUser"] = LoginUser;
+            ViewData["OldDeadLineList"] = oldDeadLineList;
 
-            return View(deadlines);
+            return View(newDeadLineList);
         }
 
         // Mapping to view that create a new room deadline
@@ -67,9 +71,7 @@ namespace UniChatApplication.Controllers
         // Receive data from create new deadline form and add data to database
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(RoomDeadLine deadline){
-
-            int RoomId = deadline.RoomId;
+        public IActionResult Create(int RoomId, RoomDeadLine deadline){
 
             RoomChat roomChat = RoomChatDAOs.getAllRoomChats(_context).FirstOrDefault(r => r.Id == RoomId);
             if (roomChat == null) return Redirect("/Home/");
@@ -82,7 +84,7 @@ namespace UniChatApplication.Controllers
                                 
             if(!CheckRoomOfUser) return Redirect("/Home/");
 
-            
+            deadline.RoomId = RoomId;
 
             if(deadline.Content != null && deadline.Content.Trim() != ""){
 
@@ -98,6 +100,79 @@ namespace UniChatApplication.Controllers
             deadline.RoomChat = roomChat;
             return View(deadline);
 
+        }
+
+
+        public IActionResult Delete(int id){
+
+            RoomDeadLine roomDeadLine = RoomDeadLineDAOs.GetAll(_context).FirstOrDefault(r => r.Id == id);
+            if (roomDeadLine == null) return Redirect("/Home/");
+
+            RoomChat roomChat = RoomChatDAOs.getAllRoomChats(_context).FirstOrDefault(r => r.Id == roomDeadLine.RoomId);
+            if (roomChat == null) return Redirect("/Home/");
+
+            Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
+            if (LoginUser == null) return Redirect("/Home/");
+
+            bool CheckRoomOfUser = roomChat.TeacherProfile.AccountID == LoginUser.Id;
+                                
+            if(!CheckRoomOfUser) return Redirect("/Home/");
+
+            _context.RoomDeadLines.Remove(roomDeadLine);
+            _context.SaveChanges();
+
+            return RedirectToAction("View", new {RoomId=roomChat.Id});
+        }
+
+        public IActionResult Edit(int id)
+        {
+            RoomDeadLine roomDeadLine = RoomDeadLineDAOs.GetAll(_context).FirstOrDefault(r => r.Id == id);
+            if (roomDeadLine == null) return Redirect("/Home/");
+
+            RoomChat roomChat = RoomChatDAOs.getAllRoomChats(_context).FirstOrDefault(r => r.Id == roomDeadLine.RoomId);
+            if (roomChat == null) return Redirect("/Home/");
+
+            Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
+            if (LoginUser == null) return Redirect("/Home/");
+
+            bool CheckRoomOfUser = roomChat.TeacherProfile.AccountID == LoginUser.Id;
+                                
+            if(!CheckRoomOfUser) return Redirect("/Home/");
+            
+            ViewData["ExpirationTime"] = roomDeadLine.ExpirationTime.ToString("yyyy-MM-dd HH:mm").Replace(' ','T');
+            return View(roomDeadLine);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ConfirmEdit(RoomDeadLine deadline)
+        {
+            
+            RoomChat roomChat = RoomChatDAOs.getAllRoomChats(_context).FirstOrDefault(r => r.Id == deadline.RoomId);
+            if (roomChat == null) return Redirect("/Home/");
+
+            Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
+            if (LoginUser == null) return Redirect("/Home/");
+
+            bool CheckRoomOfUser = roomChat.TeacherProfile.AccountID == LoginUser.Id;
+                                
+            if(!CheckRoomOfUser) return Redirect("/Home/");
+
+            if(deadline.Content != null && deadline.Content.Trim() != ""){
+
+                deadline.Content = deadline.Content.Trim();
+    
+                _context.RoomDeadLines.Update(deadline);
+                _context.SaveChanges();
+                return Redirect($"/RoomDeadLine/View?RoomId={deadline.RoomId}");
+
+            }
+            ViewData["Error"] = "Content of deadline can not be blank...";
+            
+            ViewData["ExpirationTime"] = deadline.ExpirationTime.ToString("yyyy-MM-dd HH:mm").Replace(' ','T');
+            return View("Edit", deadline);
+            
         }
     }
 }
