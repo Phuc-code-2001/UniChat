@@ -59,6 +59,25 @@ namespace UniChatApplication.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> EditTeacher(TeacherProfile profile)
+        {
+            if (HttpContext.Session.GetString("Role") == null) return Redirect("/Home/");
+
+            Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
+            if (LoginUser.RoleName != "Teacher") return BadRequest();
+
+            TeacherProfile loginProfile = (TeacherProfile) ProfileDAOs.GetProfile(_context, LoginUser);
+            // Change Properties value
+            loginProfile.FullName = profile.FullName;
+            loginProfile.Phone = profile.Phone;
+            loginProfile.Birthday = profile.Birthday;
+            _context.TeacherProfile.Update(loginProfile);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", new {id=loginProfile.AccountID});
+        }
+
+        [HttpPost]
         public async Task<IActionResult> UpdateAvatar(IFormFile imageFile)
         {
             if (HttpContext.Session.GetString("Role") == null) return Redirect("/Home/");
@@ -113,5 +132,54 @@ namespace UniChatApplication.Controllers
 
             return RedirectToAction("Index", new {id=LoginUser.Id});
         }
+
+        public IActionResult UpdatePassword()
+        {
+            if (HttpContext.Session.GetString("Role") != "Student"
+            && HttpContext.Session.GetString("Role") != "Teacher") return Redirect("/Home/");
+            Account loginAccount = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
+
+            return View(loginAccount);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdatePassword(string oldPassword, string newPassword)
+        {
+            if (HttpContext.Session.GetString("Role") != "Student"
+            && HttpContext.Session.GetString("Role") != "Teacher") return Redirect("/Home/");
+            Account loginAccount = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
+
+            if (newPassword == null || newPassword.Trim() == "") return BadRequest();
+
+            Account temp = AccountDAOs.CreateAccount(loginAccount.Username, oldPassword, loginAccount.RoleID);
+
+            if (temp.Password == loginAccount.Password)
+            {
+                Account newAccountInfo = AccountDAOs.CreateAccount(loginAccount.Username, newPassword, loginAccount.RoleID);
+                if (newAccountInfo.Password != loginAccount.Password)
+                {
+                    loginAccount.Password = newAccountInfo.Password;
+                    _context.Account.Update(loginAccount);
+                    _context.SaveChanges();
+
+                    TempData["UpdatePasswordStatus"] = true;
+                    TempData["UpdatePasswordMessage"] = "Update Password Success.";
+                }
+                else
+                {
+                    TempData["UpdatePasswordStatus"] = false;
+                    TempData["UpdatePasswordMessage"] = "New password is the same old password. Try again.";
+                }
+            }
+            else
+            {
+                TempData["UpdatePasswordStatus"] = false;
+                TempData["UpdatePasswordMessage"] = "Password input incorrect. Try again.";
+            }
+
+            return Redirect("UpdatePassword");
+        }
+
     }
 }

@@ -102,16 +102,12 @@ namespace UniChatApplication.Controllers
             Account loginAccount = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
             if (loginAccount == null || loginAccount.RoleName != "Admin") return Redirect("/Home/");
 
-            if (HttpContext.Items["UpdatePasswordMessage"] != null) {
-                ViewBag.SuccessMessage = HttpContext.Items["UpdatePasswordMessage"];
-                HttpContext.Items.Remove("UpdatePasswordMessage");
-            }
-
             return View(loginAccount);
         }
 
         [HttpPost]
-        public IActionResult UpdatePassword(string newPassword)
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdatePassword(string oldPassword, string newPassword)
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
             Account loginAccount = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
@@ -119,9 +115,32 @@ namespace UniChatApplication.Controllers
 
             if (newPassword == null || newPassword.Trim() == "") return BadRequest();
 
-            Account newAccountInfo = AccountDAOs.CreateAccount(loginAccount.Username, newPassword, loginAccount.RoleID);
-            loginAccount.Password = newAccountInfo.Password;
-            HttpContext.Items.Add("UpdatePasswordMessage", "Update Password Success.");
+            Account temp = AccountDAOs.CreateAccount(loginAccount.Username, oldPassword, loginAccount.RoleID);
+
+            if (temp.Password == loginAccount.Password)
+            {
+                Account newAccountInfo = AccountDAOs.CreateAccount(loginAccount.Username, newPassword, loginAccount.RoleID);
+                if (newAccountInfo.Password != loginAccount.Password)
+                {
+                    loginAccount.Password = newAccountInfo.Password;
+                    _context.Account.Update(loginAccount);
+                    _context.SaveChanges();
+
+                    TempData["UpdatePasswordStatus"] = true;
+                    TempData["UpdatePasswordMessage"] = "Update Password Success.";
+                }
+                else
+                {
+                    TempData["UpdatePasswordStatus"] = false;
+                    TempData["UpdatePasswordMessage"] = "New password is the same old password. Try again.";
+                }
+            }
+            else
+            {
+                TempData["UpdatePasswordStatus"] = false;
+                TempData["UpdatePasswordMessage"] = "Password input incorrect. Try again.";
+            }
+
             return Redirect("UpdatePassword");
         }
 
