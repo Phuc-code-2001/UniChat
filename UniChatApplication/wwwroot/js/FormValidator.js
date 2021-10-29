@@ -174,6 +174,20 @@ Validator.isEmail = function (selector, message) {
   };
 };
 
+//check email basic for customer
+Validator.isEmailBasic = function (selector, message) {
+    return {
+        selector: selector,
+        test: function (value) {
+            var regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+            return regex.test(value)
+                ? undefined
+                : message || "Please correct email format: sample@gmail.com";
+        },
+    };
+};
+
 //check Student code  gồm 2 chữ cái + 6 chữ số
 Validator.isStuCode = function (selector, message) {
   return {
@@ -232,15 +246,15 @@ Validator.isNameClass = function (selector, message) {
 };
 
 //Subject code có 3 kí tự đầu là chữ cái và 3 kí tự sau là số 0-9
-Validator.isSubCode = function (selector, message) {
+Validator.isVNphone= function (selector, message) {
   return {
     selector: selector,
     test: function (value) {
-      var regex = /^[a-zA-Z]{3}[0-9]{3}$/;
+        var regex = /^(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b$/;
 
       return regex.test(value)
         ? undefined
-        : message || "Please only enter in the standard form: 3 letters + 3 digits";
+        : message || "Please only enter VN phone";
     },
   };
 };
@@ -252,7 +266,7 @@ Validator.minLength = function (selector, min, message) {
     test: function (value) {
       return value.length == min
         ? undefined
-        : message || `Please enter only ${min} characters`;
+          : message || `Please enter ${min} characters correctly`;
     },
   };
 };
@@ -269,8 +283,22 @@ Validator.maxLength = function (selector, max, message) {
   };
 };
 
+//Check VNphone
+Validator.isSubCode = function (selector, message) {
+    return {
+        selector: selector,
+        test: function (value) {
+            var regex = /^[a-zA-Z]{3}[0-9]{3}$/;
+
+            return regex.test(value)
+                ? undefined
+                : message || "Please only enter in the standard form: 3 letters + 3 digits";
+        },
+    };
+};
+
 //confirm lại giá trị nhập vào
-Validator.isConfirmed = function (selector, getConfirmValue, message) {
+Validator.isVNphone = function (selector, getConfirmValue, message) {
   return {
     selector: selector,
     test: function (value) {
@@ -280,3 +308,4 @@ Validator.isConfirmed = function (selector, getConfirmValue, message) {
     },
   };
 };
+

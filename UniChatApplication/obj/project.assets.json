@@ -8254,11 +8254,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\UniChatApplication.csproj",
+      "projectUniqueName": "c:\\Users\\PhucHT\\Downloads\\UniChat\\UniChat\\UniChatApplication\\UniChatApplication.csproj",
       "projectName": "UniChatApplication",
-      "projectPath": "C:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\UniChatApplication.csproj",
+      "projectPath": "c:\\Users\\PhucHT\\Downloads\\UniChat\\UniChat\\UniChatApplication\\UniChatApplication.csproj",
       "packagesPath": "C:\\Users\\PhucHT\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\obj\\",
+      "outputPath": "c:\\Users\\PhucHT\\Downloads\\UniChat\\UniChat\\UniChatApplication\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\PhucHT\\AppData\\Roaming\\NuGet\\NuGet.Config",
