@@ -71,11 +71,10 @@ namespace UniChatApplication.Controllers
         }
 
         // Use to pin message into chat room
-        public string PinMessage(int roomMessageId){
+        public IActionResult PinMessage(int roomMessageId){
             
             RoomMessage message = RoomMessageDAOs.getAll(_context).FirstOrDefault(m => m.Id == roomMessageId);
-            if (message == null) return "";
-
+            if (message == null) return BadRequest();
 
             bool CheckMessageBelongRoomOfUser = false; 
 
@@ -92,16 +91,17 @@ namespace UniChatApplication.Controllers
                 .Any(room => room.Id == message.RoomID);
             }
 
-            if (!CheckMessageBelongRoomOfUser) return "";
+            if (!CheckMessageBelongRoomOfUser) return BadRequest();
 
             
             RoomMessagePin messagePin = RoomMessagePinDAOs.GetAllMessagePinOfRoom(_context, message.RoomID).FirstOrDefault(m => m.RoomMessage.Id == roomMessageId);
 
-            if(messagePin == null){                
-                _context.RoomMessagePins.Add( new RoomMessagePin(){
+            if(messagePin == null){   
+                messagePin = new RoomMessagePin(){
                     RoomMessageId = roomMessageId,
                     Time = DateTime.Now
-                });
+                };       
+                _context.RoomMessagePins.Add(messagePin);
                 _context.SaveChanges();
             }
             else {
@@ -110,7 +110,7 @@ namespace UniChatApplication.Controllers
                 _context.SaveChanges();
             }
             
-            return message.Content;
+            return Ok(new {Content = message.Content, Time = messagePin.Time.ToShortTimeString() + " " + messagePin.Time.ToShortDateString()});
         }
 
     }

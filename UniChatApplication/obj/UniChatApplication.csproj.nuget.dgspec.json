@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\PhucHT\\Downloads\\UniChat\\UniChat\\UniChatApplication\\UniChatApplication.csproj": {}
+    "C:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\UniChatApplication.csproj": {}
   },
   "projects": {
-    "C:\\Users\\PhucHT\\Downloads\\UniChat\\UniChat\\UniChatApplication\\UniChatApplication.csproj": {
+    "C:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\UniChatApplication.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\PhucHT\\Downloads\\UniChat\\UniChat\\UniChatApplication\\UniChatApplication.csproj",
+        "projectUniqueName": "C:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\UniChatApplication.csproj",
         "projectName": "UniChatApplication",
-        "projectPath": "C:\\Users\\PhucHT\\Downloads\\UniChat\\UniChat\\UniChatApplication\\UniChatApplication.csproj",
+        "projectPath": "C:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\UniChatApplication.csproj",
         "packagesPath": "C:\\Users\\PhucHT\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\PhucHT\\Downloads\\UniChat\\UniChat\\UniChatApplication\\obj\\",
+        "outputPath": "C:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\PhucHT\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -21,18 +21,18 @@ namespace UniChatApplication.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(int id)
+        public IActionResult Index()
         {
             if (HttpContext.Session.GetString("Role") == null) return Redirect("/Home/");
 
             Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
 
-            Account account = await _context.Account.FindAsync(id);
-            if (account == null) return NotFound();
+            // Account account = await _context.Account.FindAsync(id);
+            // if (account == null) return NotFound();
 
-            if (account.RoleName == "Admin") return NotFound();
+            // if (account.RoleName == "Admin") return NotFound();
 
-            Profile profile = ProfileDAOs.GetProfile(_context, account);
+            Profile profile = ProfileDAOs.GetProfile(_context, LoginUser);
 
             ViewData["LoginUser"] = LoginUser;
 

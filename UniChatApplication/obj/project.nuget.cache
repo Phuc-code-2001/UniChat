@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "UdqQRBOMbQndSgKHvtsxqAT5sMsIVFyfibx/oEMR+AxG6c5wfhbJfF7t0YZLhJId5hkuqtCrrazulP21cp4gTg==",
+  "dgSpecHash": "zDhA9A8lmEz87R/yCQfnhJ4MTcKGzgmuGQVYxj1/MaMjgqDnNbf+JurZ/REqLG44Ep2Y691/fsHYK7xXPJLoYA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\PhucHT\\Downloads\\UniChat\\UniChat\\UniChatApplication\\UniChatApplication.csproj",
+  "projectFilePath": "C:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\UniChatApplication.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\PhucHT\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\PhucHT\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",

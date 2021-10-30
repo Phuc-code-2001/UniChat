@@ -1407,3 +1407,8 @@ C:\Users\PhucHT\Downloads\UniChat\UniChat\UniChatApplication\obj\Debug\net5.0\Un
 C:\Users\PhucHT\Downloads\UniChat\UniChat\UniChatApplication\obj\Debug\net5.0\ref\UniChatApplication.dll
 C:\Users\PhucHT\Downloads\UniChat\UniChat\UniChatApplication\obj\Debug\net5.0\UniChatApplication.pdb
 C:\Users\PhucHT\Downloads\UniChat\UniChat\UniChatApplication\obj\Debug\net5.0\UniChatApplication.genruntimeconfig.cache
+C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\Contact\ContactManagement.cshtml.g.cs
+C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\Contact\Delete.cshtml.g.cs
+C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\Contact\Index.cshtml.g.cs
+C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\Contact\Update.cshtml.g.cs
+C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\UserProfile\UpdatePassword.cshtml.g.cs
