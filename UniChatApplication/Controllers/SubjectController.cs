@@ -22,7 +22,7 @@ namespace UniChatApplication.Controllers
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
 
-            IEnumerable<Subject> subjects = SubjectDAOs.getAllSubject(_context);
+            IEnumerable<Subject> subjects = SubjectDAOs.getAllSubject(_context).ToList();
             return View(subjects);
         }
 

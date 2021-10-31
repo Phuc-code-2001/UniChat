@@ -8,9 +8,14 @@
 
 <div class="container">
 
-    <h1 class="text-primary text-center">Class Management</h1>
+    <h1 class="text-primary text-center">RoomChat Management</h1>
     <h4 class="text-center">Detail for a roomchat</h4>
-    <a class="button-3 text-white text-decoration-none" asp-action="Index">Back to List</a>
+    @if (ViewBag.LoginUser.RoleName == "Admin") {
+        <a class="button-3 text-white text-decoration-none" asp-action="Index">Back</a>
+    }
+    else {
+        <a class="button-3 text-white text-decoration-none" asp-controller="Box" asp-action="RoomChat" asp-route-id="@Model.Id">Back</a>
+    }
     <hr>
     <div class="content">
         <div class="left-content">
@@ -41,7 +46,7 @@
                     {
                         <tr>
                             <td>
-                                <img src="" alt="avatar">
+                                <img class="avatar" src="@item.Avatar" alt="avatar">
                             </td>
                             <td>
                                 @item.StudentCode

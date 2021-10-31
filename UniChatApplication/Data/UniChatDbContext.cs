@@ -28,5 +28,16 @@ namespace UniChatApplication.Data
         public DbSet<RoomMessagePin> RoomMessagePins { get; set; }
 
         public DbSet<RoomDeadLine> RoomDeadLines { get; set; }
+        
+        public DbSet<Contact> Contacts{ get; set; }
+
+        public DbSet<GroupChat> GroupChats { get; set; }
+
+        public DbSet<GroupMessage> GroupMessages { get; set; }
+
+        public DbSet<GroupPinMessage> GroupPinMessages { get; set; }
+
+        public DbSet<GroupManage> GroupManages { get; set; }
+
     }
 }

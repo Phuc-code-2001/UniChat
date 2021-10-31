@@ -47,7 +47,7 @@ namespace UniChatApplication.Controllers
 
             if (HttpContext.Session.GetString("Role") != "Student"
             && HttpContext.Session.GetString("Role") != "Teacher") return Redirect("/Home/");
-            if(id == null) return Redirect("/Home/");
+            if(id == null) return NotFound();
 
             Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
             Profile LoginProfile = ProfileDAOs.GetProfile(_context, LoginUser);
@@ -71,11 +71,11 @@ namespace UniChatApplication.Controllers
         }
 
         // Use to pin message into chat room
-        public string PinMessage(int roomMessageId){
+        public IActionResult PinMessage(int roomMessageId)
+        {
             
             RoomMessage message = RoomMessageDAOs.getAll(_context).FirstOrDefault(m => m.Id == roomMessageId);
-            if (message == null) return "";
-
+            if (message == null) return BadRequest();
 
             bool CheckMessageBelongRoomOfUser = false; 
 
@@ -92,16 +92,17 @@ namespace UniChatApplication.Controllers
                 .Any(room => room.Id == message.RoomID);
             }
 
-            if (!CheckMessageBelongRoomOfUser) return "";
+            if (!CheckMessageBelongRoomOfUser) return BadRequest();
 
             
             RoomMessagePin messagePin = RoomMessagePinDAOs.GetAllMessagePinOfRoom(_context, message.RoomID).FirstOrDefault(m => m.RoomMessage.Id == roomMessageId);
 
-            if(messagePin == null){                
-                _context.RoomMessagePins.Add( new RoomMessagePin(){
+            if(messagePin == null){   
+                messagePin = new RoomMessagePin(){
                     RoomMessageId = roomMessageId,
                     Time = DateTime.Now
-                });
+                };       
+                _context.RoomMessagePins.Add(messagePin);
                 _context.SaveChanges();
             }
             else {
@@ -110,7 +111,41 @@ namespace UniChatApplication.Controllers
                 _context.SaveChanges();
             }
             
-            return message.Content;
+            return Ok(new {Content = message.Content, Time = messagePin.Time.ToShortTimeString() + " " + messagePin.Time.ToShortDateString()});
+        }
+
+
+        public IActionResult GroupChat(int? id)
+        {
+
+            if (HttpContext.Session.GetString("Role") != "Student") return Redirect("/Home/");
+            if(id == null) return NotFound();
+
+            Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
+            Profile LoginProfile = ProfileDAOs.GetProfile(_context, LoginUser);
+
+            IEnumerable<RoomChat> RoomChats = RoomChatDAOs.getAllRoomChats(_context)
+                                                .Where(room => room.Class.StudentProfiles.Any(student => student.AccountID == LoginUser.Id));
+
+            
+            RoomChat RoomChat = RoomChats.FirstOrDefault(room => room.Id == id);
+            if (RoomChat == null) return Redirect("/Home/");
+
+            if(LoginUser.RoleName == "Student") ViewData["LoginProfile"] = (StudentProfile) LoginProfile;
+            if(LoginUser.RoleName == "Teacher") ViewData["LoginProfile"] = (TeacherProfile) LoginProfile;
+
+            ViewData["LoginUser"] = LoginUser;
+            ViewData["RoomChats"] = RoomChats;
+            ViewData["MessagePin"] = RoomMessagePinDAOs.GetMessagePinOfRoom(_context, RoomChat.Id);
+
+            ViewData["Messages"] =  RoomMessageDAOs.messagesOfRoom(_context, RoomChat.Id);
+            
+            return View(RoomChat);
+        }
+
+        public IActionResult PinGroupMessage(int groupMessageId)
+        {
+            return Ok(new {Content="", Time="----"});
         }
 
     }

@@ -33,12 +33,15 @@ namespace UniChatApplication.Controllers
         // GET: RoomChat/Details/5
         public IActionResult Details(int? id)
         {
-            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
+            if (HttpContext.Session.GetString("Role") == null) return Redirect("/Home/");
             if (id == null) return Redirect("/Home/");
+
+            Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
 
             RoomChat roomChat = RoomChatDAOs.getAllRoomChats(_context).FirstOrDefault(m => m.Id == id);
             if (roomChat == null) return Redirect("/Home/");
 
+            ViewData["LoginUser"] = LoginUser;
             return View(roomChat);
         }
 

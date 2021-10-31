@@ -33,7 +33,7 @@
                         <h4>@Model.FullName</h4>
                     </div>
                     <div class="text-center pt-2">
-                        <h4>UserName: @ViewBag.LoginUser.Username</h4>
+                        <h4>Username: @ViewBag.LoginUser.Username</h4>
                     </div>
                     <br>
                     @* User tools include: profile and logout *@
@@ -69,54 +69,6 @@
                             </li>
                         }
                         else {
-                            <li class="deadlineItem new">
-                                <span>Content: @item.Content</span>
-                                <small>
-                                    Deadline time:
-                                    @item.ExpirationTime.ToShortDateString() @item.ExpirationTime.ToShortTimeString()
-                                </small>
-                                <small>Subject: @item.RoomChat.Subject.SubjectCode</small>
-                                @if (ViewBag.LoginUser.RoleName == "Teacher")
-                                {
-                                    <small>Class: @item.RoomChat.Class.Name</small>
-                                }
-                            </li>
-                            <li class="deadlineItem new">
-                                <span>Content: @item.Content</span>
-                                <small>
-                                    Deadline time:
-                                    @item.ExpirationTime.ToShortDateString() @item.ExpirationTime.ToShortTimeString()
-                                </small>
-                                <small>Subject: @item.RoomChat.Subject.SubjectCode</small>
-                                @if (ViewBag.LoginUser.RoleName == "Teacher")
-                                {
-                                    <small>Class: @item.RoomChat.Class.Name</small>
-                                }
-                            </li>
-                            <li class="deadlineItem new">
-                                <span>Content: @item.Content</span>
-                                <small>
-                                    Deadline time:
-                                    @item.ExpirationTime.ToShortDateString() @item.ExpirationTime.ToShortTimeString()
-                                </small>
-                                <small>Subject: @item.RoomChat.Subject.SubjectCode</small>
-                                @if (ViewBag.LoginUser.RoleName == "Teacher")
-                                {
-                                    <small>Class: @item.RoomChat.Class.Name</small>
-                                }
-                            </li>
-                            <li class="deadlineItem new">
-                                <span>Content: @item.Content</span>
-                                <small>
-                                    Deadline time:
-                                    @item.ExpirationTime.ToShortDateString() @item.ExpirationTime.ToShortTimeString()
-                                </small>
-                                <small>Subject: @item.RoomChat.Subject.SubjectCode</small>
-                                @if (ViewBag.LoginUser.RoleName == "Teacher")
-                                {
-                                    <small>Class: @item.RoomChat.Class.Name</small>
-                                }
-                            </li>
                             <li class="deadlineItem new">
                                 <span>Content: @item.Content</span>
                                 <small>

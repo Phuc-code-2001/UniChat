@@ -22,7 +22,10 @@
                             <i class="fa fa-arrow-circle-left"></i>
                         </a>
                         @* Profile *@
-                        <button class="button-1 w-25"> <i class="fa fa-user"></i> </button>
+                        <a asp-controller="UserProfile" asp-action="Index" asp-route-id="@ViewBag.LoginUser.Id"
+                        class="button-1 w-25 text-white">
+                            <i class="fa fa-user"></i>
+                        </a>
                         
                         @* Logout *@
                         <a asp-controller="Login" asp-action="Logout" class="button-3 w-25 text-decoration-none text-white">
@@ -120,7 +123,11 @@
                 <div class="room-name">
                     @* Room name *@
                     <div class="d-flex align-items-center justify-content-center text-dark">
-                        <h4 class="text-success">@Model.Class.Name - @Model.Subject.SubjectCode</h4>
+                        <h4 class="text-success">
+                            <a asp-controller="RoomChat" asp-action="Details" asp-route-id="@Model.Id">
+                                @Model.Class.Name - @Model.Subject.SubjectCode
+                            </a>
+                        </h4>
                     </div>
                 </div>
 
@@ -134,8 +141,11 @@
                                 <h6 class="time">Message pin: <small>@ViewBag.MessagePin.Time.ToShortTimeString() - @ViewBag.MessagePin.Time.ToShortDateString()</small></h6>
                                 <p style="font-size: .9rem;">
                                         <span>@ViewBag.MessagePin.RoomMessage.Content</span>
-                                        
                                 </p>
+                            }
+                            else {
+                                <h6 class="time">Message pin: <small></small></h6>
+                                <p style="font-size: .9rem;"></p>
                             }
                         </div>
                         @* Deadline pin *@
@@ -248,9 +258,12 @@
                     </ul>
                 </div>
                 <div>
-                    <form autocomplete="off" class="d-flex justify-content-center align-items-center" id="send-form" style="gap:.5rem;">
-                        <input type="text" name="message" class="form-control" placeholder="Text...">
-                        <button type="submit" class="button-1"> <i class="fa fa-paper-plane"></i></button>
+                    <form method="post" autocomplete="off" id="send-form">
+                        <input type="hidden" name="RoomID" value="@Model.Id">
+                        <input type="text" name="Message" class="form-control" placeholder="Text...">
+                        <button type="submit" class="button-1">
+                            <i class="fa fa-paper-plane"></i>
+                        </button>
                     </form>
                 </div>
 
@@ -275,10 +288,8 @@
                 type: "POST",
                 data: { roomMessageId: messageId },
                 success: function (data, textStatus, xhr) {
-                    $(".message-pin p").text(data);
-                    $(".message-pin .time").html(
-                        "Message pin: <small>@DateTime.Now.ToShortTimeString() - @DateTime.Now.ToShortDateString()</small>"
-                    );
+                    $(".message-pin p").text(data.content);
+                    $(".message-pin .time small").text(data.time);
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
 
@@ -294,13 +305,13 @@
         }, 800);
 
         const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
-        connection.on("GetRoomMessage", function (username, message, messageId, avatar) {
+        connection.on("GetRoomMessage", function (username, message, messageId, avatar, time) {
 
             if (username == "@ViewBag.LoginUser.Username") {
                 let li = $("#chat-right").clone();
                 li.removeAttr("id");
                 li.attr("class", "chat-right");
-                li.find(".chat-hour").text("@DateTime.Now.ToShortTimeString()");
+                li.find(".chat-hour").text(time);
                 li.find(".chat-text").text(message);
                 li.find(".chat-name").text("Me");
                 li.find(".pin-button").attr("target", messageId);
@@ -313,7 +324,7 @@
                 let li = $("#chat-left").clone();
                 li.removeAttr("id");
                 li.attr("class", "chat-left");
-                li.find(".chat-hour").text("@DateTime.Now.ToShortTimeString()");
+                li.find(".chat-hour").text(time);
                 li.find(".chat-text").text(message);
                 li.find(".chat-name").text(username);
                 li.find(".pin-button").attr("target", messageId);
@@ -327,6 +338,8 @@
                 scrollTop: 1000000
             }, 800);
 
+            $("#send-form").find("input[name='Message']").val(null);
+
         });
 
         connection.start().then(function () {
@@ -334,11 +347,27 @@
         });
 
         $("#send-form").submit(function (e) {
-            let message = $("input[name='message']").val().trim();
-            if (message != "") {
-                connection.invoke("SendRoomMessage", @ViewBag.LoginUser.Id, message, @Model.Id);
+
+            let roomId = $(this).find("input[name='RoomID']").val();
+            let message = $(this).find("input[name='Message']").val();
+            if (message.length > 0){
+                console.log("Start ajax");
+                $.ajax({
+                    url: "/RoomMessage/Add/",
+                    type: "Post",
+                    dataType: "json",
+                    data: { RoomID: roomId, Message: message},
+                    success: function(data, status, xhr)
+                    {
+                        console.log(data);
+                        connection.invoke("SendRoomMessage", data.id, data.roomId, data.username, data.avatar, data.message, data.time);
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) {
+                        console.log("Error");
+                    }
+                });
             }
-            $("input[name='message']").val("");
+
             e.preventDefault();
         });
 

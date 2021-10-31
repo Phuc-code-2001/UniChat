@@ -2,12 +2,14 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using UniChatApplication.Data;
 using UniChatApplication.Models;
 using UniChatApplication.Daos;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using ExcelDataReader;
 
 namespace UniChatApplication.Controllers
 {
@@ -53,11 +55,20 @@ namespace UniChatApplication.Controllers
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
 
+
+            student.Email = student.Email.ToLower();
             string username = AccountDAOs.getUsenameFromEmail(student.Email);
+
             if (AccountDAOs.AccountIsExisted(_context, username)){
                 ViewData["Error"] = $"Account {username} existed...";
                 return View(student);
             }
+
+            if (_context.StudentProfile.Any(s => s.StudentCode == student.StudentCode)){
+                ViewData["Error"] = $"StudentCode {student.StudentCode} existed...";
+                return View(student);
+            }
+
             student.Birthday = DateTime.Now.Date;
 
             student.Account = AccountDAOs.CreateAccount(username, AccountDAOs.DefaultPassword, 1);
@@ -125,6 +136,104 @@ namespace UniChatApplication.Controllers
 
             return RedirectToAction("Index");
         }
-        
+
+        public IActionResult CreateByFile()
+        {
+            if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
+
+            ViewData["Result"] = TempData["Result"] ?? new List<string>();
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreateByFile(IFormFile file)
+        {
+            if (file == null) return RedirectToAction("Index");
+            if (!file.FileName.EndsWith(".xlsx")) return BadRequest();
+
+            //Get url To Save
+            string saveRelativePath = $"/files/";
+
+            string savePath = Directory.GetCurrentDirectory().Replace("\\", "/") + "/wwwroot" + saveRelativePath + file.FileName;
+
+            Directory.CreateDirectory(Path.GetDirectoryName(savePath));
+
+            using (FileStream stream = new FileStream(savePath, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+
+            List<string> result = ProcessingData(file.FileName);
+            TempData["Result"] = result;
+            
+            return RedirectToAction("CreateByFile");
+        }
+
+        private List<string> ProcessingData(string fName)
+        {
+
+            List<string> result = new List<string>();
+
+            string fileName = $"{Directory.GetCurrentDirectory()}{@"\wwwroot\files"}" + "\\" + fName;
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            using (FileStream stream = System.IO.File.Open(fileName, FileMode.Open, FileAccess.Read))
+            {
+                using (var reader = ExcelReaderFactory.CreateReader(stream))
+                {   
+                    reader.Read(); // title
+                    while (reader.Read())
+                    {
+                        try{
+
+                            string FullName = reader.GetValue(0).ToString();
+                            string Email = reader.GetValue(1).ToString().ToLower();
+                            string Gender = reader.GetValue(2).ToString();
+                            string Major = reader.GetValue(3).ToString();
+                            string StudentCode = reader.GetValue(4).ToString();
+                            string ClassName = reader.GetValue(5).ToString();
+
+                            string username = AccountDAOs.getUsenameFromEmail(Email);
+
+                            if (AccountDAOs.AccountIsExisted(_context, username))
+                            {
+                                result.Add($"Error: Account {username} existed...");
+                                continue;
+                            }
+
+                            if (_context.StudentProfile.Any(s => s.StudentCode == StudentCode))
+                            {
+                                result.Add($"Error: StudentCode {StudentCode} existed...");
+                                continue;
+                            }
+                                
+                            StudentProfile st = new StudentProfile(){
+                                    FullName = FullName,
+                                    Email = Email,
+                                    Gender = Gender.ToLower() == "male",
+                                    Major = Major,
+                                    StudentCode = StudentCode,
+                                    Birthday = DateTime.Now
+                            };
+
+                            st.Account = AccountDAOs.CreateAccount(username, AccountDAOs.DefaultPassword, 1);
+                            st.Class = _context.Class.FirstOrDefault(c => c.Name == ClassName) ?? new Class(){ Name = ClassName };
+                                
+                            _context.Add(st);
+                            _context.SaveChanges();
+
+                            result.Add($"Success: Add student '{FullName}' successfully.");
+
+                        }
+                        catch(NullReferenceException){
+                            // End of file
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 }

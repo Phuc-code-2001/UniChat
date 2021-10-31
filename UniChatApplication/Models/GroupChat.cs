@@ -18,7 +18,7 @@ namespace UniChatApplication.Models
         public string Name { get; set; }
 
         [Column("_index")]
-        public int Order { get; set; }
+        public int Order { get; set; } = 0;
 
         [Column("room_id")]
         [ForeignKey("RoomChat")]
@@ -29,6 +29,8 @@ namespace UniChatApplication.Models
         public ICollection<GroupMessage> Messages { get; set; }
 
         public ICollection<GroupDeadLine> DeadLines { get; set; }
+        
+        public ICollection<GroupManage> GroupManages { get; set; }
 
     }
 }
