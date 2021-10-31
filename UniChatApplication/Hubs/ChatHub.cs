@@ -27,6 +27,13 @@ namespace UniChatApplication.Hubs
             
         }
 
+        public async Task JoinGroup(int id){
+
+            await Groups.AddToGroupAsync(Context.ConnectionId, $"GroupChat-{id}");
+            System.Console.WriteLine($"{Context.ConnectionId} Joined GroupChat {id}");
+            
+        }
+
         public async Task SendRoomMessage(int id, int roomId, string username, string avatar, string message, string time)
         {
 
@@ -38,44 +45,19 @@ namespace UniChatApplication.Hubs
                     avatar,
                     time
             );
-            
-            // Account account = await _context.Account.FindAsync(userId);
+        }
 
-            // ISession session = LoginController.session;
-            // Account loginUser = AccountDAOs.getLoginAccount(_context, session);
-            
-            // RoomChat room = RoomChatDAOs.getAllRoomChats(_context).FirstOrDefault(r => r.Id == roomId);
+        public async Task SendGroupMessage(int id, int groupId, string username, string avatar, string message, string time)
+        {
 
-            // if(loginUser.Id == userId 
-            // && (room.Class.StudentProfiles.Any(p => p.AccountID == userId)
-            // || room.TeacherProfile.AccountID == userId)){
-
-            //     RoomMessageDAOs.Add(_context, new RoomMessage(){
-            //         AccountID = account.Id,
-            //         RoomID = roomId,
-            //         Content = message,
-            //         TimeMessage = DateTime.Now
-            //     });
-
-            //     RoomMessage roomMessage = await _context.RoomMessages.OrderBy(r => r.Id).LastAsync();
-            //     int messageId = roomMessage.Id;
-                
-            //     string avatar = "";
-            //     if (loginUser.RoleName == "Teacher"){
-            //         avatar = ((TeacherProfile) ProfileDAOs.GetProfile(_context, loginUser)).Avatar;
-            //     }
-            //     else if (loginUser.RoleName == "Student"){
-            //         avatar = ((StudentProfile) ProfileDAOs.GetProfile(_context, loginUser)).Avatar;
-            //     }
-
-            //     await Clients.Group($"RoomChat-{roomId}").SendAsync(
-            //         "GetRoomMessage",
-            //         loginUser.Username,
-            //         message,
-            //         messageId,
-            //         avatar
-            //     );
-            // }
+            await Clients.Group($"GroupChat-{groupId}").SendAsync(
+                    "GetGroupMessage",
+                    username,
+                    message,
+                    id,
+                    avatar,
+                    time
+            );
         }
     }
 }

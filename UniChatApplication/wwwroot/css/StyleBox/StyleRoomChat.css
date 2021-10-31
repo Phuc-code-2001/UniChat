@@ -261,3 +261,10 @@ body{
     align-items: center;
     gap: .5rem;
 }
+
+.chat-avatar img {
+    object-fit: cover;
+}
+
+
+

@@ -141,8 +141,11 @@
                                 <h6 class="time">Message pin: <small>@ViewBag.MessagePin.Time.ToShortTimeString() - @ViewBag.MessagePin.Time.ToShortDateString()</small></h6>
                                 <p style="font-size: .9rem;">
                                         <span>@ViewBag.MessagePin.RoomMessage.Content</span>
-                                        
                                 </p>
+                            }
+                            else {
+                                <h6 class="time">Message pin: <small></small></h6>
+                                <p style="font-size: .9rem;"></p>
                             }
                         </div>
                         @* Deadline pin *@

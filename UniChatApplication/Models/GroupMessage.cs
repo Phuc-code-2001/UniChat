@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -10,11 +11,13 @@ namespace UniChatApplication.Models
         [Key]
         public int Id { get; set; }
         
+        [Column("account_id")]
         [ForeignKey("Account")]
         public int AccountId { get; set; }
 
         public Account Account { get; set; }
 
+        [Column("group_id")]
         [ForeignKey("GroupChat")]
         public int GroupId { get; set; }
 
@@ -25,5 +28,8 @@ namespace UniChatApplication.Models
 
         [Column("time_message")]
         public DateTime TimeMessage { get; set; }
+        
+        [InverseProperty("GroupMessage")]
+        public ICollection<GroupPinMessage> AllPinMessage { get; set; }
     }
 }

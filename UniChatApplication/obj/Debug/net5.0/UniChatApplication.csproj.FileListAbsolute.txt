@@ -1412,3 +1412,7 @@ C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Vie
 C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\Contact\Index.cshtml.g.cs
 C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\Contact\Update.cshtml.g.cs
 C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\UserProfile\UpdatePassword.cshtml.g.cs
+C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\StudentProfile\CreateByFile.cshtml.g.cs
+C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\bin\Debug\net5.0\ExcelDataReader.dll
+C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\TeacherProfile\CreateByFile.cshtml.g.cs
+C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\Box\GroupChat.cshtml.g.cs

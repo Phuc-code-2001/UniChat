@@ -12,9 +12,11 @@ namespace UniChatApplication.Models
         [Key]
         public int Id { get; set; }
 
+        [Column("group_message_id")]
+        [ForeignKey("GroupMessage")]
         public int GroupMessageId { get; set; }
-        [ForeignKey("GroupMessageId")]
-        public GroupMessage Message { get; set; }
+        
+        public GroupMessage GroupMessage { get; set; }
 
         [Column("time_marked")]
         public DateTime Time { get; set; }

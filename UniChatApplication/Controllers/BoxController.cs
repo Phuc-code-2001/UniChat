@@ -47,7 +47,7 @@ namespace UniChatApplication.Controllers
 
             if (HttpContext.Session.GetString("Role") != "Student"
             && HttpContext.Session.GetString("Role") != "Teacher") return Redirect("/Home/");
-            if(id == null) return Redirect("/Home/");
+            if(id == null) return NotFound();
 
             Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
             Profile LoginProfile = ProfileDAOs.GetProfile(_context, LoginUser);
@@ -71,7 +71,8 @@ namespace UniChatApplication.Controllers
         }
 
         // Use to pin message into chat room
-        public IActionResult PinMessage(int roomMessageId){
+        public IActionResult PinMessage(int roomMessageId)
+        {
             
             RoomMessage message = RoomMessageDAOs.getAll(_context).FirstOrDefault(m => m.Id == roomMessageId);
             if (message == null) return BadRequest();
@@ -111,6 +112,40 @@ namespace UniChatApplication.Controllers
             }
             
             return Ok(new {Content = message.Content, Time = messagePin.Time.ToShortTimeString() + " " + messagePin.Time.ToShortDateString()});
+        }
+
+
+        public IActionResult GroupChat(int? id)
+        {
+
+            if (HttpContext.Session.GetString("Role") != "Student") return Redirect("/Home/");
+            if(id == null) return NotFound();
+
+            Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
+            Profile LoginProfile = ProfileDAOs.GetProfile(_context, LoginUser);
+
+            IEnumerable<RoomChat> RoomChats = RoomChatDAOs.getAllRoomChats(_context)
+                                                .Where(room => room.Class.StudentProfiles.Any(student => student.AccountID == LoginUser.Id));
+
+            
+            RoomChat RoomChat = RoomChats.FirstOrDefault(room => room.Id == id);
+            if (RoomChat == null) return Redirect("/Home/");
+
+            if(LoginUser.RoleName == "Student") ViewData["LoginProfile"] = (StudentProfile) LoginProfile;
+            if(LoginUser.RoleName == "Teacher") ViewData["LoginProfile"] = (TeacherProfile) LoginProfile;
+
+            ViewData["LoginUser"] = LoginUser;
+            ViewData["RoomChats"] = RoomChats;
+            ViewData["MessagePin"] = RoomMessagePinDAOs.GetMessagePinOfRoom(_context, RoomChat.Id);
+
+            ViewData["Messages"] =  RoomMessageDAOs.messagesOfRoom(_context, RoomChat.Id);
+            
+            return View(RoomChat);
+        }
+
+        public IActionResult PinGroupMessage(int groupMessageId)
+        {
+            return Ok(new {Content="", Time="----"});
         }
 
     }
