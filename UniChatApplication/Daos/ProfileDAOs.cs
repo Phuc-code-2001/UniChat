@@ -44,7 +44,8 @@ namespace UniChatApplication.Daos
 
             return context.StudentProfile
                     .Include(p => p.Account)
-                    .Include(p => p.Class);
+                    .Include(p => p.Class)
+                    .Include(p => p.GroupManages);
         }
 
         public static IQueryable<TeacherProfile> getAllTeachers(UniChatDbContext context){

@@ -1,5 +1,6 @@
 
 
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using UniChatApplication.Data;
 
@@ -8,7 +9,7 @@ namespace UniChatApplication.Models
     [Table("group_manage")]
     public class GroupManage
     {
-
+        [Key]
         public int Id { get; set; } = 0;
 
         [Column("student_id")]

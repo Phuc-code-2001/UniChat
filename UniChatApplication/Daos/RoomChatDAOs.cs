@@ -13,7 +13,8 @@ namespace UniChatApplication.Daos
                     .Include(r => r.Class.StudentProfiles)
                     .Include(r => r.Subject)
                     .Include(r => r.TeacherProfile)
-                    .Include(r => r.Messages);
+                    .Include(r => r.Messages)
+                    .Include(r => r.GroupChats);
         }
 
         public static bool RoomChatExists(UniChatDbContext context, int classId, int SubjectId)

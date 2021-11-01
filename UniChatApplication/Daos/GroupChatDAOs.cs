@@ -11,6 +11,7 @@ namespace UniChatApplication.Daos
             return context.GroupChats
                     .Include(g => g.RoomChat)
                     .Include(g => g.RoomChat.Class)
+                    .Include(g => g.RoomChat.Subject)
                     .Include(g => g.Messages)
                     .Include(g => g.GroupManages);
         }

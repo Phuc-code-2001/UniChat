@@ -6,8 +6,16 @@
 
 
 /*Component 1*/
+header{
+    background-image: url('Wellcome.gif');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 70vh;
+}
+
 .background {
-    background-image: url('../images/Workshops-Header-Background.png');
+    background-image: url('Login.jpeg');
     background-repeat: no-repeat;
     background-size: cover;
     height: 50vh;
@@ -52,32 +60,20 @@
 .introProject p{
     margin: 1em;
 }
-/*Component 3*/
 
-.background-vision {
-    background-color: #adc9ca;
-    background-size: 100%;
-    padding: 2rem 1rem;
+/* Footer */
+footer{
+    background-image: url('Footer.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 50vh;
 }
 
-.introVison {
-    margin-left: 20%;
-    margin-right: 20%;
-    padding: 1rem;
+.container{
+    padding-top: 25vh;
+}
+.row{
     background-color: white;
-    border-radius: 1em;
-    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
-}
-
-.introVison:hover {
-    box-shadow: gray 0px 20px 30px -10px;
-    transform: translateY(-2px);
-}
-.introVison h1{
-    text-align: center;
-    padding: 0.1em;
-}
-.introVison p{
-    margin: 1em;
-        padding: 0.1em;
+    padding: 1rem;
+    border-radius: 1rem;
 }
