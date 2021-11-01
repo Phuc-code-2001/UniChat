@@ -51,12 +51,36 @@ namespace UniChatApplication.Controllers
 
             Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
             Profile LoginProfile = ProfileDAOs.GetProfile(_context, LoginUser);
-
+            
+            // Get RoomChat List
             IEnumerable<RoomChat> RoomChats = RoomChatDAOs.getAllRoomChats(_context)
                                                 .Where(room => (room.TeacherProfile.AccountID == LoginUser.Id) || (room.Class.StudentProfiles.Any(student => student.AccountID == LoginUser.Id)));
-            
+            // Get main RoomChat which is selected
             RoomChat RoomChat = RoomChats.FirstOrDefault(room => room.Id == id);
             if (RoomChat == null) return Redirect("/Home/");
+
+            
+            if (LoginUser.RoleName == "Student")
+            {
+                // Get GroupChat List if LoginUser is student
+
+                List<GroupChat> GroupChats = new List<GroupChat>();
+                IEnumerable<GroupManage> groupDatas = GroupManageDAOs.getAllGroupData(_context).Where(d => d.StudentId == LoginProfile.Id);
+                foreach (GroupManage item in groupDatas)
+                {
+                    GroupChats.Add(item.GroupChat);
+                }
+                
+                ViewData["GroupChats"] = GroupChats;
+            }
+            else
+            {
+                // Get GroupChat List if LoginUser is Teacher
+                IEnumerable<GroupChat> GroupChats = GroupChatDAOs.getAllGroupChats(_context)
+                                                    .Where(g => g.RoomID == RoomChat.Id).OrderBy(g => g.Order)
+                                                    .ToList();
+                ViewData["GroupChats"] = GroupChats;
+            }
 
             if(LoginUser.RoleName == "Student") ViewData["LoginProfile"] = (StudentProfile) LoginProfile;
             if(LoginUser.RoleName == "Teacher") ViewData["LoginProfile"] = (TeacherProfile) LoginProfile;
@@ -123,30 +147,37 @@ namespace UniChatApplication.Controllers
 
             Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
             Profile LoginProfile = ProfileDAOs.GetProfile(_context, LoginUser);
-
+            
+            // Get RoomChat List
             IEnumerable<RoomChat> RoomChats = RoomChatDAOs.getAllRoomChats(_context)
                                                 .Where(room => room.Class.StudentProfiles.Any(student => student.AccountID == LoginUser.Id));
 
+            // Get GroupChat List
+            IEnumerable<GroupChat> GroupChats = GroupChatDAOs.getAllGroupChats(_context)
+                                                .Where(g => RoomChats.Any(r => r.Id == g.RoomID))
+                                                .ToList();
+            ViewData["GroupChats"] = GroupChats;
+
+            // Get main GroupChat which is selected
+            GroupChat GroupChat = GroupChats.FirstOrDefault(g => g.Id == id);
+            if (GroupChat == null) return NotFound();
+
+
             
-            RoomChat RoomChat = RoomChats.FirstOrDefault(room => room.Id == id);
-            if (RoomChat == null) return Redirect("/Home/");
 
             if(LoginUser.RoleName == "Student") ViewData["LoginProfile"] = (StudentProfile) LoginProfile;
             if(LoginUser.RoleName == "Teacher") ViewData["LoginProfile"] = (TeacherProfile) LoginProfile;
 
             ViewData["LoginUser"] = LoginUser;
             ViewData["RoomChats"] = RoomChats;
-            ViewData["MessagePin"] = RoomMessagePinDAOs.GetMessagePinOfRoom(_context, RoomChat.Id);
+            // ViewData["MessagePin"] = RoomMessagePinDAOs.GetMessagePinOfRoom(_context, RoomChat.Id);
 
-            ViewData["Messages"] =  RoomMessageDAOs.messagesOfRoom(_context, RoomChat.Id);
+            ViewData["Messages"] =  _context.GroupMessages.Where(m => m.GroupId == GroupChat.Id);
             
-            return View(RoomChat);
+            return View(GroupChat);
         }
 
-        public IActionResult PinGroupMessage(int groupMessageId)
-        {
-            return Ok(new {Content="", Time="----"});
-        }
+        
 
     }
 

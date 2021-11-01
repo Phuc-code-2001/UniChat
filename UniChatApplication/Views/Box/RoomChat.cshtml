@@ -80,7 +80,9 @@
                     @if (ViewBag.LoginUser.RoleName == "Student") 
                     {
                         <div class="ml-auto">
-                            <button class="btn btn-primary btn-sm "><i class="fa fa-plus"></i></button>
+                            <a class="btn btn-primary btn-sm" asp-controller="GroupChat" asp-action="Create" asp-route-roomId="@Model.Id">
+                                <i class="fa fa-plus"></i>
+                            </a>
                         </div>
                     }
                 </div>
@@ -89,30 +91,34 @@
                     @* Scroller for group chat *@
                     <div class="scroller">
                         @* Friend drawer *@
-                        <a class="friend-drawer text-decoration-none">
+                        @foreach (GroupChat item in ViewBag.GroupChats)
+                        {
+                            <a class="friend-drawer text-decoration-none">
 
-                            <img class="profile-image" src="https://www.ecoblader.com/wp-content/uploads/2013/02/ecoblader-facebook.jpg" alt="">
+                                <img class="profile-image" src="https://www.ecoblader.com/wp-content/uploads/2013/02/ecoblader-facebook.jpg" alt="">
 
-                            <div class="friend-drawer-text d-flex align-items-center">
-                                @* Name group *@
-                                <h4 class="mb-0">Group Subject</h4>
-                            </div>
-                        </a>
-                        <br>
+                                <div class="friend-drawer-text d-flex align-items-center">
+                                    @* Name group *@
+                                    <h4 class="mb-0">@item.RoomChat.Subject.SubjectCode (@item.Order)</h4>
+                                </div>
+                            </a>
+                            <br>
+                        }
                     </div>
                 }
                 else if (ViewBag.LoginUser.RoleName == "Teacher")
                 {
                     @* Scroller for group chat *@
-                    <div class="scroller">
+                    <div class="scroller px-4">
                         @* Friend drawer *@
-                        <ol class="d-flex flex-column px-4" style="font-size: 1.2rem; gap: .2rem;">
-                            <li>Group name Group name Group name</li>
-                            <li>Group name Group name Group name</li>
-                            <li>Group name Group name Group name</li>
-                            <li>Group name</li>
-                            <li>Group name</li>
-                        </ol>
+                        <ul class="d-flex flex-column px-4" style="font-size: 1.2rem; gap: .2rem;">
+                            @foreach (GroupChat item in ViewBag.GroupChats)
+                            {
+                                <li>
+                                    @item.Order - @item.Name
+                                </li>
+                            }
+                        </ul>
                     </div>
                 }
             </div>

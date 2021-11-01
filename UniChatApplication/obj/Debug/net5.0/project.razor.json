@@ -15619,11 +15619,6 @@
   "RootNamespace": "UniChatApplication",
   "Documents": [
     {
-      "FilePath": "c:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\Views\\Home\\Error.cshtml",
-      "TargetPath": "Views\\Home\\Error.cshtml",
-      "FileKind": "mvc"
-    },
-    {
       "FilePath": "c:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\Views\\StudentProfile\\Details.cshtml",
       "TargetPath": "Views\\StudentProfile\\Details.cshtml",
       "FileKind": "mvc"
@@ -15794,6 +15789,11 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\Views\\GroupChat\\Create.cshtml",
+      "TargetPath": "Views\\GroupChat\\Create.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\Views\\RoomDeadLine\\Create.cshtml",
       "TargetPath": "Views\\RoomDeadLine\\Create.cshtml",
       "FileKind": "mvc"
@@ -15819,8 +15819,8 @@
       "FileKind": "mvc"
     },
     {
-      "FilePath": "c:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\Views\\Home\\Check.cshtml",
-      "TargetPath": "Views\\Home\\Check.cshtml",
+      "FilePath": "c:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\Views\\GroupChat\\Setting.cshtml",
+      "TargetPath": "Views\\GroupChat\\Setting.cshtml",
       "FileKind": "mvc"
     },
     {
