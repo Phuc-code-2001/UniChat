@@ -86,40 +86,170 @@ namespace UniChatApplication.Controllers
             _context.SaveChanges();
 
 
-            return RedirectToAction("Setting", new {roomId=roomChat.Id});
+            return RedirectToAction("Index", "Box", new {id=groupChat.Id});
+        }
+
+
+        public IActionResult Details(int id)
+        {
+
+            if (HttpContext.Session.GetString("Role") == null) return Redirect("/Home/");
+            GroupChat groupChat = GroupChatDAOs.getAllGroupChats(_context).FirstOrDefault(g => g.Id == id);
+            if (groupChat == null) return NotFound();
+
+            ViewData["GroupDataList"] = GroupManageDAOs.getAllGroupData(_context).Where(d => d.GroupId == id);
+            ViewData["RoomChat"] = groupChat.RoomChat;
+
+            return View(groupChat);
+
         }
 
 
         // Add more student into Group of LoginUser
-        public IActionResult Setting(int roomId)
+        public IActionResult Setting(int groupId)
         {
             
             if (HttpContext.Session.GetString("Role") != "Student") return Redirect("/Home/");
-            
             Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
-            RoomChat roomChat = RoomChatDAOs.getAllRoomChats(_context).FirstOrDefault(r => r.Id == roomId);
-            if (roomChat == null) return NotFound();
-            ViewData["RoomChat"] = roomChat;
-
-            // Check RoomChat if it includes LoginUser
-            if (!roomChat.Class.StudentProfiles.Any(s => s.AccountID == LoginUser.Id)) return BadRequest();
-
-            // Check RoomChat if it include a group chat of LoginUser
-            GroupManage groupData = GroupManageDAOs.getAllGroupData(_context)
-                                .FirstOrDefault(d => d.StudentProfile.AccountID == LoginUser.Id && d.RoleText == "Leader");
-            if (groupData == null) return NotFound();
-            GroupChat GroupChat = groupData.GroupChat;
-
-            IEnumerable<StudentProfile> studentsOfRoom = roomChat.Class.StudentProfiles;
+            StudentProfile LoginProfile = (StudentProfile) ProfileDAOs.GetProfile(_context, LoginUser);
             
+            // Get main GroupChat which is selected
+            GroupChat GroupChat = GroupChatDAOs.getAllGroupChats(_context).FirstOrDefault(g => g.Id == groupId);
+            if (GroupChat == null) return NotFound();
+            // Check groupChat if it contains LoginUser
+            GroupManage groupData = GroupChat.GroupManages.FirstOrDefault(m => m.StudentId == LoginProfile.Id && m.RoleText == "Leader");
+            if (groupData == null) return NotFound();
+
+            RoomChat RoomChat = RoomChatDAOs.getAllRoomChats(_context).FirstOrDefault(r => r.Id == GroupChat.RoomID);
+            // Check RoomChat belong to LoginUser
+            if (!RoomChat.Class.StudentProfiles.Any(s => s.AccountID == LoginUser.Id)) return BadRequest();
+            
+            IEnumerable<GroupManage> GroupDataList = GroupManageDAOs.getAllGroupData(_context)
+                                        .Where(d => d.GroupId == groupId).OrderByDescending(d => d.Role);
+            ViewData["GroupDataList"] = GroupDataList;
+            
+            IEnumerable<StudentProfile> StudentRestListOfRoom = RoomChat.Class.StudentProfiles
+                                                .Where(st => !GroupDataList.Any(d => st.Id == d.StudentId));
+            
+            IEnumerable<GroupManage> GroupDataStudentRestList = GroupManageDAOs.getAllGroupData(_context)
+                                                                .Where(d => d.GroupChat.RoomID == RoomChat.Id);
+            
+            StudentRestListOfRoom = StudentRestListOfRoom.Where(st => !GroupDataStudentRestList.Any(d => d.StudentId == st.Id));
+
+            ViewData["StudentRestListOfRoom"] = StudentRestListOfRoom;
+
+            ViewData["RoomChat"] = RoomChat;
 
             return View(GroupChat);
         }
 
-        public IActionResult AddMember(int GroupChatId, int StudentId)
+        public IActionResult Add(int GroupChatId, int StudentId)
         {
-            object DataResponse = new {};
-            return Ok(DataResponse);
+
+            if (HttpContext.Session.GetString("Role") != "Student") return BadRequest();
+            Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
+            StudentProfile LoginProfile = (StudentProfile) ProfileDAOs.GetProfile(_context, LoginUser);
+
+            GroupChat GroupChat = GroupChatDAOs.getAllGroupChats(_context).FirstOrDefault(g => g.Id == GroupChatId);
+            if (GroupChat == null) return BadRequest();
+
+            StudentProfile student = ProfileDAOs.getAllStudents(_context).FirstOrDefault(p => p.Id == StudentId);
+            if (student == null) return BadRequest();
+            
+            //Check LoginUser if he/she is Leader of Group
+            bool CheckLeader = GroupChat.GroupManages.Any(d => d.StudentId == LoginProfile.Id && d.RoleText == "Leader");
+            if (CheckLeader == false) return BadRequest();
+
+            RoomChat RoomChat = GroupChat.RoomChat;
+            // Check student belong to RoomChat
+            bool CheckStudentBelongToRoom = student.ClassID == RoomChat.ClassId;
+            if(CheckStudentBelongToRoom == false) return BadRequest();
+
+            IEnumerable<GroupChat> AllGroupOfRoom = RoomChat.GroupChats;
+
+            bool CheckStudentHadGroup = AllGroupOfRoom.Any(g => g.GroupManages.Any(d => d.StudentId == StudentId));
+
+            if (CheckStudentHadGroup) return BadRequest();
+
+            // Add new Data into GroupManage
+            _context.GroupManages.Add(new GroupManage(){
+                StudentId=StudentId,
+                GroupId=GroupChatId,
+                Role = false,
+            });
+            _context.SaveChanges();
+            
+            return RedirectToAction("Setting", new {groupId=GroupChatId});
+        }
+
+        public IActionResult Remove(int GroupManageId)
+        {
+
+            if (HttpContext.Session.GetString("Role") != "Student") return BadRequest();
+            Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
+            StudentProfile LoginProfile = (StudentProfile) ProfileDAOs.GetProfile(_context, LoginUser);
+
+            GroupManage GroupData = GroupManageDAOs.getAllGroupData(_context).FirstOrDefault(d => d.Id == GroupManageId);
+            if (GroupData == null) return BadRequest();
+
+            GroupChat GroupChat = GroupData.GroupChat;
+
+            // Check LoginUser is Leader
+            bool CheckLeader = GroupChat.GroupManages.Any(d => d.StudentId == LoginProfile.Id && d.RoleText == "Leader");
+            // Check LoginUser left group
+            bool CheckStudentSelfLeft = GroupData.StudentId == LoginProfile.Id;
+
+            if (CheckLeader || CheckStudentSelfLeft)
+            {
+                _context.GroupManages.Remove(GroupData);
+                _context.SaveChanges();
+                return RedirectToAction("Setting", new {groupId=GroupChat.Id});
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        public IActionResult Left(int GroupId)
+        {
+            if (HttpContext.Session.GetString("Role") != "Student") return BadRequest();
+            Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
+            StudentProfile LoginProfile = (StudentProfile) ProfileDAOs.GetProfile(_context, LoginUser);
+
+            GroupManage GroupData = _context.GroupManages.FirstOrDefault(d => d.StudentId == LoginProfile.Id && d.GroupId == GroupId);
+            if (GroupData == null) return BadRequest();
+
+            if (GroupData.RoleText != "Member") return BadRequest();
+
+            _context.GroupManages.Remove(GroupData);
+            _context.SaveChanges();
+
+            return Redirect("/Home/");
+
+        }
+
+        public IActionResult Destroy(int GroupChatId)
+        {
+            
+            if (HttpContext.Session.GetString("Role") != "Student") return BadRequest();
+            Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
+            StudentProfile LoginProfile = (StudentProfile) ProfileDAOs.GetProfile(_context, LoginUser);
+
+            GroupChat GroupChat = GroupChatDAOs.getAllGroupChats(_context).FirstOrDefault(g => g.Id == GroupChatId);
+            if (GroupChat == null) return BadRequest();
+
+            //Check LoginUser if he/she is Leader of Group
+            bool CheckLeader = GroupChat.GroupManages.Any(d => d.StudentId == LoginProfile.Id && d.RoleText == "Leader");
+            if (CheckLeader == false) return BadRequest();
+
+            _context.GroupManages.RemoveRange(GroupChat.GroupManages);
+            _context.GroupChats.Remove(GroupChat);
+
+            _context.SaveChanges();
+
+            return Redirect("/Home/");
+
         }
 
     }

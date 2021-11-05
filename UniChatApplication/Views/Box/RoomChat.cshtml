@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="~/css/StyleBox/StyleRoomChat.css">
 
 <body>
-    <div class="container">
+    <div class="m-container">
         <div class="row box">
             @************************* User (Left) **************************** *@
             <div class="col-sm-4 user border-right">
@@ -93,13 +93,13 @@
                         @* Friend drawer *@
                         @foreach (GroupChat item in ViewBag.GroupChats)
                         {
-                            <a class="friend-drawer text-decoration-none">
+                            <a asp-action="GroupChat" asp-route-id="@item.Id" class="friend-drawer text-decoration-none">
 
                                 <img class="profile-image" src="https://www.ecoblader.com/wp-content/uploads/2013/02/ecoblader-facebook.jpg" alt="">
 
                                 <div class="friend-drawer-text d-flex align-items-center">
                                     @* Name group *@
-                                    <h4 class="mb-0">@item.RoomChat.Subject.SubjectCode (@item.Order)</h4>
+                                    <h4 class="mb-0">@item.RoomChat.Subject.SubjectCode SL(@item.GroupManages.Count)</h4>
                                 </div>
                             </a>
                             <br>
@@ -125,143 +125,149 @@
 
             @* ************************ Chat (Right)) **************************** *@
             <div class="col-sm-8 chat">
-    
                 <div class="room-name">
+
                     @* Room name *@
-                    <div class="d-flex align-items-center justify-content-center text-dark">
-                        <h4 class="text-success">
-                            <a asp-controller="RoomChat" asp-action="Details" asp-route-id="@Model.Id">
-                                @Model.Class.Name - @Model.Subject.SubjectCode
-                            </a>
-                        </h4>
-                    </div>
+                    <h4 class="text-center">
+                        <a asp-controller="RoomChat" asp-action="Details" asp-route-id="@Model.Id">
+                            @Model.Class.Name - @Model.Subject.SubjectCode
+                        </a>
+                    </h4>
                 </div>
+                <div class="room-body">
 
-                @* Message pin and deadline pin *@
-                <div>
-                    <div class="row pin setting-tray">
-                        @* Message pin *@
-                        <div class="message-pin col-sm-8">
-                            @if (ViewBag.MessagePin != null)
-                            {
-                                <h6 class="time">Message pin: <small>@ViewBag.MessagePin.Time.ToShortTimeString() - @ViewBag.MessagePin.Time.ToShortDateString()</small></h6>
-                                <p style="font-size: .9rem;">
-                                        <span>@ViewBag.MessagePin.RoomMessage.Content</span>
-                                </p>
-                            }
-                            else {
-                                <h6 class="time">Message pin: <small></small></h6>
-                                <p style="font-size: .9rem;"></p>
-                            }
+                    @* Message pin and deadline pin *@
+                    <div class="pin-box border-top m-absolute">
+                        <div class="row pin setting-tray">
+                            @* Message pin *@
+                            <div class="message-pin col-sm-8">
+                                @if (ViewBag.MessagePin != null)
+                                {
+                                    <h6 class="time">Message pin: <small>@ViewBag.MessagePin.Time.ToShortTimeString() - @ViewBag.MessagePin.Time.ToShortDateString()</small></h6>
+                                    <p style="font-size: .9rem;">
+                                            <span>@ViewBag.MessagePin.RoomMessage.Content</span>
+                                    </p>
+                                }
+                                else {
+                                    <h6 class="time">Message pin: <small></small></h6>
+                                    <p style="font-size: .9rem;"></p>
+                                }
+                            </div>
+                            @* Deadline pin *@
+                            <div class="col-sm-4 d-flex align-items-center justify-content-center">
+                                <a asp-controller="RoomDeadLine" asp-action="View" asp-route-RoomId="@Model.Id" class="button-3 text-decoration-none text-white">
+                                    DeadLine
+                                </a>
+                            </div>
                         </div>
-                        @* Deadline pin *@
-                        <div class="col-sm-4 d-flex align-items-center justify-content-center">
-                            <a asp-controller="RoomDeadLine" asp-action="View" asp-route-RoomId="@Model.Id" class="button-3 text-decoration-none text-white">
-                                DeadLine
-                            </a>
+                        <div class="pin-control">
+                            @* Button for show and hide pin *@
+                            <div class="display-pin">
+                                <button class="btn btn-secondary btn-pin btn-sm"><i class="fa fa-plus"></i> </button>
+                            </div>
+                            <!-- Add font awesome icons to buttons (note that the fa-spin class rotates the icon) -->
+                            <button class="buttonload" disabled>
+                            <i class="fa fa-spinner fa-spin"></i>
+                            </button>
                         </div>
                     </div>
-                </div>
 
-                @* Button for show and hide pin *@
-                <div class="col-sm-1 display-pin d-flex align-items-center justify-content-center m-2"
-                    style="z-index: 99; position: absolute;">
-                    <button class="btn btn-secondary btn-pin btn-sm"> <i class="fa fa-plus"></i> </button>
-                </div>
+                    @* Chat main *@
+                    <div class="chat-container scroller-chat border-top">
 
-                @* Chat main *@
-                <div class="chat-container scroller-chat">
+                        <ul class="chat-box" name="room-@Model.Id">
+                            
+                            <li class="chat-right d-none" id="chat-right" >
+                                <div class="pin-button d-flex align-items-center m-1">
+                                    <button class="btn btn-sm" style="height: 2rem; width: 2rem;"> <i
+                                    class="fa fa-thumbtack"></i></button>
+                                </div>
 
-                    <ul class="chat-box" name="room-@Model.Id">
+                                @* User chat time *@
+                                <div class="chat-hour"></div>
+                                @* User message *@
+                                <div class="chat-text" style="background-color: rgb(85, 200, 250, 0.4);">
+                                    
+                                </div>
+                                @* User avatar and name *@
+                                <div class="chat-avatar">
+                                    <img src="" alt="Me">
+                                    <div class="chat-name">Me</div>
+                                </div>
+                            </li>
 
-                        <li class="chat-right d-none" id="chat-right" >
-                            <div class="pin-button d-flex align-items-center m-1">
-                                <button class="btn btn-sm" style="height: 2rem; width: 2rem;"> <i
-                                class="fa fa-thumbtack"></i></button>
-                            </div>
+                            <li class="chat-left d-none" id="chat-left">
+                                <div class="chat-avatar">
+                                    <img src="" alt="">
+                                    <div class="chat-name"></div>
+                                </div>
+                                <div class="chat-text">
+                                    
+                                </div>
+                                <div class="chat-hour"></div>
 
-                            @* User chat time *@
-                            <div class="chat-hour"></div>
-                            @* User message *@
-                            <div class="chat-text" style="background-color: rgb(85, 200, 250, 0.4);">
-                                
-                            </div>
-                            @* User avatar and name *@
-                            <div class="chat-avatar">
-                                <img src="" alt="Me">
-                                <div class="chat-name">Me</div>
-                            </div>
-                        </li>
+                                <div class="pin-button d-flex align-items-center m-1">
+                                    <button class="btn btn-sm" style="height: 2rem; width: 2rem;"><i
+                                    class="fa fa-thumbtack"></i></button>
+                                </div>
+                            </li>
 
-                        <li class="chat-left d-none" id="chat-left">
-                            <div class="chat-avatar">
-                                <img src="" alt="">
-                                <div class="chat-name"></div>
-                            </div>
-                            <div class="chat-text">
-                                
-                            </div>
-                            <div class="chat-hour"></div>
-
-                            <div class="pin-button d-flex align-items-center m-1">
-                                <button class="btn btn-sm" style="height: 2rem; width: 2rem;"><i
-                                class="fa fa-thumbtack"></i></button>
-                            </div>
-                        </li>
-
-                        @foreach (RoomMessage item in ViewBag.Messages)
-                        {
-                            if (item.AccountID == ViewBag.LoginUser.Id)
+                            @foreach (RoomMessage item in ViewBag.Messages)
                             {
-                                <li class="chat-right">
-                                    <div class="pin-button d-flex align-items-center m-1" target="@item.Id">
-                                        <button class="btn btn-sm" style="height: 2rem; width: 2rem;"> <i
-                                        class="fa fa-thumbtack"></i></button>
-                                    </div>
+                                if (item.AccountID == ViewBag.LoginUser.Id)
+                                {
+                                    <li class="chat-right">
+                                        <div class="pin-button d-flex align-items-center m-1" target="@item.Id">
+                                            <button class="btn btn-sm" style="height: 2rem; width: 2rem;"> <i
+                                            class="fa fa-thumbtack"></i></button>
+                                        </div>
 
-                                    @* User chat time *@
-                                    <div class="chat-hour">@item.TimeMessage.ToShortTimeString()</div>
-                                    @* User message *@
-                                    <div class="chat-text" style="background-color: rgb(85, 200, 250, 0.4);">
-                                        @item.Content
-                                    </div>
-                                    @* User avatar and name *@
-                                    <div class="chat-avatar">
-                                        <img src="@ViewBag.LoginProfile.Avatar" alt="Me">
-                                        <div class="chat-name">Me</div>
-                                    </div>
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="chat-left text-center">
-                                    <div class="chat-avatar">
-                                        @{
-                                            string url = "";
-                                            if (item.Account.RoleName == "Teacher"){
-                                                url = item.Account.TeacherProfile.Avatar;
+                                        @* User chat time *@
+                                        <div class="chat-hour">@item.TimeMessage.ToShortTimeString()</div>
+                                        @* User message *@
+                                        <div class="chat-text" style="background-color: rgb(85, 200, 250, 0.4);">
+                                            @item.Content
+                                        </div>
+                                        @* User avatar and name *@
+                                        <div class="chat-avatar">
+                                            <img src="@ViewBag.LoginProfile.Avatar" alt="Me">
+                                            <div class="chat-name">Me</div>
+                                        </div>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="chat-left text-center">
+                                        <div class="chat-avatar">
+                                            @{
+                                                string url = "";
+                                                if (item.Account.RoleName == "Teacher"){
+                                                    url = item.Account.TeacherProfile.Avatar;
+                                                }
+                                                else if (item.Account.RoleName == "Student"){
+                                                    url = item.Account.StudentProfile.Avatar;
+                                                }
                                             }
-                                            else if (item.Account.RoleName == "Student"){
-                                                url = item.Account.StudentProfile.Avatar;
-                                            }
-                                        }
-                                        <img src="@url"
-                                    alt="@item.Account.Username">
-                                        <div class="chat-name">@item.Account.Username</div>
-                                    </div>
-                                    <div class="chat-text">
-                                        @item.Content
-                                    </div>
-                                    <div class="chat-hour">@item.TimeMessage.ToShortTimeString()</div>
+                                            <img src="@url"
+                                        alt="@item.Account.Username">
+                                            <div class="chat-name">@item.Account.Username</div>
+                                        </div>
+                                        <div class="chat-text">
+                                            @item.Content
+                                        </div>
+                                        <div class="chat-hour">@item.TimeMessage.ToShortTimeString()</div>
 
-                                    <div class="pin-button d-flex align-items-center m-1" target="@item.Id">
-                                        <button class="btn btn-sm" style="height: 2rem; width: 2rem;"> <i
-                                        class="fa fa-thumbtack"></i></button>
-                                    </div>
-                                </li>
+                                        <div class="pin-button d-flex align-items-center m-1" target="@item.Id">
+                                            <button class="btn btn-sm" style="height: 2rem; width: 2rem;"> <i
+                                            class="fa fa-thumbtack"></i></button>
+                                        </div>
+                                    </li>
+                                }
                             }
-                        }
-                    </ul>
+                        </ul>
+
+                    </div>
+
                 </div>
                 <div>
                     <form method="post" autocomplete="off" id="send-form">
@@ -272,7 +278,6 @@
                         </button>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>
@@ -281,12 +286,9 @@
 <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
 <script>
 
-    $(document).ready(function () {
-        $(".display-pin").click(function (e) {
-            $('.pin').toggle("slow");
-        });
+    $(document).ready(function(){
 
-        var pinBtnClick = function (e)
+        const pinBtnClick = function (e)
         {
             let messageId = $(this).attr("target");
             $.ajax({
@@ -299,21 +301,23 @@
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
 
-                    console.log("pin Message Failed!");
+                    console.log("Pin Message Failed!");
                 }
             });
         }
 
         $(".pin-button").click(pinBtnClick);
 
-        $(".scroller-chat").animate({
-            scrollTop: 1000000
-        }, 800);
-
         const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
-        connection.on("GetRoomMessage", function (username, message, messageId, avatar, time) {
 
-            if (username == "@ViewBag.LoginUser.Username") {
+        connection.start().then(function () {
+            connection.invoke("JoinRoom", @Model.Id);
+        });
+
+        connection.on("GetRoomMessage", function (username, message, messageId, avatar, time)
+        {
+            if (username == "@ViewBag.LoginUser.Username")
+            {
                 let li = $("#chat-right").clone();
                 li.removeAttr("id");
                 li.attr("class", "chat-right");
@@ -326,7 +330,8 @@
                 li.find("img").attr("alt", "Me");
                 li.appendTo($(".chat-box"));
             }
-            else {
+            else
+            {
                 let li = $("#chat-left").clone();
                 li.removeAttr("id");
                 li.attr("class", "chat-left");
@@ -341,23 +346,19 @@
             }
 
             $(".scroller-chat").animate({
-                scrollTop: 1000000
+                scrollTop: $(".chat-box").outerHeight()
             }, 800);
 
             $("#send-form").find("input[name='Message']").val(null);
 
         });
 
-        connection.start().then(function () {
-            connection.invoke("JoinRoom", @Model.Id);
-        });
-
-        $("#send-form").submit(function (e) {
-
+        $("#send-form").submit(function (e)
+        {
             let roomId = $(this).find("input[name='RoomID']").val();
             let message = $(this).find("input[name='Message']").val();
             if (message.length > 0){
-                console.log("Start ajax");
+                
                 $.ajax({
                     url: "/RoomMessage/Add/",
                     type: "Post",
@@ -365,7 +366,6 @@
                     data: { RoomID: roomId, Message: message},
                     success: function(data, status, xhr)
                     {
-                        console.log(data);
                         connection.invoke("SendRoomMessage", data.id, data.roomId, data.username, data.avatar, data.message, data.time);
                     },
                     error: function (jqXhr, textStatus, errorMessage) {
@@ -377,6 +377,81 @@
             e.preventDefault();
         });
 
-    })
+        $(".scroller-chat").scrollTop($(".chat-box").outerHeight());
+
+        $(".display-pin").click(function (e) {
+            $('.pin').toggle("slow");
+        });
+
+        $(".buttonload").hide();
+
+
+        const LoadMessages = function(){
+            if ($(".scroller-chat").scrollTop() <= 16)
+            {
+                $(".buttonload").show();
+
+                $.ajax({
+                    url: "/RoomMessage/LoadMoreRoomMessages/",
+                    data: {RoomId: @Model.Id},
+                    dataType: "json",
+                    success: function(dataList, status, xhr)
+                    {
+                        
+                        let height = 0;
+                        for(let i=0; i<dataList.length; i++)
+                        {
+                            data = dataList[i];
+                            if (data.username == "@ViewBag.LoginUser.Username")
+                            {
+                                let li = $("#chat-right").clone();
+                                li.removeAttr("id");
+                                li.attr("class", "chat-right");
+                                li.find(".chat-hour").text(data.time);
+                                li.find(".chat-text").text(data.message);
+                                li.find(".chat-name").text("Me");
+                                li.find(".pin-button").attr("target", data.id);
+                                li.find(".pin-button").click(pinBtnClick);
+                                li.find("img").attr("src", data.avatar);
+                                li.find("img").attr("alt", "Me");
+                                li.prependTo($(".chat-box"));
+
+                                height += li.outerHeight();
+                            }
+                            else
+                            {
+                                let li = $("#chat-left").clone();
+                                li.removeAttr("id");
+                                li.attr("class", "chat-left");
+                                li.find(".chat-hour").text(data.time);
+                                li.find(".chat-text").text(data.message);
+                                li.find(".chat-name").text(data.username);
+                                li.find(".pin-button").attr("target", data.id);
+                                li.find(".pin-button").click(pinBtnClick);
+                                li.find("img").attr("src", data.avatar);
+                                li.find("img").attr("alt", data.username);
+                                li.prependTo($(".chat-box"));
+
+                                height += li.outerHeight();
+                            }
+                            // End For
+                        }
+
+                        $(".scroller-chat").scrollTop(height);
+                        $(".buttonload").hide();
+                        //End Success
+                    },
+                    error: function(jqXhr, textStatus, errorMessage)
+                    {
+                        $(".buttonload").hide();
+                    }
+
+                });
+            }
+        }
+
+        setInterval(LoadMessages, 1000);
+
+    });
 
 </script>

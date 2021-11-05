@@ -1,0 +1,56 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: monospace, sans-serif;
+}
+/* Background */
+
+body{
+    background-image: url('Halloween.gif');
+    background-repeat: no-repeat;
+    background-size: cover;
+   
+}
+
+/*  */
+
+.profile{
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+
+}
+.card{
+    height: 100%;
+    border-radius: 1rem;
+}
+
+.card-image{
+    padding: 1rem;
+    margin: 1rem;
+    text-align: center;
+}
+.card-img{
+    box-shadow: 0 0 5px 1px blue;
+    border-radius: 50%;
+    height: 250px;
+    width: 250px;
+}
+
+.box{
+    background-color: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    height: 100%;
+}
+
+.avatar-form {
+    box-shadow: 0 0 5px 1px blue;
+    border-radius: 5px;
+}
+
+.avatar-form input.file-info {
+    border: none;
+    outline: none;
+    height: 100%;
+}

@@ -8,6 +8,7 @@ namespace UniChatApplication.Models
     public class Account
     {
 
+        // Id Property
         [Key]
         public int Id { get; set; }
 
@@ -19,6 +20,7 @@ namespace UniChatApplication.Models
         [Column("role_id")]
         public int RoleID { get; set; }
 
+        // Get RoleName
         [NotMapped]
         public string RoleName {
             get {
@@ -29,6 +31,7 @@ namespace UniChatApplication.Models
             }
         }
 
+        
         public StudentProfile StudentProfile { get; set; }
 
         public TeacherProfile TeacherProfile { get; set; }

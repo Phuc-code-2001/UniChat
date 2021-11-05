@@ -11,6 +11,8 @@
 
     <h1 class="text-primary text-center">Class Management</h1>
     <hr>
+    <a class="button-3 text-white text-decoration-none" asp-action="Index">Back to List</a>
+    <hr>
     <h5 class="text-danger">Do you really want to delete @Model.Name?</h5>
     <form method="post" class="mt-3">
         <input type="submit" class="btn btn-outline-danger" value="Confirm">
@@ -21,7 +23,7 @@
             <div class="boxchatlist">
                 <h4 class="text-center text-info">Roomchats</h4>
                 <ol>
-                    @foreach (RoomChat item in Model.RoomChats)
+                    @foreach (RoomChat item in ViewBag.RoomChats)
                     {
                         <li>
                             <h6>
@@ -30,9 +32,10 @@
                                 </a>
                             </h6>
                             <ul>
-                                <li>GroupName</li>
-                                <li>GroupName</li>
-                                <li>GroupName</li>
+                                @foreach (GroupChat group in item.GroupChats)
+                                {
+                                    <li>@group.Name</li>
+                                }
                             </ul>
                         </li>
                     }
@@ -52,7 +55,7 @@
                     {
                         <tr>
                             <td>
-                                <img src="" alt="avatar">
+                                <img class="avatar" src="@item.Avatar" alt="avatar">
                             </td>
                             <td>
                                 @item.StudentCode
@@ -66,7 +69,5 @@
             </table>
         </div>
     </div>
-
-    <a class="button-3 text-white text-decoration-none" asp-action="Index">Back to List</a>
 
 </div>

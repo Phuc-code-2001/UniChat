@@ -27,3 +27,11 @@ body {
     font-size: 15px;
     text-align: center;
 }
+
+.avatar {
+    width: 100px;
+    height: 125px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 0 5px 1px blue;
+}

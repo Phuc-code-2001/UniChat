@@ -57,7 +57,7 @@ header h1{
     text-align: center;
 }
 
-.avatar-box > img {
+.avatar-box img {
     width: 250px;
     height: 250px;
     border-radius: 100rem;
@@ -86,10 +86,12 @@ header h1{
     display: flex;
     flex-direction: column;
     cursor: default;
+    font-size: 1.2rem;
 }
 
 .new {
-    color: var(--indigo);
+    background-color: black;
+    color: yellow;
 }
 
 .old {

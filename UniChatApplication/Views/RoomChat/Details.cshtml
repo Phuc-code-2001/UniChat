@@ -28,9 +28,10 @@
             </ul>
             <h4 class="text-center text-info">Groups in this room</h4>
             <ul>
-                <li>...</li>
-                <li>...</li>
-                <li>....</li>
+                @foreach (GroupChat item in ViewBag.GroupChats)
+                {
+                    <li>@item.Name</li>
+                }
             </ul>
         </div>
         <div class="right-content">

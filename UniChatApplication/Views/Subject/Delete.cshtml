@@ -28,14 +28,14 @@
             </thead>
             <tbody>
 
-                @foreach (RoomChat item in Model.RoomChats)
+                @foreach (RoomChat item in ViewBag.RoomChats)
                 {
                     <tr>
                         <td>@item.Id</td>
                         <td>@item.Class.Name</td>
                         <td>@item.TeacherProfile.FullName</td>
                         <td>@item.Class.StudentProfiles.Count</td>
-                        <td></td>
+                        <td>@item.GroupChats.Count</td>
                     </tr>
                 }
 

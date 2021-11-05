@@ -7,9 +7,13 @@
 <link rel="stylesheet" href="~/css/cssPlus/buttonPlus.css">
 <link rel="stylesheet" href="~/css/RoomChatManagement/StyleDelete.css">
 
+
 <div class="container">
 
-    <h1 class="text-primary text-center">Class Management</h1>
+    <h1 class="text-primary text-center">RoomChat Management</h1>
+    <hr>
+    <a class="button-3 text-white text-decoration-none" asp-action="Index">Back to List</a>
+    <hr>
     <h4 class="text-danger">Do you really want to delete this room?</h4>
     <form method="post" class="mt-3">
         <input type="submit" class="btn btn-outline-danger" value="Confirm">
@@ -26,9 +30,10 @@
             </ul>
             <h4 class="text-center text-info">Groups in this room</h4>
             <ul>
-                <li>...</li>
-                <li>...</li>
-                <li>....</li>
+                @foreach (GroupChat item in ViewBag.GroupChats)
+                {
+                    <li>@item.Name</li>
+                }
             </ul>
         </div>
         <div class="right-content">
@@ -44,7 +49,7 @@
                     {
                         <tr>
                             <td>
-                                <img src="" alt="avatar">
+                                <img class="avatar" src="@item.Avatar" alt="">
                             </td>
                             <td>
                                 @item.StudentCode
@@ -58,5 +63,5 @@
             </table>
         </div>
     </div>
-    <a class="button-3 text-white text-decoration-none" asp-action="Index">Back to List</a>
+    
 </div>

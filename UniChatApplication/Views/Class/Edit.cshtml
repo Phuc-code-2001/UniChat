@@ -10,6 +10,7 @@
 
 <div class="container">
     <h1 class="text-center text-primary">Class Management</h1>
+    <h4 class="text-center text-info">Edit for class @Model.Name</h4>
     <hr>
     <a asp-action="Index" class="button-3 text-white text-decoration-none">Back to List</a>
     <hr>
@@ -33,7 +34,7 @@
                         <tr id="@item.Id">
                             <td>@item.StudentCode</td>
                             <td>
-
+                                <img class="avatar" src="@item.Avatar" alt="">
                             </td>
                             <td>@item.FullName</td>
                             <td>@item.Major</td>
@@ -64,7 +65,7 @@
                         <tr>
                             <td>@item.StudentCode</td>
                             <td>
-
+                                <img class="avatar" src="@item.Avatar" alt="">
                             </td>
                             <td>@item.FullName</td>
                             <td>@item.Major</td>
@@ -77,9 +78,7 @@
             </table>
         </div>
     </div>
-
     <hr>
-    <h3 class="text-primary text-center">@Model.Name</h3>
 
 </div>
 
