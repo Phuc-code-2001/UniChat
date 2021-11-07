@@ -4,13 +4,36 @@
 
 @model RoomDeadLine
 
+<style>
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: monospace, sans-serif;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        margin-top: 60px;
+        padding: 2rem;
+        box-shadow: 0 0 5px 1px blue;
+        border-radius: 5px;
+    }
+
+
+</style>
+
 <div class="container">
 
-    <h2>Create new deadline</h2>
-
-    <h4>
-        <span>RoomChat:</span>
-        <span class="text-primary">@Model.RoomChat.Class.Name - @Model.RoomChat.Subject.FullName</span>
+    <h2 class="text-center text-primary font-weight-bold">New Deadline</h2>
+    <div>
+        <a class="button-3 text-white text-decoration-none" asp-action="View" asp-route-RoomId="@Model.RoomId">Back</a>
+    </div>
+    
+    <h4 class="text-center">
+        <span class="text-success">@Model.RoomChat.Class.Name - @Model.RoomChat.Subject.FullName</span>
     </h4>
 
     <form method="Post">
@@ -21,20 +44,17 @@
             </div>
         }
         <div class="form-group">
-            <label asp-for="Content"></label>
-            <textarea asp-for="Content" cols="30" rows="10"></textarea>
+            <label class="font-weight-bold" asp-for="Content"></label>
+            <textarea class="form-control" asp-for="Content" cols="30" rows="10"></textarea>
         </div>
         <div class="form-group">
-            <label asp-for="ExpirationTime"></label>
-            <input type="datetime-local" name="ExpirationTime" value="@ViewBag.ExpirationTime">
+            <label class="font-weight-bold" asp-for="ExpirationTime"></label>
+            <input class="form-control" type="datetime-local" name="ExpirationTime" value="@ViewBag.ExpirationTime">
         </div>
-        <div class="form-group">
+        <div class="form-group text-right">
             <input type="submit" class="btn btn-primary" value="Create">
         </div>
     </form>
     
-
-
-    <a class="btn btn-danger" asp-action="View" asp-route-RoomId="@Model.RoomId">Back</a>
 
 </div>

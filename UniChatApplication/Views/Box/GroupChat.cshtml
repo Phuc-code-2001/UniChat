@@ -369,6 +369,82 @@
 
             e.preventDefault();
         });
+
+        $(".scroller-chat").scrollTop($(".chat-box").outerHeight());
+
+        $(".display-pin").click(function (e) {
+            $('.pin').toggle("slow");
+        });
+
+        $(".buttonload").hide();
+
+        const LoadMessages = function()
+        {
+            if ($(".scroller-chat").scrollTop() <= 16)
+            {
+                $(".buttonload").show();
+
+                $.ajax({
+                    url: "/GroupMessage/LoadMoreGroupMessages",
+                    data: {GroupId: @Model.Id},
+                    dataType: "json",
+                    success: function(dataList, status, xhr)
+                    {
+                        
+                        let height = 0;
+                        for(let i=0; i<dataList.length; i++)
+                        {
+                            data = dataList[i];
+                            if (data.username == "@ViewBag.LoginUser.Username")
+                            {
+                                let li = $("#chat-right").clone();
+                                li.removeAttr("id");
+                                li.attr("class", "chat-right");
+                                li.find(".chat-hour").text(data.time);
+                                li.find(".chat-text").text(data.message);
+                                li.find(".chat-name").text("Me");
+                                li.find(".pin-button").attr("target", data.id);
+                                li.find(".pin-button").click(pinBtnClick);
+                                li.find("img").attr("src", data.avatar);
+                                li.find("img").attr("alt", "Me");
+                                li.prependTo($(".chat-box"));
+
+                                height += li.outerHeight();
+                            }
+                            else
+                            {
+                                let li = $("#chat-left").clone();
+                                li.removeAttr("id");
+                                li.attr("class", "chat-left");
+                                li.find(".chat-hour").text(data.time);
+                                li.find(".chat-text").text(data.message);
+                                li.find(".chat-name").text(data.username);
+                                li.find(".pin-button").attr("target", data.id);
+                                li.find(".pin-button").click(pinBtnClick);
+                                li.find("img").attr("src", data.avatar);
+                                li.find("img").attr("alt", data.username);
+                                li.prependTo($(".chat-box"));
+
+                                height += li.outerHeight();
+                            }
+                            // End For
+                        }
+
+                        $(".scroller-chat").scrollTop(height);
+                        $(".buttonload").hide();
+                        //End Success
+                    },
+                    error: function(jqXhr, textStatus, errorMessage)
+                    {
+                        $(".buttonload").hide();
+                    }
+
+                });
+            };
+        };
+
+        setInterval(LoadMessages, 1000);
+
     });
 
 </script>
@@ -382,37 +458,6 @@
                 e.preventDefault();
             }
         });
-    });
-
-</script>
-
-<script>
-
-    $(document).ready(function () {
-
-        $(".scroller-chat").scrollTop($(".chat-box").outerHeight());
-
-        $(".display-pin").click(function (e) {
-            $('.pin').toggle("slow");
-        });
-
-        $(".buttonload").hide();
-
-        $(".scroller-chat").scroll(function(){
-            if ($(this).scrollTop() == 0) {
-                $(".buttonload").show();
-            }
-            else
-            {
-                $(".buttonload").hide();
-            }
-        });
-
-        $(".scroller-chat").resize(function(){
-            console.log(".scroller-chat resized...");
-            $(".buttonload").hide();
-        })
-
     });
 
 </script>

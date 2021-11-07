@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,65 +24,73 @@ namespace UniChatApplication.Controllers
 
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetString("Role") == null) return Redirect("/Home/");
+            if (HttpContext.Session.GetString("Role") != "Student"
+            && HttpContext.Session.GetString("Role") != "Teacher") return Redirect("/Home/");
 
             Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
-
-            // Account account = await _context.Account.FindAsync(id);
-            // if (account == null) return NotFound();
-
-            // if (account.RoleName == "Admin") return NotFound();
-
             Profile profile = ProfileDAOs.GetProfile(_context, LoginUser);
 
             ViewData["LoginUser"] = LoginUser;
+            
 
             return View(profile);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> EditStudent(StudentProfile profile)
+        public async Task<IActionResult> EditPhone(string phone)
         {
-            if (HttpContext.Session.GetString("Role") == null) return Redirect("/Home/");
+            if (HttpContext.Session.GetString("Role") != "Student"
+            && HttpContext.Session.GetString("Role") != "Teacher") return BadRequest();
 
             Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
-            if (LoginUser.RoleName != "Student") return BadRequest();
+            
+            if (phone != null && !Regex.IsMatch(phone, @"^[0-9]{10}$")){
+                return BadRequest();
+            }
 
-            StudentProfile loginProfile = (StudentProfile) ProfileDAOs.GetProfile(_context, LoginUser);
-            // Change Properties value
-            loginProfile.FullName = profile.FullName;
-            loginProfile.Phone = profile.Phone;
-            loginProfile.Birthday = profile.Birthday;
-            _context.StudentProfile.Update(loginProfile);
+            if (LoginUser.RoleName == "Student")
+            {
+                LoginUser.StudentProfile.Phone = phone;
+            }
+            else {
+                LoginUser.TeacherProfile.Phone = phone;
+            }
+            _context.Update(LoginUser);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", new {id=loginProfile.AccountID});
+            return Ok(new {phone=phone});
         }
 
-        [HttpPost]
-        public async Task<IActionResult> EditTeacher(TeacherProfile profile)
+        public async Task<IActionResult> EditBirthDay(string birthday)
         {
-            if (HttpContext.Session.GetString("Role") == null) return Redirect("/Home/");
+            if (HttpContext.Session.GetString("Role") != "Student"
+            && HttpContext.Session.GetString("Role") != "Teacher") return BadRequest();
 
             Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
-            if (LoginUser.RoleName != "Teacher") return BadRequest();
+            
+            DateTime BirthDay = DateTime.Now;
 
-            TeacherProfile loginProfile = (TeacherProfile) ProfileDAOs.GetProfile(_context, LoginUser);
-            // Change Properties value
-            loginProfile.FullName = profile.FullName;
-            loginProfile.Phone = profile.Phone;
-            loginProfile.Birthday = profile.Birthday;
-            _context.TeacherProfile.Update(loginProfile);
+            if (birthday != null && !DateTime.TryParse(birthday, out BirthDay)){
+                return BadRequest();
+            }
+
+            if (LoginUser.RoleName == "Student")
+            {
+                LoginUser.StudentProfile.Birthday = BirthDay;
+            }
+            else {
+                LoginUser.TeacherProfile.Birthday = BirthDay;
+            }
+            _context.Update(LoginUser);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", new {id=loginProfile.AccountID});
+            return Ok(new {birthday=BirthDay.ToShortDateString()});
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateAvatar(IFormFile imageFile)
         {
             if (HttpContext.Session.GetString("Role") == null) return Redirect("/Home/");
-
+            if (imageFile == null) return BadRequest();
             Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
 
             if(LoginUser.RoleName == "Teacher")

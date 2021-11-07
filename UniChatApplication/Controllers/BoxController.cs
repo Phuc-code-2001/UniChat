@@ -194,7 +194,7 @@ namespace UniChatApplication.Controllers
             ViewData["LoginUser"] = LoginUser;
             ViewData["RoomChats"] = RoomChats;
             ViewData["MessagePin"] = GroupMessagePinDAOs.GetMessagePinOfGroup(_context, GroupChat.Id);
-
+            // Load Messages
             ViewData["Messages"] =  GroupMessageDAOs.Take(_context, GroupChat.Id, 0, numberOfMessagesOnStartLoad);
             HttpContext.Session.SetInt32($"Group{GroupChat.Id}NumberOfMessageSended", numberOfMessagesOnStartLoad);
             

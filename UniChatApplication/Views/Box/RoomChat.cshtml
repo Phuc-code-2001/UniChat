@@ -22,8 +22,7 @@
                             <i class="fa fa-arrow-circle-left"></i>
                         </a>
                         @* Profile *@
-                        <a asp-controller="UserProfile" asp-action="Index" asp-route-id="@ViewBag.LoginUser.Id"
-                        class="button-1 w-25 text-white">
+                        <a asp-controller="UserProfile" asp-action="Index" class="button-1 w-25 text-white">
                             <i class="fa fa-user"></i>
                         </a>
                         
@@ -51,8 +50,7 @@
                         if (item.Id == Model.Id){
                             <a asp-action="RoomChat" asp-route-id="@item.Id" class="friend-drawer active text-decoration-none">
                                 @* Room avatar *@
-                                <img class="profile-image"
-                                src="https://www.ecoblader.com/wp-content/uploads/2013/02/ecoblader-facebook.jpg" alt="">
+                                <img class="profile-image" src="https://picsum.photos/200" alt="">
                                 @* Room name *@
                                 <div class="friend-drawer-text text-white ">
                                     <h4 class="mb-0">@item.Subject.SubjectCode</h4>
@@ -62,8 +60,7 @@
                         else {
                             <a asp-action="RoomChat" asp-route-id="@item.Id" class="friend-drawer text-decoration-none">
                                 @* Room avatar *@
-                                <img class="profile-image"
-                                src="https://www.ecoblader.com/wp-content/uploads/2013/02/ecoblader-facebook.jpg" alt="">
+                                <img class="profile-image" src="https://picsum.photos/200" alt="">
                                 @* Room name *@
                                 <div class="friend-drawer-text text-dark ">
                                     <h4 class="mb-0">@item.Subject.SubjectCode</h4>
@@ -95,7 +92,7 @@
                         {
                             <a asp-action="GroupChat" asp-route-id="@item.Id" class="friend-drawer text-decoration-none">
 
-                                <img class="profile-image" src="https://www.ecoblader.com/wp-content/uploads/2013/02/ecoblader-facebook.jpg" alt="">
+                                <img class="profile-image" src="https://picsum.photos/200" alt="">
 
                                 <div class="friend-drawer-text d-flex align-items-center">
                                     @* Name group *@
@@ -115,7 +112,9 @@
                             @foreach (GroupChat item in ViewBag.GroupChats)
                             {
                                 <li>
-                                    @item.Order - @item.Name
+                                    <a asp-controller="GroupChat" asp-action="Details" asp-route-id="@item.Id">
+                                        Group @item.Order: @item.Name
+                                    </a>
                                 </li>
                             }
                         </ul>
@@ -386,13 +385,14 @@
         $(".buttonload").hide();
 
 
-        const LoadMessages = function(){
+        const LoadMessages = function()
+        {
             if ($(".scroller-chat").scrollTop() <= 16)
             {
                 $(".buttonload").show();
 
                 $.ajax({
-                    url: "/RoomMessage/LoadMoreRoomMessages/",
+                    url: "/RoomMessage/LoadMoreRoomMessages",
                     data: {RoomId: @Model.Id},
                     dataType: "json",
                     success: function(dataList, status, xhr)
@@ -447,8 +447,8 @@
                     }
 
                 });
-            }
-        }
+            };
+        };
 
         setInterval(LoadMessages, 1000);
 

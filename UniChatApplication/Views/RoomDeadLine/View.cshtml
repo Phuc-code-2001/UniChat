@@ -4,32 +4,89 @@
     ViewData["Title"] = "RoomDeadline Management";
 }
 
+
+<style>
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: monospace, sans-serif;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        margin-top: 60px;
+        padding: 2rem;
+        box-shadow: 0 0 5px 1px blue;
+        border-radius: 5px;
+    }
+
+    table {
+        margin-bottom: 0 !important;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .d-box {
+        padding: 1.5rem;
+        border: 1px solid skyblue;
+        position: relative;
+        border-radius: 5px;
+    }
+
+    .new:before {
+        content: "News";
+        position: absolute;
+        color: red;
+        background-color: white;
+        font-size: 1.2rem;
+        padding: 0 5px;
+        top: 0;
+        left: 1rem; 
+        transform: translateY(-50%);
+    }
+
+    .old:before {
+        content: "Olds";
+        position: absolute;
+        color: green;
+        background-color: white;
+        font-size: 1.2rem;
+        padding: 0 5px;
+        top: 0;
+        left: 1rem; 
+        transform: translateY(-50%);
+    }
+
+</style>
+
 <div class="container">
 
-    <h2>DeadLine Management</h2>
-    
-    <h4>
-        <span>RoomChat:</span>
-        <span class="text-primary">@ViewBag.RoomChat.Class.Name - @ViewBag.RoomChat.Subject.FullName</span>
-    </h4>
+    <h2 class="text-center text-primary font-weight-bold">DeadLine</h2>
     
     <div>
-        <a class="btn btn-outline-danger" asp-controller="Box" asp-action="RoomChat" asp-route-id="@ViewBag.roomChat.Id">Back</a>
+        <a class="button-3 text-white text-decoration-none" asp-controller="Box" asp-action="RoomChat" asp-route-id="@ViewBag.roomChat.Id">Back</a>
         @if (ViewBag.LoginUser.RoleName == "Teacher"){
-            <a class="btn btn-outline-primary" asp-action="Create" asp-route-RoomId="@ViewBag.RoomChat.Id">Create</a>
+            <a class="button-2 text-white text-decoration-none" asp-action="Create" asp-route-RoomId="@ViewBag.RoomChat.Id">Create</a>
         }
     </div>
+    <h4 class="text-center">
+        <span class="text-success">@ViewBag.RoomChat.Class.Name - @ViewBag.RoomChat.Subject.FullName</span>
+    </h4>
 
-    <div>
-        <h6>New DeadLine List</h6>
-        <table class="table table-bordered text-center">
-            <thead>
+    
+    <div class="d-box new">
+        <table class="table table-bordered table-info text-center">
+            <thead class="bg-danger text-white">
                 <tr>
                     <th>Number</th>
                     <th>Content</th>
                     <th>Expiration Time</th>
                     @if (ViewBag.LoginUser.RoleName == "Teacher"){
-                        <th>Delete</th>
+                        <th>Options</th>
                     }
                 </tr>
             </thead>
@@ -55,16 +112,16 @@
             </tbody>
         </table>
     </div>
-    <div>
-        <h6>Old DeadLine List</h6>
-        <table class="table table-bordered text-center">
-            <thead>
+    <hr>
+    <div class="d-box old">
+        <table class="table table-bordered table-success text-center">
+            <thead class="bg-success">
                 <tr>
                     <th>Number</th>
                     <th>Content</th>
                     <th>Expiration Time</th>
                     @if (ViewBag.LoginUser.RoleName == "Teacher"){
-                        <th>Delete</th>
+                        <th>Options</th>
                     }
                 </tr>
             </thead>
