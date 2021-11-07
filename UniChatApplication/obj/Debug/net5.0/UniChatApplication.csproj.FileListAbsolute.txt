@@ -1416,3 +1416,4 @@ C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Vie
 C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\Box\GroupChat.cshtml.g.cs
 C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\GroupChat\Create.cshtml.g.cs
 C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\GroupChat\Setting.cshtml.g.cs
+C:\Users\PhucHT\Desktop\UniChatWeb\UniChatApplication\obj\Debug\net5.0\Razor\Views\GroupChat\Details.cshtml.g.cs

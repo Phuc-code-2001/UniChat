@@ -8,10 +8,11 @@ using System;
 namespace UniChatApplication.Daos
 {
 
-    public class RoomMessageDAOs {
+    public class RoomMessageDAOs
+    {
 
 
-        public static IEnumerable<RoomMessage> getAll(UniChatDbContext _context){
+        public static IQueryable<RoomMessage> getAll(UniChatDbContext _context){
             return _context.RoomMessages
                             .Include(m => m.Account)
                             .Include(m => m.Account.StudentProfile)
@@ -19,30 +20,14 @@ namespace UniChatApplication.Daos
                             .Include(m => m.RoomChat);
         }
 
-        public static IEnumerable<RoomMessage> messagesOfRoom(UniChatDbContext _context, int RoomID){
+        public static IQueryable<RoomMessage> messagesOfRoom(UniChatDbContext _context, int RoomID)
+        {
             return getAll(_context).Where(m => m.RoomID == RoomID).OrderBy(m => m.TimeMessage);
         }
 
-        public static bool Add(UniChatDbContext _context, RoomMessage message){
-            try{
-                _context.RoomMessages.Add(message);
-                _context.SaveChanges();
-                return true;
-            }
-            catch(Exception){
-                return false;
-            }
-        }
-
-        public static bool Remove(UniChatDbContext _context, RoomMessage message){
-            try{
-                _context.RoomMessages.Remove(message);
-                _context.SaveChanges();
-                return true;
-            }
-            catch(Exception){
-                return false;
-            }
+        public static IEnumerable<RoomMessage> Take(UniChatDbContext context, int RoomID, int start, int count)
+        {
+            return messagesOfRoom(context, RoomID).ToList().SkipLast(start).TakeLast(count);
         }
     
     }

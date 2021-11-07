@@ -15709,6 +15709,11 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\Views\\GroupChat\\Details.cshtml",
+      "TargetPath": "Views\\GroupChat\\Details.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\Views\\Class\\Index.cshtml",
       "TargetPath": "Views\\Class\\Index.cshtml",
       "FileKind": "mvc"

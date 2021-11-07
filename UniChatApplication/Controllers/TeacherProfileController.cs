@@ -124,10 +124,7 @@ namespace UniChatApplication.Controllers
             TeacherProfile teacherProfile = ProfileDAOs.getAllTeachers(_context).FirstOrDefault(p => p.Id == id);
             if (teacherProfile == null) return Redirect("/Home/");
 
-            foreach(RoomChat item in teacherProfile.RoomChats){
-                item.Class = ClassDAOs.getAllClasses(_context).FirstOrDefault(c => c.Id == item.ClassId);
-                item.Subject = SubjectDAOs.getAllSubject(_context).FirstOrDefault(s => s.Id == item.SubjectId);
-            }
+            ViewData["RoomChats"] = RoomChatDAOs.getAllRoomChats(_context).Where(r => r.TeacherId == id);
 
             return View(teacherProfile);
         }

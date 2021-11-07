@@ -38,9 +38,8 @@ namespace UniChatApplication.Controllers
 
             Class c = ClassDAOs.getAllClasses(_context).FirstOrDefault(c => c.Id == id);
             if(c == null) return Redirect("/Home/");
-            foreach(RoomChat item in c.RoomChats){
-                item.Subject = _context.Subjects.FirstOrDefault(s => s.Id == item.SubjectId);
-            }
+
+            ViewData["RoomChats"] = RoomChatDAOs.getAllRoomChats(_context).Where(r => r.ClassId == id);
 
             return View(c);
         }
@@ -132,9 +131,7 @@ namespace UniChatApplication.Controllers
             Class c = ClassDAOs.getAllClasses(_context).FirstOrDefault(c => c.Id == id);
             if(c == null) return Redirect("/Home/");
 
-            foreach(RoomChat item in c.RoomChats){
-                item.Subject = _context.Subjects.FirstOrDefault(s => s.Id == item.SubjectId);
-            }
+            ViewData["RoomChats"] = RoomChatDAOs.getAllRoomChats(_context).Where(r => r.ClassId == id);
 
             return View(c);
         }

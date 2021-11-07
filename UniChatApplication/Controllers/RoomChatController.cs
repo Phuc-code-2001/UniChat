@@ -41,6 +41,12 @@ namespace UniChatApplication.Controllers
             RoomChat roomChat = RoomChatDAOs.getAllRoomChats(_context).FirstOrDefault(m => m.Id == id);
             if (roomChat == null) return Redirect("/Home/");
 
+            // Get GroupChat List of Room
+            IEnumerable<GroupChat> GroupChats = GroupChatDAOs.getAllGroupChats(_context)
+                                                .Where(g => g.RoomID == roomChat.Id).OrderBy(g => g.Order)
+                                                .ToList();
+            ViewData["GroupChats"] = GroupChats;
+
             ViewData["LoginUser"] = LoginUser;
             return View(roomChat);
         }
@@ -136,6 +142,12 @@ namespace UniChatApplication.Controllers
 
             RoomChat roomChat = RoomChatDAOs.getAllRoomChats(_context).FirstOrDefault(m => m.Id == id);
             if (roomChat == null) return Redirect("/Home/");
+
+            // Get GroupChat List of Room
+            IEnumerable<GroupChat> GroupChats = GroupChatDAOs.getAllGroupChats(_context)
+                                                .Where(g => g.RoomID == roomChat.Id).OrderBy(g => g.Order)
+                                                .ToList();
+            ViewData["GroupChats"] = GroupChats;
 
             return View(roomChat);
         }

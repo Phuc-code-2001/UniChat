@@ -97,6 +97,12 @@ namespace UniChatApplication.Controllers
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
             if (id == null) return Redirect("/Home/");
 
+            StudentProfile StudentCheckExisted = _context.StudentProfile.FirstOrDefault(s => s.StudentCode == student.StudentCode);
+            if (StudentCheckExisted != null && StudentCheckExisted.Id != student.Id){
+                ViewData["Error"] = $"StudentCode {student.StudentCode} existed...";
+                return View(student);
+            }
+
             StudentProfile profile = ProfileDAOs.getAllStudents(_context).FirstOrDefault(p => p.Id == id);
             if (profile == null) return Redirect("/Home/");
             profile.FullName = student.FullName;
