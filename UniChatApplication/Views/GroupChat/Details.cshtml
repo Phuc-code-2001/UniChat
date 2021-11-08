@@ -46,7 +46,15 @@
     <h4 class="text-info text-center">Subject: @ViewBag.RoomChat.Subject.SubjectCode -
         @ViewBag.RoomChat.Subject.FullName</h4>
     <hr>
-    <a asp-controller="Box" asp-action="GroupChat" asp-route-id="@Model.Id" class="btn btn-danger">Back</a>
+    @if (ViewBag.LoginUser.RoleName == "Student") {
+        <a asp-controller="Box" asp-action="GroupChat" asp-route-id="@Model.Id" class="button-3 text-white text-decoration-none">Back</a>
+    }
+    else if (ViewBag.LoginUser.RoleName == "Teacher") {
+        <a asp-controller="Box" asp-action="RoomChat" asp-route-id="@Model.RoomID" class="button-3 text-white text-decoration-none">Back</a>
+    }
+    else {
+        <a asp-controller="RoomChat" asp-action="Details" asp-route-id="@Model.RoomID" class="button-3 text-white text-decoration-none">Back</a>
+    }
     <hr>
 
     <div class="group-student-list">

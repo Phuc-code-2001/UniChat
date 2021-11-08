@@ -63,7 +63,7 @@
                         <a asp-action="RoomChat" asp-route-id="@item.Id" class="friend-drawer text-decoration-none">
                             @* Room avatar *@
                             <img class="profile-image"
-                            src="https://www.ecoblader.com/wp-content/uploads/2013/02/ecoblader-facebook.jpg" alt="">
+                            src="https://picsum.photos/200" alt="">
                             @* Room name *@
                             <div class="friend-drawer-text text-dark ">
                                 <h4 class="mb-0">@item.Subject.SubjectCode</h4>
@@ -94,27 +94,23 @@
                 @* Scroller for group chat *@
                 <div class="scroller">
                     @* Friend drawer *@
+                    <a asp-action="GroupChat" asp-route-id="@Model.Id" class="friend-drawer active text-decoration-none text-white">
+
+                        <img class="profile-image" src="https://picsum.photos/200" alt="">
+
+                        <div class="friend-drawer-text d-flex align-items-center">
+                            @* Name group *@
+                            <h4 class="mb-0">@Model.RoomChat.Subject.SubjectCode SL(@Model.GroupManages.Count)</h4>
+                        </div>
+                    </a>
+                    <br>
                     @foreach (GroupChat item in ViewBag.GroupChats)
                     {
-
-                        if (item.Id == Model.Id)
-                        {
-                            <a asp-action="GroupChat" asp-route-id="@item.Id" class="friend-drawer active text-decoration-none text-white">
-
-                                <img class="profile-image" src="https://www.ecoblader.com/wp-content/uploads/2013/02/ecoblader-facebook.jpg" alt="">
-
-                                <div class="friend-drawer-text d-flex align-items-center">
-                                    @* Name group *@
-                                    <h4 class="mb-0">@item.RoomChat.Subject.SubjectCode SL(@item.GroupManages.Count)</h4>
-                                </div>
-                            </a>
-                            <br>
-                        }
-                        else
+                        if (item.Id != Model.Id)
                         {
                             <a asp-action="GroupChat" asp-route-id="@item.Id" class="friend-drawer text-decoration-none">
 
-                                <img class="profile-image" src="https://www.ecoblader.com/wp-content/uploads/2013/02/ecoblader-facebook.jpg" alt="">
+                                <img class="profile-image" src="https://picsum.photos/200" alt="">
 
                                 <div class="friend-drawer-text d-flex align-items-center">
                                     @* Name group *@

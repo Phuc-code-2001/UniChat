@@ -30,7 +30,9 @@
             <ul>
                 @foreach (GroupChat item in ViewBag.GroupChats)
                 {
-                    <li>@item.Name</li>
+                    <li>
+                        <a asp-controller="GroupChat" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
+                    </li>
                 }
             </ul>
         </div>
