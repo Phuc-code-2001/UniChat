@@ -48,6 +48,11 @@ namespace UniChatApplication.Controllers
 
             // Check RoomChat if it includes LoginUser
             if (!roomChat.Class.StudentProfiles.Any(s => s.AccountID == LoginUser.Id)) return BadRequest();
+
+            if (string.IsNullOrEmpty(groupChat.Name)) {
+                ViewData["ErrorMessage"] = $"GroupChat's name can not be blank.";
+                return View();
+            }
             
             List<GroupChat> groupChatOfRooms = roomChat.GroupChats.OrderBy(g => g.Order).ToList();
             if (groupChatOfRooms.Any(g => g.Name == groupChat.Name))
@@ -95,8 +100,11 @@ namespace UniChatApplication.Controllers
 
             if (HttpContext.Session.GetString("Role") == null) return Redirect("/Home/");
             GroupChat groupChat = GroupChatDAOs.getAllGroupChats(_context).FirstOrDefault(g => g.Id == id);
+            Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
+
             if (groupChat == null) return NotFound();
 
+            ViewData["LoginUser"] = LoginUser;
             ViewData["GroupDataList"] = GroupManageDAOs.getAllGroupData(_context).Where(d => d.GroupId == id);
             ViewData["RoomChat"] = groupChat.RoomChat;
 
