@@ -5,9 +5,15 @@ using UniChatApplication.Models;
 
 namespace UniChatApplication.Daos
 {
-    public class GroupChatDAOs {
-
-        public static IQueryable<GroupChat> getAllGroupChats(UniChatDbContext context){
+    public class GroupChatDAOs
+    {
+        /// <summary>
+        /// Get All Group Chats
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns>List of group chats</returns>
+        public static IQueryable<GroupChat> getAllGroupChats(UniChatDbContext context)
+        {
             return context.GroupChats
                     .Include(g => g.RoomChat)
                     .Include(g => g.RoomChat.Class)
@@ -15,6 +21,6 @@ namespace UniChatApplication.Daos
                     .Include(g => g.Messages)
                     .Include(g => g.GroupManages);
         }
-        
+
     }
 }

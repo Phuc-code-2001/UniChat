@@ -10,6 +10,10 @@ namespace UniChatApplication.Data
 {
     public class SeedData
     {
+        /// <summary>
+        /// InitialAdminAccount
+        /// </summary>
+        /// <param name="serviceProvider"></param>
         public static void InitialAdminAccount(IServiceProvider serviceProvider)
         {
             UniChatDbContext context =
@@ -36,8 +40,12 @@ namespace UniChatApplication.Data
             context.SaveChanges();
         }
 
-
-        public static void ResetDataServer(IServiceProvider serviceProvider){
+        /// <summary>
+        /// ResetDataServer
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        public static void ResetDataServer(IServiceProvider serviceProvider)
+        {
 
             UniChatDbContext context =
                 new UniChatDbContext(serviceProvider
@@ -48,7 +56,8 @@ namespace UniChatApplication.Data
             List<LoginCookie> cookies = new List<LoginCookie>();
             foreach (LoginCookie item in context.LoginCookies)
             {
-                if (item.ExpirationTime <= DateTime.Now){
+                if (item.ExpirationTime <= DateTime.Now)
+                {
                     cookies.Add(item);
                 }
             }

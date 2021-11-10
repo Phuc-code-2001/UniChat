@@ -16,59 +16,72 @@ namespace UniChatApplication.Controllers
 
         readonly UniChatDbContext _context;
         public static ISession session;
-        
+
 
         public LoginController(UniChatDbContext context)
         {
             _context = context;
         }
 
-        // Mapping to Login View
+        /// <summary>
+        /// Mapping to Login View
+        /// </summary>
+        /// <returns>Login View</returns>
         public async Task<IActionResult> Index()
         {
             // Use session to detect login. Check Role
             string username = HttpContext.Session.GetString("username");
-            if (username != null){
+            if (username != null)
+            {
                 Account account = await _context.Account.FirstOrDefaultAsync(a => a.Username == username);
 
                 LoginController.session = HttpContext.Session;
-                
-                if (account.RoleName == "Admin"){
+
+                if (account.RoleName == "Admin")
+                {
 
                     HttpContext.Session.SetString("Role", "Admin");
                     return Redirect("/Admin/");
                 }
-                if (account.RoleName == "Teacher"){
-                    
+                if (account.RoleName == "Teacher")
+                {
+
                     HttpContext.Session.SetString("Role", "Teacher");
                     return Redirect("/Box/");
                 }
 
-                if (account.RoleName == "Student"){
-                    
+                if (account.RoleName == "Student")
+                {
+
                     HttpContext.Session.SetString("Role", "Student");
                     return Redirect("/Box/");
                 }
-                
+
             }
-            else {
+            else
+            {
 
                 //read cookie from Request object  
                 string cookieValueFromReq = Request.Cookies["login"];
-                if (cookieValueFromReq != null) {
+                if (cookieValueFromReq != null)
+                {
                     LoginCookie cookie = _context.LoginCookies.FirstOrDefault(c => c.Key == cookieValueFromReq);
-                    if (cookie != null){
+                    if (cookie != null)
+                    {
 
-                        if (cookie.ExpirationTime > DateTime.Now){
+                        if (cookie.ExpirationTime > DateTime.Now)
+                        {
 
                             int userId = cookie.AccountID;
                             Account user = _context.Account.Find(userId);
-                            if (user != null){
+                            if (user != null)
+                            {
                                 HttpContext.Session.SetString("username", user.Username);
                                 return RedirectToAction("Index");
                             }
                         }
-                        else {
+                        else
+                        {
                             DeleteLoginCookie();
                         }
                     }
@@ -80,11 +93,17 @@ namespace UniChatApplication.Controllers
             return View();
         }
 
-        // Get data from view to login
+        /// <summary>
+        /// Get data from view to login
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <param name="remember"></param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
         public IActionResult Index(string username, string password, bool remember)
         {
-            
+
             var validator = AccountDAOs.AccountValidate(username, password);
 
             if (validator["UsernameMessage"] == string.Empty && validator["PasswordMessage"] == string.Empty)
@@ -96,29 +115,34 @@ namespace UniChatApplication.Controllers
 
                 if (matchedAccounts.Count > 0)
                 {
-                    if (remember) {
+                    if (remember)
+                    {
                         // Set login cookie
                         CookieOptions options = new CookieOptions();
                         options.Expires = DateTime.Now.AddMinutes(30);
                         string key;
 
-                        while(true){
+                        while (true)
+                        {
                             key = CookieDaos.CreateCookieLogin();
-                            if(_context.LoginCookies.Count(c => c.Key == key) == 0){
+                            if (_context.LoginCookies.Count(c => c.Key == key) == 0)
+                            {
                                 break;
                             }
                         }
 
                         Response.Cookies.Append("login", key, options);
-                        _context.LoginCookies.Add(new LoginCookie(){
-                            Key=key,
-                            ExpirationTime=DateTime.Now.AddMinutes(30),
-                            AccountID=matchedAccounts[0].Id
-                            });
+                        _context.LoginCookies.Add(new LoginCookie()
+                        {
+                            Key = key,
+                            ExpirationTime = DateTime.Now.AddMinutes(30),
+                            AccountID = matchedAccounts[0].Id
+                        });
                         _context.SaveChanges();
 
                     }
-                    else {
+                    else
+                    {
                         DeleteLoginCookie();
                     }
 
@@ -134,7 +158,8 @@ namespace UniChatApplication.Controllers
                 }
 
             }
-            else {
+            else
+            {
                 // Đưa thông tin trong validator qua trang Login để thông báo
                 ViewData["uerror"] = validator["UsernameMessage"];
                 ViewData["perror"] = validator["PasswordMessage"];
@@ -144,7 +169,10 @@ namespace UniChatApplication.Controllers
 
         }
 
-        // Logout function
+        /// <summary>
+        /// Logout function
+        /// </summary>
+        /// <returns>View Home</returns>
         public IActionResult Logout()
         {
             HttpContext.Session.Remove("username");
@@ -153,8 +181,11 @@ namespace UniChatApplication.Controllers
             return Redirect("/Home/");
         }
 
-        // Use to delete login cookie
-        public void DeleteLoginCookie(){
+        /// <summary>
+        /// Use to delete login cookie
+        /// </summary>
+        public void DeleteLoginCookie()
+        {
             Response.Cookies.Delete("login");
         }
 

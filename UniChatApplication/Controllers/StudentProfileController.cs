@@ -22,7 +22,10 @@ namespace UniChatApplication.Controllers
             _context = context;
         }
 
-        // Mapping to Index view of Student Management
+        /// <summary>
+        /// Mapping to Index view of Student Management
+        /// </summary>
+        /// <returns>View Index of StudentProfile</returns>
         public IActionResult Index()
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
@@ -30,7 +33,11 @@ namespace UniChatApplication.Controllers
             return View(students);
         }
 
-        // Mapping to detail page of Student Management
+        /// <summary>
+        /// Mapping to detail page of Student Management
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>View Detail of StudentProfile</returns>
         public IActionResult Details(int? id)
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
@@ -42,14 +49,21 @@ namespace UniChatApplication.Controllers
             return View(student);
         }
 
-        // Mapping to Create View of Student Management
+        /// <summary>
+        /// Mapping to Create View of Student Management
+        /// </summary>
+        /// <returns>View Create of StudentProfile</returns>
         public IActionResult Create()
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
             return View();
         }
 
-        // Use to get data from create view to create student account and profile.
+        /// <summary>
+        /// Use to get data from create view to create student account and profile
+        /// </summary>
+        /// <param name="student"></param>
+        /// <returns>ActionResult</returns>
         [HttpPost]
         public ActionResult Create(StudentProfile student)
         {
@@ -59,12 +73,14 @@ namespace UniChatApplication.Controllers
             student.Email = student.Email.ToLower();
             string username = AccountDAOs.getUsenameFromEmail(student.Email);
 
-            if (AccountDAOs.AccountIsExisted(_context, username)){
+            if (AccountDAOs.AccountIsExisted(_context, username))
+            {
                 ViewData["Error"] = $"Account {username} existed...";
                 return View(student);
             }
 
-            if (_context.StudentProfile.Any(s => s.StudentCode == student.StudentCode)){
+            if (_context.StudentProfile.Any(s => s.StudentCode == student.StudentCode))
+            {
                 ViewData["Error"] = $"StudentCode {student.StudentCode} existed...";
                 return View(student);
             }
@@ -77,7 +93,11 @@ namespace UniChatApplication.Controllers
             return RedirectToAction("Index");
         }
 
-        // Mapping to Edit View of Student Management
+        /// <summary>
+        /// Mapping to Edit View of Student Management
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>View Edit of StudentProfile</returns>
         public IActionResult Edit(int? id)
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
@@ -89,7 +109,12 @@ namespace UniChatApplication.Controllers
             return View(studentProfile);
         }
 
-        // Use to get data from edit view to edit information for a student
+        /// <summary>
+        /// Use to get data from edit view to edit information for a student
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="student"></param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int? id, StudentProfile student)
@@ -98,7 +123,8 @@ namespace UniChatApplication.Controllers
             if (id == null) return Redirect("/Home/");
 
             StudentProfile StudentCheckExisted = _context.StudentProfile.FirstOrDefault(s => s.StudentCode == student.StudentCode);
-            if (StudentCheckExisted != null && StudentCheckExisted.Id != student.Id){
+            if (StudentCheckExisted != null && StudentCheckExisted.Id != student.Id)
+            {
                 ViewData["Error"] = $"StudentCode {student.StudentCode} existed...";
                 return View(student);
             }
@@ -115,7 +141,11 @@ namespace UniChatApplication.Controllers
             return RedirectToAction("Index");
         }
 
-        // Mapping to delete view, show information to confirm delete
+        /// <summary>
+        /// Mapping to delete view, show information to confirm delete
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>View Delete of StudentProfile</returns>
         public IActionResult Delete(int? id)
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
@@ -127,7 +157,11 @@ namespace UniChatApplication.Controllers
             return View(studentProfile);
         }
 
-        // Confirm delete student
+        /// <summary>
+        /// Confirm delete student
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>IActionResult</returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int? id)
@@ -142,7 +176,10 @@ namespace UniChatApplication.Controllers
 
             return RedirectToAction("Index");
         }
-
+        /// <summary>
+        /// Create Student By File
+        /// </summary>
+        /// <returns>Status of list status</returns>
         public IActionResult CreateByFile()
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
@@ -151,7 +188,11 @@ namespace UniChatApplication.Controllers
 
             return View();
         }
-
+        /// <summary>
+        /// Create By File Student
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
         public IActionResult CreateByFile(IFormFile file)
         {
@@ -172,10 +213,14 @@ namespace UniChatApplication.Controllers
 
             List<string> result = ProcessingData(file.FileName);
             TempData["Result"] = result;
-            
+
             return RedirectToAction("CreateByFile");
         }
-
+        /// <summary>
+        /// Processing Data for Add StudentProfile
+        /// </summary>
+        /// <param name="fName"></param>
+        /// <returns>List of Status Message</returns>
         private List<string> ProcessingData(string fName)
         {
 
@@ -186,11 +231,12 @@ namespace UniChatApplication.Controllers
             using (FileStream stream = System.IO.File.Open(fileName, FileMode.Open, FileAccess.Read))
             {
                 using (var reader = ExcelReaderFactory.CreateReader(stream))
-                {   
+                {
                     reader.Read(); // title
                     while (reader.Read())
                     {
-                        try{
+                        try
+                        {
 
                             string FullName = reader.GetValue(0).ToString();
                             string Email = reader.GetValue(1).ToString().ToLower();
@@ -212,26 +258,28 @@ namespace UniChatApplication.Controllers
                                 result.Add($"Error: StudentCode {StudentCode} existed...");
                                 continue;
                             }
-                                
-                            StudentProfile st = new StudentProfile(){
-                                    FullName = FullName,
-                                    Email = Email,
-                                    Gender = Gender.ToLower() == "male",
-                                    Major = Major,
-                                    StudentCode = StudentCode,
-                                    Birthday = DateTime.Now
+
+                            StudentProfile st = new StudentProfile()
+                            {
+                                FullName = FullName,
+                                Email = Email,
+                                Gender = Gender.ToLower() == "male",
+                                Major = Major,
+                                StudentCode = StudentCode,
+                                Birthday = DateTime.Now
                             };
 
                             st.Account = AccountDAOs.CreateAccount(username, AccountDAOs.DefaultPassword, 1);
-                            st.Class = _context.Class.FirstOrDefault(c => c.Name == ClassName) ?? new Class(){ Name = ClassName };
-                                
+                            st.Class = _context.Class.FirstOrDefault(c => c.Name == ClassName) ?? new Class() { Name = ClassName };
+
                             _context.Add(st);
                             _context.SaveChanges();
 
                             result.Add($"Success: Add student '{FullName}' successfully.");
 
                         }
-                        catch(NullReferenceException){
+                        catch (NullReferenceException)
+                        {
                             // End of file
                             break;
                         }

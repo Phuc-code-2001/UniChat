@@ -9,18 +9,23 @@ using System;
 
 namespace UniChatApplication.Controllers
 {
-    
-    public class BoxController : Controller {
-        
+
+    public class BoxController : Controller
+    {
+
 
         readonly UniChatDbContext _context;
         public static readonly int numberOfMessagesOnEachLoad = 5;
         public static readonly int numberOfMessagesOnStartLoad = 10;
 
-        public BoxController(UniChatDbContext context){
+        public BoxController(UniChatDbContext context)
+        {
             _context = context;
         }
-
+        /// <summary>
+        /// Mapping Index
+        /// </summary>
+        /// <returns>View Index of Box</returns>
         public IActionResult Index()
         {
 
@@ -32,7 +37,7 @@ namespace UniChatApplication.Controllers
 
             IEnumerable<RoomChat> RoomChats = RoomChatDAOs.getAllRoomChats(_context)
                                                 .Where(room => (room.TeacherProfile.AccountID == LoginUser.Id) || (room.Class.StudentProfiles.Any(student => student.AccountID == LoginUser.Id)));
-            
+
             IEnumerable<RoomDeadLine> roomDeadLineList = RoomDeadLineDAOs.GetAll(_context)
                                                             .Where(r => RoomChats.Any(rc => rc.Id == r.RoomId))
                                                             .OrderByDescending(r => r.ExpirationTime).Take(8);
@@ -43,12 +48,12 @@ namespace UniChatApplication.Controllers
 
                 List<GroupChat> GroupChats = new List<GroupChat>();
                 IEnumerable<GroupManage> groupDatas = GroupManageDAOs.getAllGroupData(_context)
-                .Where(d => d.StudentId == LoginProfile.Id && d.GroupChat.RoomChat.ClassId == ((StudentProfile) LoginProfile).ClassID);
+                .Where(d => d.StudentId == LoginProfile.Id && d.GroupChat.RoomChat.ClassId == ((StudentProfile)LoginProfile).ClassID);
                 foreach (GroupManage item in groupDatas)
                 {
                     GroupChats.Add(item.GroupChat);
                 }
-                
+
                 ViewData["GroupChats"] = GroupChats;
             }
 
@@ -59,16 +64,22 @@ namespace UniChatApplication.Controllers
             return View(LoginProfile);
         }
 
-        // Mapping to RoomChat, send data to RoomChat
-        public IActionResult RoomChat(int? id){
+
+        /// <summary>
+        /// Mapping to RoomChat, send data to RoomChat
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>View RoomChat of Box</returns>
+        public IActionResult RoomChat(int? id)
+        {
 
             if (HttpContext.Session.GetString("Role") != "Student"
             && HttpContext.Session.GetString("Role") != "Teacher") return Redirect("/Home/");
-            if(id == null) return NotFound();
+            if (id == null) return NotFound();
 
             Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
             Profile LoginProfile = ProfileDAOs.GetProfile(_context, LoginUser);
-            
+
             // Get RoomChat List
             IEnumerable<RoomChat> RoomChats = RoomChatDAOs.getAllRoomChats(_context)
                                                 .Where(room => (room.TeacherProfile.AccountID == LoginUser.Id) || (room.Class.StudentProfiles.Any(student => student.AccountID == LoginUser.Id)));
@@ -77,19 +88,19 @@ namespace UniChatApplication.Controllers
             RoomChat RoomChat = RoomChats.FirstOrDefault(room => room.Id == id);
             if (RoomChat == null) return Redirect("/Home/");
 
-            
+
             if (LoginUser.RoleName == "Student")
             {
                 // Get GroupChat List if LoginUser is student
 
                 List<GroupChat> GroupChats = new List<GroupChat>();
                 IEnumerable<GroupManage> groupDatas = GroupManageDAOs.getAllGroupData(_context)
-                .Where(d => d.StudentId == LoginProfile.Id && d.GroupChat.RoomChat.ClassId == ((StudentProfile) LoginProfile).ClassID);
+                .Where(d => d.StudentId == LoginProfile.Id && d.GroupChat.RoomChat.ClassId == ((StudentProfile)LoginProfile).ClassID);
                 foreach (GroupManage item in groupDatas)
                 {
                     GroupChats.Add(item.GroupChat);
                 }
-                
+
                 ViewData["GroupChats"] = GroupChats;
             }
             else
@@ -101,74 +112,89 @@ namespace UniChatApplication.Controllers
                 ViewData["GroupChats"] = GroupChats;
             }
 
-            if(LoginUser.RoleName == "Student") ViewData["LoginProfile"] = (StudentProfile) LoginProfile;
-            if(LoginUser.RoleName == "Teacher") ViewData["LoginProfile"] = (TeacherProfile) LoginProfile;
+            if (LoginUser.RoleName == "Student") ViewData["LoginProfile"] = (StudentProfile)LoginProfile;
+            if (LoginUser.RoleName == "Teacher") ViewData["LoginProfile"] = (TeacherProfile)LoginProfile;
 
             ViewData["LoginUser"] = LoginUser;
             ViewData["RoomChats"] = RoomChats;
             ViewData["MessagePin"] = RoomMessagePinDAOs.GetMessagePinOfRoom(_context, RoomChat.Id);
 
-            ViewData["Messages"] =  RoomMessageDAOs.Take(_context, RoomChat.Id, 0, numberOfMessagesOnStartLoad);
+            ViewData["Messages"] = RoomMessageDAOs.Take(_context, RoomChat.Id, 0, numberOfMessagesOnStartLoad);
             HttpContext.Session.SetInt32($"Room{RoomChat.Id}NumberOfMessageSended", numberOfMessagesOnStartLoad);
-            
-            
+
+
             return View(RoomChat);
         }
 
-        // Use to pin message into RoomChat
+
+        /// <summary>
+        /// Use to pin message into RoomChat
+        /// </summary>
+        /// <param name="roomMessageId"></param>
+        /// <returns>View of PinMessage of Box</returns>
         public IActionResult PinMessage(int roomMessageId)
         {
-            
+
             RoomMessage message = RoomMessageDAOs.getAll(_context).FirstOrDefault(m => m.Id == roomMessageId);
             if (message == null) return BadRequest();
 
-            bool CheckMessageBelongGroupOfUser = false; 
+            bool CheckMessageBelongGroupOfUser = false;
 
             Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
             Profile LoginProfile = ProfileDAOs.GetProfile(_context, LoginUser);
 
-            if(LoginUser.RoleName == "Teacher") {
-                CheckMessageBelongGroupOfUser = ((TeacherProfile) LoginProfile).RoomChats
+            if (LoginUser.RoleName == "Teacher")
+            {
+                CheckMessageBelongGroupOfUser = ((TeacherProfile)LoginProfile).RoomChats
                 .Any(room => room.Id == message.RoomID);
             }
             // RoleName = "Student"
-            else {
-                CheckMessageBelongGroupOfUser = ((StudentProfile) LoginProfile).Class.RoomChats
+            else
+            {
+                CheckMessageBelongGroupOfUser = ((StudentProfile)LoginProfile).Class.RoomChats
                 .Any(room => room.Id == message.RoomID);
             }
 
             if (!CheckMessageBelongGroupOfUser) return BadRequest();
 
-            
+
             RoomMessagePin messagePin = RoomMessagePinDAOs.GetAllMessagePinOfRoom(_context, message.RoomID).FirstOrDefault(m => m.RoomMessage.Id == roomMessageId);
 
-            if(messagePin == null){   
-                messagePin = new RoomMessagePin(){
+            if (messagePin == null)
+            {
+                messagePin = new RoomMessagePin()
+                {
                     RoomMessageId = roomMessageId,
                     Time = DateTime.Now
-                };       
+                };
                 _context.RoomMessagePins.Add(messagePin);
                 _context.SaveChanges();
             }
-            else {
+            else
+            {
                 messagePin.Time = DateTime.Now;
                 _context.RoomMessagePins.Update(messagePin);
                 _context.SaveChanges();
             }
-            
-            return Ok(new {Content = message.Content, Time = messagePin.Time.ToShortTimeString() + " " + messagePin.Time.ToShortDateString()});
+
+            return Ok(new { Content = message.Content, Time = messagePin.Time.ToShortTimeString() + " " + messagePin.Time.ToShortDateString() });
         }
 
-        // Mapping to GroupChat, send data to GroupChat
+
+        /// <summary>
+        /// Mapping to GroupChat, send data to GroupChat
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>View GroupChat of Box</returns>
         public IActionResult GroupChat(int? id)
         {
 
             if (HttpContext.Session.GetString("Role") != "Student") return Redirect("/Home/");
-            if(id == null) return NotFound();
+            if (id == null) return NotFound();
 
             Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
             Profile LoginProfile = ProfileDAOs.GetProfile(_context, LoginUser);
-            
+
             // Get RoomChat List
             IEnumerable<RoomChat> RoomChats = RoomChatDAOs.getAllRoomChats(_context)
                                                 .Where(room => room.Class.StudentProfiles.Any(student => student.AccountID == LoginUser.Id));
@@ -188,23 +214,27 @@ namespace UniChatApplication.Controllers
 
             ViewData["GroupRole"] = groupData.RoleText;
 
-            if(LoginUser.RoleName == "Student") ViewData["LoginProfile"] = (StudentProfile) LoginProfile;
-            if(LoginUser.RoleName == "Teacher") ViewData["LoginProfile"] = (TeacherProfile) LoginProfile;
+            if (LoginUser.RoleName == "Student") ViewData["LoginProfile"] = (StudentProfile)LoginProfile;
+            if (LoginUser.RoleName == "Teacher") ViewData["LoginProfile"] = (TeacherProfile)LoginProfile;
 
             ViewData["LoginUser"] = LoginUser;
             ViewData["RoomChats"] = RoomChats;
             ViewData["MessagePin"] = GroupMessagePinDAOs.GetMessagePinOfGroup(_context, GroupChat.Id);
             // Load Messages
-            ViewData["Messages"] =  GroupMessageDAOs.Take(_context, GroupChat.Id, 0, numberOfMessagesOnStartLoad);
+            ViewData["Messages"] = GroupMessageDAOs.Take(_context, GroupChat.Id, 0, numberOfMessagesOnStartLoad);
             HttpContext.Session.SetInt32($"Group{GroupChat.Id}NumberOfMessageSended", numberOfMessagesOnStartLoad);
-            
+
             return View(GroupChat);
         }
 
-        // Use to pin message into GroupChat
+        /// <summary>
+        /// Use to pin message into GroupChat
+        /// </summary>
+        /// <param name="groupMessageId"></param>
+        /// <returns>View of PinGroupMessage of Box</returns>
         public IActionResult PinGroupMessage(int groupMessageId)
         {
-            
+
             GroupMessage message = GroupMessageDAOs.getAll(_context).FirstOrDefault(m => m.Id == groupMessageId);
             if (message == null) return BadRequest();
 
@@ -212,32 +242,35 @@ namespace UniChatApplication.Controllers
             Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
             Profile LoginProfile = ProfileDAOs.GetProfile(_context, LoginUser);
 
-            bool CheckMessageBelongGroupOfUser = message.GroupChat.GroupManages.Any(d => d.StudentId == LoginProfile.Id); 
+            bool CheckMessageBelongGroupOfUser = message.GroupChat.GroupManages.Any(d => d.StudentId == LoginProfile.Id);
 
             if (!CheckMessageBelongGroupOfUser) return BadRequest();
 
-            
+
             GroupPinMessage messagePin = GroupMessagePinDAOs.GetAllMessagePinOfGroup(_context, message.GroupId).FirstOrDefault(m => m.GroupMessage.Id == groupMessageId);
 
-            if(messagePin == null){   
-                messagePin = new GroupPinMessage(){
+            if (messagePin == null)
+            {
+                messagePin = new GroupPinMessage()
+                {
                     GroupMessageId = groupMessageId,
                     Time = DateTime.Now
-                };       
+                };
                 _context.GroupPinMessages.Add(messagePin);
                 _context.SaveChanges();
             }
-            else {
+            else
+            {
                 messagePin.Time = DateTime.Now;
                 _context.GroupPinMessages.Update(messagePin);
                 _context.SaveChanges();
             }
-            
-            return Ok(new {Content = message.Content, Time = messagePin.Time.ToShortTimeString() + " " + messagePin.Time.ToShortDateString()});
+
+            return Ok(new { Content = message.Content, Time = messagePin.Time.ToShortTimeString() + " " + messagePin.Time.ToShortDateString() });
         }
 
 
-        
+
 
     }
 

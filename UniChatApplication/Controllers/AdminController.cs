@@ -24,14 +24,19 @@ namespace UniChatApplication.Controllers
             _context = context;
         }
 
-        // Mapping Index
+        /// <summary>
+        /// Mapping Index
+        /// </summary>
+        /// <returns>View of Login Page</returns>
         public IActionResult Index()
         {
 
             Account loginAccount = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
-            if(loginAccount != null){
-                if(loginAccount.RoleName == "Admin"){
-                    AdminProfile profile = (AdminProfile) ProfileDAOs.GetProfile(_context, loginAccount);
+            if (loginAccount != null)
+            {
+                if (loginAccount.RoleName == "Admin")
+                {
+                    AdminProfile profile = (AdminProfile)ProfileDAOs.GetProfile(_context, loginAccount);
                     return View(profile);
                 }
             }
@@ -40,19 +45,29 @@ namespace UniChatApplication.Controllers
 
         }
 
-        // Mapping to Admin Profile
-        public IActionResult Details(int? id){
+        /// <summary>
+        /// Mapping to Admin Profile
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>View of Admin Profile</returns>
+        public IActionResult Details(int? id)
+        {
 
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
-            if(id == null) return Redirect("/Home/");
-            AdminProfile admin =  _context.AdminProfile.Include(a => a.Account).FirstOrDefault(m => m.Id == id);
+            if (id == null) return Redirect("/Home/");
+            AdminProfile admin = _context.AdminProfile.Include(a => a.Account).FirstOrDefault(m => m.Id == id);
             if (admin == null) return Redirect("/Home/");
             return View(admin);
 
         }
-
+        /// <summary>
+        /// Edit AdminProfile
+        /// </summary>
+        /// <param name="adminProfile"></param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
-        public IActionResult Edit(AdminProfile adminProfile){
+        public IActionResult Edit(AdminProfile adminProfile)
+        {
 
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
             AdminProfile oldProfile = _context.AdminProfile.Find(adminProfile.Id);
@@ -62,19 +77,23 @@ namespace UniChatApplication.Controllers
             _context.AdminProfile.Update(oldProfile);
             _context.SaveChanges();
             return Redirect($"/Admin/Details/{oldProfile.Id}");
-            
+
         }
-        
+        /// <summary>
+        /// UpdateAvatar of Admin
+        /// </summary>
+        /// <param name="imageFile"></param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
         public IActionResult UpdateAvatar(IFormFile imageFile)
         {
 
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
             Account loginAccount = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
-            if(loginAccount == null || loginAccount.RoleName != "Admin") return Redirect("/Home/");
-                
-            AdminProfile profile = (AdminProfile) ProfileDAOs.GetProfile(_context, loginAccount);
-                    
+            if (loginAccount == null || loginAccount.RoleName != "Admin") return Redirect("/Home/");
+
+            AdminProfile profile = (AdminProfile)ProfileDAOs.GetProfile(_context, loginAccount);
+
             string ImageName = $"id_{profile.Id}" + Path.GetExtension(imageFile.FileName);
             //Get url To Save
             string saveRelativePath = $"/media/profiles/adminProfiles/";
@@ -83,7 +102,7 @@ namespace UniChatApplication.Controllers
 
             Directory.CreateDirectory(Path.GetDirectoryName(savePath));
 
-            using(FileStream stream = new FileStream(savePath, FileMode.Create))
+            using (FileStream stream = new FileStream(savePath, FileMode.Create))
             {
                 imageFile.CopyTo(stream);
             }
@@ -91,11 +110,14 @@ namespace UniChatApplication.Controllers
             profile.Avatar = saveRelativePath + ImageName;
             _context.AdminProfile.Update(profile);
             _context.SaveChanges();
-            
+
             return Redirect($"/Admin/Details/{profile.Id}");
         }
 
-        
+        /// <summary>
+        /// Mapping Update Password
+        /// </summary>
+        /// <returns>View of UpdatePassword of Admin</returns>
         public IActionResult UpdatePassword()
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
@@ -104,7 +126,12 @@ namespace UniChatApplication.Controllers
 
             return View(loginAccount);
         }
-
+        /// <summary>
+        /// UpdatePassword of Admin
+        /// </summary>
+        /// <param name="oldPassword"></param>
+        /// <param name="newPassword"></param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult UpdatePassword(string oldPassword, string newPassword)

@@ -21,7 +21,11 @@ namespace UniChatApplication.Controllers
             _context = context;
         }
 
-        // GET: RoomChat
+
+        /// <summary>
+        /// Mapping Index of RoomChat
+        /// </summary>
+        /// <returns>View Index of RoomChat</returns>
         public IActionResult Index()
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
@@ -30,7 +34,11 @@ namespace UniChatApplication.Controllers
             return View(rooms);
         }
 
-        // GET: RoomChat/Details/5
+        /// <summary>
+        /// Mapping Detail
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>View Detail of RoomChat</returns>
         public IActionResult Details(int? id)
         {
             if (HttpContext.Session.GetString("Role") == null) return Redirect("/Home/");
@@ -51,7 +59,10 @@ namespace UniChatApplication.Controllers
             return View(roomChat);
         }
 
-        // GET: RoomChat/Create
+        /// <summary>
+        /// Mapping Create of RoomChat
+        /// </summary>
+        /// <returns>View Create of RoomChat</returns>
         public IActionResult Create()
         {
             ViewData["ClassId"] = new SelectList(_context.Class, "Id", "Name");
@@ -60,26 +71,32 @@ namespace UniChatApplication.Controllers
             return View();
         }
 
-        
+        /// <summary>
+        /// Create of RoomChat
+        /// </summary>
+        /// <param name="roomChat"></param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(RoomChat roomChat)
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
-            
+
             if (ModelState.IsValid)
             {
                 string ClassName = _context.Class.Find(roomChat.ClassId)?.Name;
                 string SubjectName = _context.Subjects.Find(roomChat.SubjectId)?.FullName;
 
-                if(ClassName == null || SubjectName == null) return Redirect("/Home/");
+                if (ClassName == null || SubjectName == null) return Redirect("/Home/");
 
-                if (!RoomChatDAOs.RoomChatExists(_context, roomChat.ClassId, roomChat.SubjectId)) {
+                if (!RoomChatDAOs.RoomChatExists(_context, roomChat.ClassId, roomChat.SubjectId))
+                {
                     _context.RoomChats.Add(roomChat);
                     _context.SaveChanges();
                     return RedirectToAction("Index");
                 }
-                else {
+                else
+                {
                     ViewData["Error"] = $"RoomChat with Class {ClassName} and Subject {SubjectName} existed.";
                 }
             }
@@ -89,7 +106,11 @@ namespace UniChatApplication.Controllers
             return View(roomChat);
         }
 
-        // GET: RoomChat/Edit/5
+        /// <summary>
+        /// Mapping Edit if RoomChat
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>View Edit of RoomChat</returns>
         public IActionResult Edit(int? id)
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
@@ -105,7 +126,12 @@ namespace UniChatApplication.Controllers
             return View(roomChat);
         }
 
-        
+        /// <summary>
+        /// Edit of RoomChat
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="roomChat"></param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int? id, RoomChat roomChat)
@@ -134,7 +160,11 @@ namespace UniChatApplication.Controllers
             return View(roomChat);
         }
 
-        // GET: RoomChat/Delete/5
+        /// <summary>
+        /// Mapping Delete of RoomChat
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>View Delete of RoomChat</returns>
         public IActionResult Delete(int? id)
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
@@ -152,7 +182,11 @@ namespace UniChatApplication.Controllers
             return View(roomChat);
         }
 
-        // POST: RoomChat/Delete/5
+        /// <summary>
+        /// Delete Confirmed of RoomChat
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>IActionResult</returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int? id)
@@ -161,7 +195,7 @@ namespace UniChatApplication.Controllers
             if (id == null) return Redirect("/Home/");
 
             RoomChat roomChat = _context.RoomChats.Find(id);
-            if(roomChat == null) return Redirect("/Home/");
+            if (roomChat == null) return Redirect("/Home/");
             _context.RoomChats.Remove(roomChat);
             _context.SaveChanges();
 

@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace UniChatApplication.Controllers
 {
-     public class ContactController : Controller
+    public class ContactController : Controller
     {
         private readonly UniChatDbContext _logger;
 
@@ -19,13 +19,20 @@ namespace UniChatApplication.Controllers
         {
             this._logger = logger;
         }
-
+        /// <summary>
+        /// Mapping Index of Contact
+        /// </summary>
+        /// <returns>View Index of Contact</returns>
         public IActionResult Index()
         {
             return View();
         }
 
-        // add new request for contact
+        /// <summary>
+        /// add new request for contact
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Index(Contact obj)
@@ -39,7 +46,10 @@ namespace UniChatApplication.Controllers
             return View(obj);
         }
 
-        // show list of contact
+        /// <summary>
+        /// show list of contact
+        /// </summary>
+        /// <returns>View ContactMangeMent</returns>
         public IActionResult ContactManagement()
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
@@ -47,7 +57,11 @@ namespace UniChatApplication.Controllers
             return View(contactList);
         }
 
-        // view beforce delete
+        /// <summary>
+        /// Mapping to Delete
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>View Delete of Contact</returns>
         [HttpGet]
         public IActionResult Delete(int id)
         {
@@ -64,7 +78,11 @@ namespace UniChatApplication.Controllers
             return View(obj);
         }
 
-        //delete data
+        /// <summary>
+        /// Delete a Contact
+        /// </summary>
+        /// <param name="contactId"></param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteContact(int contactId)
@@ -76,7 +94,11 @@ namespace UniChatApplication.Controllers
             this._logger.SaveChanges();
             return RedirectToAction("ContactManagement");
         }
-
+        /// <summary>
+        /// Mapping Update
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>View Update of Contact</returns>
         public IActionResult Update(int id)
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
@@ -91,7 +113,11 @@ namespace UniChatApplication.Controllers
             }
             return View(obj);
         }
-
+        /// <summary>
+        /// Update a Contact
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult UpdateContact(Contact obj)
