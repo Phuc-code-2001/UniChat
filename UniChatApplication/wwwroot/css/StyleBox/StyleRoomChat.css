@@ -83,7 +83,26 @@ body {
 }
 
 .message-pin::-webkit-scrollbar {
-    display: none;
+    width: 6px;
+    height: 6px;
+}
+
+.message-pin::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.message-pin::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.message-pin::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.message-pin::-webkit-scrollbar-thumb:active {
+    background: rgba(0, 0, 0, .9);
 }
 
 
@@ -224,6 +243,7 @@ body {
 
 .chat-container li .chat-avatar {
     margin-right: 20px;
+    text-align: center;
 }
 
 .chat-container li.chat-right {

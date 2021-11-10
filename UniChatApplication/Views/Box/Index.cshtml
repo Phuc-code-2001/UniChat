@@ -51,41 +51,43 @@
 
             <div class="col-sm-6">
                 <div class="box">
-                     <h3 class="box-tile text-center">My Deadline</h3>
-                <ul class="list">
-                    @foreach (RoomDeadLine item in ViewBag.RoomDeadLineList)
-                    {
-                        if (item.ExpirationTime <= DateTime.Now)
-                        {
-                            <li class="deadlineItem old">
-                                <span>Content: @item.Content</span>
-                                <small>
-                                    Deadline time:
-                                    @item.ExpirationTime.ToShortDateString() @item.ExpirationTime.ToShortTimeString()
-                                </small>
-                                <small>Subject: @item.RoomChat.Subject.SubjectCode</small>
-                                @if (ViewBag.LoginUser.RoleName == "Teacher")
+                    <h3 class="box-tile text-center">My Deadline</h3>
+                    <div class="scroller">
+                        <ul class="list">
+                            @foreach (RoomDeadLine item in ViewBag.RoomDeadLineList)
+                            {
+                                if (item.ExpirationTime <= DateTime.Now)
                                 {
-                                    <small>Class: @item.RoomChat.Class.Name</small>
+                                    <li class="deadlineItem old">
+                                        <span><b>Content:</b> @item.Content</span>
+                                        <small>
+                                            <b>Deadline time:</b>
+                                            @item.ExpirationTime.ToShortDateString() @item.ExpirationTime.ToShortTimeString()
+                                        </small>
+                                        <small><b>Subject:</b> @item.RoomChat.Subject.SubjectCode</small>
+                                        @if (ViewBag.LoginUser.RoleName == "Teacher")
+                                        {
+                                            <small>Class: @item.RoomChat.Class.Name</small>
+                                        }
+                                    </li>
                                 }
-                            </li>
-                        }
-                        else {
-                            <li class="deadlineItem new">
-                                <span>Content: @item.Content</span>
-                                <small>
-                                    Deadline time:
-                                    @item.ExpirationTime.ToShortDateString() @item.ExpirationTime.ToShortTimeString()
-                                </small>
-                                <small>Subject: @item.RoomChat.Subject.SubjectCode</small>
-                                @if (ViewBag.LoginUser.RoleName == "Teacher")
-                                {
-                                    <small>Class: @item.RoomChat.Class.Name</small>
+                                else {
+                                    <li class="deadlineItem new">
+                                        <span><b>Content:</b> @item.Content</span>
+                                        <small>
+                                            <b>Deadline time:</b>
+                                            <u>@item.ExpirationTime.ToShortDateString() @item.ExpirationTime.ToShortTimeString()</u>
+                                        </small>
+                                        <small><b>Subject:</b> @item.RoomChat.Subject.SubjectCode</small>
+                                        @if (ViewBag.LoginUser.RoleName == "Teacher")
+                                        {
+                                            <small>Class: @item.RoomChat.Class.Name</small>
+                                        }
+                                    </li>
                                 }
-                            </li>
-                        }
-                    }
-                </ul>
+                            }
+                        </ul>
+                    </div>
                 </div>
             </div>
 

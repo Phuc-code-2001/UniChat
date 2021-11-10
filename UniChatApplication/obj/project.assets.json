@@ -8286,19 +8286,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Tuyen\\.nuget\\packages\\": {}
+    "C:\\Users\\PhucHT\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\C#studio\\UniChatProject3\\UniChat-master\\UniChatApplication\\UniChatApplication.csproj",
+      "projectUniqueName": "C:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\UniChatApplication.csproj",
       "projectName": "UniChatApplication",
-      "projectPath": "c:\\C#studio\\UniChatProject3\\UniChat-master\\UniChatApplication\\UniChatApplication.csproj",
-      "packagesPath": "C:\\Users\\Tuyen\\.nuget\\packages\\",
-      "outputPath": "c:\\C#studio\\UniChatProject3\\UniChat-master\\UniChatApplication\\obj\\",
+      "projectPath": "C:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\UniChatApplication.csproj",
+      "packagesPath": "C:\\Users\\PhucHT\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\PhucHT\\Desktop\\UniChatWeb\\UniChatApplication\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Tuyen\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\PhucHT\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -8393,7 +8393,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }
