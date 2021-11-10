@@ -9,34 +9,34 @@
 /* Background */
 
 @keyframes ChangeBackground {
-    0%{
+    0% {
         background-image: url('Background_chat1.png');
     }
-    33%{
+    33% {
         background-image: url('Background_chat2.png');
     }
-    66%{
+    66% {
         background-image: url('Background_chat3.png');
     }
-    100%{
+    100% {
         background-image: url('Background_chat1.png');
     }
 }
 
-
-body{
-  background-image: url('Background_chat1.png');
-  background-repeat: no-repeat;
-  background-size: cover;
-  
-  animation: ChangeBackground;
-  animation-delay: 0s;
-  animation-duration: 20s;
-  animation-iteration-count: infinite;
-  padding: 1rem 5rem 0;
+body {
+    background-image: url('Background_chat1.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    animation: ChangeBackground;
+    animation-delay: 0s;
+    animation-duration: 20s;
+    animation-iteration-count: infinite;
+    padding: 1rem 5rem 0;
 }
 
+
 /* More css by PhucHT */
+
 .m-container {
     padding: 0;
     margin: 0;
@@ -47,7 +47,7 @@ body{
     position: relative;
 }
 
-.room-name > h4 {
+.room-name>h4 {
     margin: 8.5px 0 0;
 }
 
@@ -83,24 +83,49 @@ body{
 }
 
 .message-pin::-webkit-scrollbar {
-    display: none;
+    width: 6px;
+    height: 6px;
 }
 
+.message-pin::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.message-pin::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.message-pin::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.message-pin::-webkit-scrollbar-thumb:active {
+    background: rgba(0, 0, 0, .9);
+}
+
+
 /* Style buttons */
+
 .buttonload {
     background-color: transparent;
-    border: none; /* Remove borders */
-    color: #333; /* White text */
-    font-size: 24px; /* Set a font size */
+    border: none;
+    /* Remove borders */
+    color: #333;
+    /* White text */
+    font-size: 24px;
+    /* Set a font size */
     position: absolute;
     top: .5rem;
     left: 50%;
     transform: translateX(-50%);
 }
 
+
 /* Box */
 
-.box{
+.box {
     border: 1px solid;
     border-radius: 1rem;
     padding: 1rem 0 0;
@@ -150,7 +175,26 @@ body{
 }
 
 .scroller::-webkit-scrollbar {
-    display: none;
+    width: 6px;
+    height: 6px;
+}
+
+.scroller::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.scroller::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.scroller::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.scroller::-webkit-scrollbar-thumb:active {
+    background: rgba(0, 0, 0, .9);
 }
 
 .friend-drawer-text {
@@ -166,7 +210,8 @@ body{
 
 
 /* Chat */
-.chat{
+
+.chat {
     height: 95vh;
 }
 
@@ -198,6 +243,7 @@ body{
 
 .chat-container li .chat-avatar {
     margin-right: 20px;
+    text-align: center;
 }
 
 .chat-container li.chat-right {
@@ -322,6 +368,3 @@ body{
 .chat-avatar img {
     object-fit: cover;
 }
-
-
-

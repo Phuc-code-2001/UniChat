@@ -6,32 +6,40 @@ using UniChatApplication.Models;
 
 namespace UniChatApplication.Daos
 {
-    public class RoomDeadLineDAOs {
+    public class RoomDeadLineDAOs
+    {
 
-
-        public static IEnumerable<RoomDeadLine> GetAll(UniChatDbContext context){
+        /// <summary>
+        /// Get All RoomDeadLine
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns>List of RoomDeadLine</returns>
+        public static IEnumerable<RoomDeadLine> GetAll(UniChatDbContext context)
+        {
             return context.RoomDeadLines.Include(d => d.RoomChat)
                                         .Include(d => d.RoomChat.Class)
                                         .Include(d => d.RoomChat.Subject)
                                         .Include(d => d.RoomChat.TeacherProfile);
         }
 
-        public static IEnumerable<RoomDeadLine> GetLimit(UniChatDbContext context, int limit)
+        /// <summary>
+        /// Get All RoomDeadLine of Room 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="RoomId"></param>
+        /// <returns>List of RoomDeadLine</returns>
+        public static IEnumerable<RoomDeadLine> GetAllOfRoom(UniChatDbContext context, int RoomId)
         {
-            return context.RoomDeadLines.Include(d => d.RoomChat)
-                                        .Include(d => d.RoomChat.Class)
-                                        .Include(d => d.RoomChat.Class.StudentProfiles)
-                                        .Include(d => d.RoomChat.Subject)
-                                        .Include(d => d.RoomChat.TeacherProfile)
-                                        .OrderBy(d => d.Id)
-                                        .Take(limit);
-        }
-
-        public static IEnumerable<RoomDeadLine> GetAllOfRoom(UniChatDbContext context, int RoomId){
             return GetAll(context).Where(d => d.RoomId == RoomId);
         }
-
-        public static RoomDeadLine GetLastOfRoom(UniChatDbContext context, int RoomId){
+        /// <summary>
+        /// Get LastDeadLine of Room
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="RoomId"></param>
+        /// <returns>RoomDeadLine</returns>
+        public static RoomDeadLine GetLastOfRoom(UniChatDbContext context, int RoomId)
+        {
             return GetAllOfRoom(context, RoomId).OrderBy(d => d.Id).LastOrDefault();
         }
 

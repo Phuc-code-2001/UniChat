@@ -21,7 +21,10 @@ namespace UniChatApplication.Controllers
         {
             _context = context;
         }
-
+        /// <summary>
+        /// Mapping Index of UserProfile
+        /// </summary>
+        /// <returns>View Index of UserProfile</returns>
         public IActionResult Index()
         {
             if (HttpContext.Session.GetString("Role") != "Student"
@@ -31,19 +34,24 @@ namespace UniChatApplication.Controllers
             Profile profile = ProfileDAOs.GetProfile(_context, LoginUser);
 
             ViewData["LoginUser"] = LoginUser;
-            
+
 
             return View(profile);
         }
-
+        /// <summary>
+        /// Use Edit Phone 
+        /// </summary>
+        /// <param name="phone"></param>
+        /// <returns>EditPhone UserProfile</returns>
         public async Task<IActionResult> EditPhone(string phone)
         {
             if (HttpContext.Session.GetString("Role") != "Student"
             && HttpContext.Session.GetString("Role") != "Teacher") return BadRequest();
 
             Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
-            
-            if (phone != null && !Regex.IsMatch(phone, @"^[0-9]{10}$")){
+
+            if (phone != null && !Regex.IsMatch(phone, @"^[0-9]{10}$"))
+            {
                 return BadRequest();
             }
 
@@ -51,25 +59,31 @@ namespace UniChatApplication.Controllers
             {
                 LoginUser.StudentProfile.Phone = phone;
             }
-            else {
+            else
+            {
                 LoginUser.TeacherProfile.Phone = phone;
             }
             _context.Update(LoginUser);
             await _context.SaveChangesAsync();
 
-            return Ok(new {phone=phone});
+            return Ok(new { phone = phone });
         }
-
+        /// <summary>
+        /// Use Edit BirthDay
+        /// </summary>
+        /// <param name="birthday"></param>
+        /// <returns>EditBirthDay UserProfile</returns>
         public async Task<IActionResult> EditBirthDay(string birthday)
         {
             if (HttpContext.Session.GetString("Role") != "Student"
             && HttpContext.Session.GetString("Role") != "Teacher") return BadRequest();
 
             Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
-            
+
             DateTime BirthDay = DateTime.Now;
 
-            if (birthday != null && !DateTime.TryParse(birthday, out BirthDay)){
+            if (birthday != null && !DateTime.TryParse(birthday, out BirthDay))
+            {
                 return BadRequest();
             }
 
@@ -77,15 +91,20 @@ namespace UniChatApplication.Controllers
             {
                 LoginUser.StudentProfile.Birthday = BirthDay;
             }
-            else {
+            else
+            {
                 LoginUser.TeacherProfile.Birthday = BirthDay;
             }
             _context.Update(LoginUser);
             await _context.SaveChangesAsync();
 
-            return Ok(new {birthday=BirthDay.ToShortDateString()});
+            return Ok(new { birthday = BirthDay.ToShortDateString() });
         }
-
+        /// <summary>
+        /// UpdateAvatar of UserProfile
+        /// </summary>
+        /// <param name="imageFile"></param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
         public async Task<IActionResult> UpdateAvatar(IFormFile imageFile)
         {
@@ -93,9 +112,9 @@ namespace UniChatApplication.Controllers
             if (imageFile == null) return BadRequest();
             Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
 
-            if(LoginUser.RoleName == "Teacher")
+            if (LoginUser.RoleName == "Teacher")
             {
-                TeacherProfile profile = (TeacherProfile) ProfileDAOs.GetProfile(_context, LoginUser);
+                TeacherProfile profile = (TeacherProfile)ProfileDAOs.GetProfile(_context, LoginUser);
 
                 string ImageName = $"id_{profile.Id}" + Path.GetExtension(imageFile.FileName);
                 //Get url To Save
@@ -105,7 +124,7 @@ namespace UniChatApplication.Controllers
 
                 Directory.CreateDirectory(Path.GetDirectoryName(savePath));
 
-                using(var stream = new FileStream(savePath, FileMode.Create))
+                using (var stream = new FileStream(savePath, FileMode.Create))
                 {
                     imageFile.CopyTo(stream);
                 }
@@ -113,10 +132,11 @@ namespace UniChatApplication.Controllers
                 profile.Avatar = saveRelativePath + ImageName;
                 _context.TeacherProfile.Update(profile);
                 await _context.SaveChangesAsync();
-                
+
             }
-            else if (LoginUser.RoleName == "Student") {
-                StudentProfile profile = (StudentProfile) ProfileDAOs.GetProfile(_context, LoginUser);
+            else if (LoginUser.RoleName == "Student")
+            {
+                StudentProfile profile = (StudentProfile)ProfileDAOs.GetProfile(_context, LoginUser);
 
                 string ImageName = $"id_{profile.Id}" + Path.GetExtension(imageFile.FileName);
                 //Get url To Save
@@ -126,7 +146,7 @@ namespace UniChatApplication.Controllers
 
                 Directory.CreateDirectory(Path.GetDirectoryName(savePath));
 
-                using(var stream = new FileStream(savePath, FileMode.Create))
+                using (var stream = new FileStream(savePath, FileMode.Create))
                 {
                     imageFile.CopyTo(stream);
                 }
@@ -135,13 +155,17 @@ namespace UniChatApplication.Controllers
                 _context.StudentProfile.Update(profile);
                 await _context.SaveChangesAsync();
             }
-            else {
+            else
+            {
                 return BadRequest();
             }
 
-            return RedirectToAction("Index", new {id=LoginUser.Id});
+            return RedirectToAction("Index", new { id = LoginUser.Id });
         }
-
+        /// <summary>
+        /// Mapping UpdatePassword
+        /// </summary>
+        /// <returns>View UpdatePassword of UserProfile</returns>
         public IActionResult UpdatePassword()
         {
             if (HttpContext.Session.GetString("Role") != "Student"
@@ -150,6 +174,12 @@ namespace UniChatApplication.Controllers
 
             return View(loginAccount);
         }
+        /// <summary>
+        /// Mapping UpdatePassword
+        /// </summary>
+        /// <param name="oldPassword"></param>
+        /// <param name="newPassword"></param>
+        /// <returns>IActionResult</returns>
 
         [HttpPost]
         [ValidateAntiForgeryToken]

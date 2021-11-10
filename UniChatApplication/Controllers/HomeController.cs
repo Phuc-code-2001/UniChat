@@ -21,35 +21,29 @@ namespace UniChatApplication.Controllers
             _context = context;
         }
 
-        // Mapping to Home View
+        /// <summary>
+        /// Mapping to Home View
+        /// </summary>
+        /// <returns>View Index of Home</returns>
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetString("username") != null){
+            if (HttpContext.Session.GetString("username") != null)
+            {
                 return Redirect("/Login/");
             }
 
             return View();
-            
+
         }
 
-
+        /// <summary>
+        /// Mapping to Error page
+        /// </summary>
+        /// <returns>View Error of Home</returns>
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-        // Use for debug, test
-        public async Task<IActionResult> Check()
-        {
-
-            List<Account> accounts = await _context.Account
-                .ToListAsync();
-
-            List<AdminProfile> profiles = await _context.AdminProfile.ToListAsync();
-
-            return View(profiles);
-        }
-
     }
 }

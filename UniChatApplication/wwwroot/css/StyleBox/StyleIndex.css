@@ -36,11 +36,34 @@ header h1{
     display: flex;
     flex-direction: column;
     max-height: 433px;
-    overflow-y: auto;
 }
 
-.box::-webkit-scrollbar {
-    display: none;
+.scroller {
+    flex: 1;
+    overflow-x: auto;
+}
+
+.scroller::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.scroller::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.scroller::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.scroller::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.scroller::-webkit-scrollbar-thumb:active {
+    background: rgba(0, 0, 0, .9);
 }
 
 .box:hover{
@@ -81,8 +104,7 @@ header h1{
 .deadlineItem {
     background-color: #ffeebc;
     padding: 1rem;
-    border-radius: 10px;
-    font-weight: 600;
+    border-radius: 3px;
     display: flex;
     flex-direction: column;
     cursor: default;
@@ -90,10 +112,11 @@ header h1{
 }
 
 .new {
-    background-color: black;
-    color: yellow;
+    background-color: var(--red);
+    color: white;
 }
 
 .old {
     color: black;
+    font-weight: 500;
 }

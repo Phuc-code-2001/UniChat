@@ -22,7 +22,10 @@ namespace UniChatApplication.Controllers
             _context = context;
         }
 
-        // Mapping to Index view of Teacher Management
+        /// <summary>
+        /// Mapping to Index view of Teacher Management
+        /// </summary>
+        /// <returns>View Index of Teacher</returns>
         public IActionResult Index()
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
@@ -31,7 +34,11 @@ namespace UniChatApplication.Controllers
             return View(teachers);
         }
 
-        // Mapping to detail page of Teacher Management
+        /// <summary>
+        /// Mapping to detail page of Teacher Management
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>View Detail of TeacherProfile</returns>
         public IActionResult Details(int? id)
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
@@ -40,7 +47,8 @@ namespace UniChatApplication.Controllers
             TeacherProfile teacherProfile = ProfileDAOs.getAllTeachers(_context).FirstOrDefault(m => m.Id == id);
             if (teacherProfile == null) return Redirect("/Home/");
 
-            foreach(RoomChat item in teacherProfile.RoomChats){
+            foreach (RoomChat item in teacherProfile.RoomChats)
+            {
                 item.Class = ClassDAOs.getAllClasses(_context).FirstOrDefault(c => c.Id == item.ClassId);
                 item.Subject = SubjectDAOs.getAllSubject(_context).FirstOrDefault(s => s.Id == item.SubjectId);
             }
@@ -48,14 +56,21 @@ namespace UniChatApplication.Controllers
             return View(teacherProfile);
         }
 
-        // Mapping to Create View of Student Management
+        /// <summary>
+        /// Mapping to Create View of Student Management
+        /// </summary>
+        /// <returns>View Create of TeacherFile</returns>
         public IActionResult Create()
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
             return View();
         }
 
-        // Use to get data from create view to create teacher account and profile.
+        /// <summary>
+        /// Use to get data from create view to create teacher account and profile.
+        /// </summary>
+        /// <param name="teacher"></param>
+        /// <returns>ActionResult</returns>
         [HttpPost]
         public ActionResult Create(TeacherProfile teacher)
         {
@@ -64,12 +79,14 @@ namespace UniChatApplication.Controllers
             teacher.Email = teacher.Email.ToLower();
             string username = AccountDAOs.getUsenameFromEmail(teacher.Email);
 
-            if (AccountDAOs.AccountIsExisted(_context, username)){
+            if (AccountDAOs.AccountIsExisted(_context, username))
+            {
                 ViewData["Error"] = $"Account {username} existed...";
                 return View(teacher);
             }
 
-            if (_context.TeacherProfile.Any(t => t.TeacherCode == teacher.TeacherCode)) {
+            if (_context.TeacherProfile.Any(t => t.TeacherCode == teacher.TeacherCode))
+            {
                 ViewData["Error"] = $"TeacherCode {teacher.TeacherCode} existed...";
                 return View(teacher);
             }
@@ -82,7 +99,11 @@ namespace UniChatApplication.Controllers
             return RedirectToAction("Index");
         }
 
-        // Mapping to Edit View of Teacher Management
+        /// <summary>
+        /// Mapping to Edit View of Teacher Management
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>View Edit of TeacherProfile</returns>
         public IActionResult Edit(int? id)
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
@@ -94,12 +115,17 @@ namespace UniChatApplication.Controllers
             return View(teacherProfile);
         }
 
-        // Use to get data from edit view to edit information for a teacher
+        /// <summary>
+        /// Use to get data from edit view to edit information for a teacher
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="teacher"></param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int? id, TeacherProfile teacher)
         {
-            
+
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
             if (id == null) return Redirect("/Home/");
 
@@ -112,10 +138,14 @@ namespace UniChatApplication.Controllers
             _context.Update(profile);
             _context.SaveChanges();
             return RedirectToAction("Index");
-            
+
         }
 
-        // Mapping to delete view, show information to confirm delete
+        /// <summary>
+        /// Mapping to delete view, show information to confirm delete
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>View Delete of TeacherProfile</returns>
         public IActionResult Delete(int? id)
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
@@ -129,7 +159,11 @@ namespace UniChatApplication.Controllers
             return View(teacherProfile);
         }
 
-        // Confirm delete student
+        /// <summary>
+        /// Confirm delete student
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>IActionResult</returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int? id)
@@ -144,7 +178,10 @@ namespace UniChatApplication.Controllers
 
             return RedirectToAction("Index");
         }
-
+        /// <summary>
+        /// Create By File of TeacherProfile
+        /// </summary>
+        /// <returns>CreateByFile TeacherProfile</returns>
         public IActionResult CreateByFile()
         {
             if (HttpContext.Session.GetString("Role") != "Admin") return Redirect("/Home/");
@@ -153,7 +190,11 @@ namespace UniChatApplication.Controllers
 
             return View();
         }
-
+        /// <summary>
+        /// Create By File of TeacherProfile
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
         public IActionResult CreateByFile(IFormFile file)
         {
@@ -177,7 +218,11 @@ namespace UniChatApplication.Controllers
 
             return RedirectToAction("CreateByFile");
         }
-
+        /// <summary>
+        /// Processing Data for Add TeacherProfile
+        /// </summary>
+        /// <param name="fName"></param>
+        /// <returns>List of Status Message</returns>
         private List<string> ProcessingData(string fName)
         {
 
@@ -188,11 +233,12 @@ namespace UniChatApplication.Controllers
             using (FileStream stream = System.IO.File.Open(fileName, FileMode.Open, FileAccess.Read))
             {
                 using (var reader = ExcelReaderFactory.CreateReader(stream))
-                {   
+                {
                     reader.Read(); // title
                     while (reader.Read())
                     {
-                        try{
+                        try
+                        {
 
                             string FullName = reader.GetValue(0).ToString();
                             string Email = reader.GetValue(1).ToString().ToLower();
@@ -213,23 +259,25 @@ namespace UniChatApplication.Controllers
                                 continue;
                             }
 
-                            TeacherProfile tc = new TeacherProfile(){
-                                    FullName = FullName,
-                                    Email = Email,
-                                    Gender = Gender.ToLower() == "male",
-                                    TeacherCode = TeacherCode,
-                                    Birthday = DateTime.Now
+                            TeacherProfile tc = new TeacherProfile()
+                            {
+                                FullName = FullName,
+                                Email = Email,
+                                Gender = Gender.ToLower() == "male",
+                                TeacherCode = TeacherCode,
+                                Birthday = DateTime.Now
                             };
 
                             tc.Account = AccountDAOs.CreateAccount(username, AccountDAOs.DefaultPassword, 2);
-                            
+
                             _context.Add(tc);
                             _context.SaveChanges();
 
                             result.Add($"Success: Add teacher '{FullName}' successfully.");
 
                         }
-                        catch(NullReferenceException){
+                        catch (NullReferenceException)
+                        {
                             // End of file
                             break;
                         }

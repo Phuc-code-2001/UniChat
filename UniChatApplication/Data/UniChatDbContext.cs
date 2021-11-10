@@ -3,6 +3,7 @@ using UniChatApplication.Models;
 
 namespace UniChatApplication.Data
 {
+    //Database Context For UniChat System
     public class UniChatDbContext : DbContext
     {
         public UniChatDbContext(DbContextOptions<UniChatDbContext> options) : base(options) { }
@@ -19,7 +20,7 @@ namespace UniChatApplication.Data
 
         public DbSet<StudentProfile> StudentProfile { get; set; }
 
-        public DbSet<LoginCookie> LoginCookies {get; set; }
+        public DbSet<LoginCookie> LoginCookies { get; set; }
 
         public DbSet<RoomChat> RoomChats { get; set; }
 
@@ -28,8 +29,8 @@ namespace UniChatApplication.Data
         public DbSet<RoomMessagePin> RoomMessagePins { get; set; }
 
         public DbSet<RoomDeadLine> RoomDeadLines { get; set; }
-        
-        public DbSet<Contact> Contacts{ get; set; }
+
+        public DbSet<Contact> Contacts { get; set; }
 
         public DbSet<GroupChat> GroupChats { get; set; }
 

@@ -26,7 +26,7 @@ namespace UniChatApplication.Controllers
         /// </summary>
         /// <param name="GroupId">Id of GroupChat</param>
         /// <param name="Message">New Message</param>
-        /// <returns></returns>
+        /// <returns>IActionResult</returns>
         [HttpPost]
         public IActionResult Add(int GroupId, string Message)
         {
@@ -34,10 +34,11 @@ namespace UniChatApplication.Controllers
 
             Account LoginUser = AccountDAOs.getLoginAccount(_context, HttpContext.Session);
             GroupChat groupChat = GroupChatDAOs.getAllGroupChats(_context).FirstOrDefault(r => r.Id == GroupId);
-            
-            if(groupChat.GroupManages.Any(d => d.StudentId == LoginUser.StudentProfile.Id))
+
+            if (groupChat.GroupManages.Any(d => d.StudentId == LoginUser.StudentProfile.Id))
             {
-                GroupMessage NewMessage = new GroupMessage(){
+                GroupMessage NewMessage = new GroupMessage()
+                {
                     GroupId = GroupId,
                     AccountId = LoginUser.Id,
                     Content = Message,
@@ -46,14 +47,15 @@ namespace UniChatApplication.Controllers
 
                 groupChat.Messages.Add(NewMessage);
                 _context.SaveChanges();
-                
-                var response = new {
-                    id=NewMessage.Id,
-                    GroupId=GroupId,
-                    username=LoginUser.Username,
-                    avatar=ProfileDAOs.GetProfile(_context, LoginUser).Avatar,
-                    message=Message,
-                    time=NewMessage.TimeMessage.ToShortTimeString()
+
+                var response = new
+                {
+                    id = NewMessage.Id,
+                    GroupId = GroupId,
+                    username = LoginUser.Username,
+                    avatar = ProfileDAOs.GetProfile(_context, LoginUser).Avatar,
+                    message = Message,
+                    time = NewMessage.TimeMessage.ToShortTimeString()
                 };
 
                 return Ok(response);
@@ -67,7 +69,7 @@ namespace UniChatApplication.Controllers
         /// Use to load more messages in GroupChat
         /// </summary>
         /// <param name="GroupId">Id of GroupChat</param>
-        /// <returns></returns>
+        /// <returns>IActionResult</returns>
         public IActionResult LoadMoreGroupMessages(int GroupId)
         {
             if (HttpContext.Session.GetString("Role") != "Student") return BadRequest();
@@ -80,23 +82,24 @@ namespace UniChatApplication.Controllers
             // Check GroupChat if it includes LoginUser
             bool checkLoginUserInGroup = _context.GroupManages
                                         .Any(d => d.StudentId == LoginProfile.Id && d.GroupId == GroupId);
-            if(!checkLoginUserInGroup) return BadRequest();
-            
+            if (!checkLoginUserInGroup) return BadRequest();
+
             // Load more messages
             int NumberOfMessageSended = HttpContext.Session.GetInt32($"Group{GroupId}NumberOfMessageSended") ?? 0;
-            
+
             IEnumerable<GroupMessage> GroupMessages = GroupMessageDAOs.Take(_context, GroupId, NumberOfMessageSended, BoxController.numberOfMessagesOnEachLoad).Reverse();
 
             List<object> messages = new List<object>();
             foreach (GroupMessage item in GroupMessages)
             {
                 // id, username, message, avatar, time
-                object message = new {
-                    id=item.Id,
-                    username=item.Account.Username,
-                    message=item.Content,
-                    avatar=ProfileDAOs.GetProfile(_context, item.Account).Avatar,
-                    time=item.TimeMessage.ToShortTimeString()
+                object message = new
+                {
+                    id = item.Id,
+                    username = item.Account.Username,
+                    message = item.Content,
+                    avatar = ProfileDAOs.GetProfile(_context, item.Account).Avatar,
+                    time = item.TimeMessage.ToShortTimeString()
                 };
 
                 messages.Add(message);
@@ -105,7 +108,7 @@ namespace UniChatApplication.Controllers
             HttpContext.Session.SetInt32($"Group{GroupId}NumberOfMessageSended", NumberOfMessageSended + GroupMessages.Count());
 
             return Ok(messages);
-            
+
         }
 
     }
