@@ -3,8 +3,7 @@
 @{
     ViewData["Title"] = "AdminProfile";
 }
-<link rel="stylesheet" href="~/css/cssPlus/buttonPlus.css">
-<link rel="stylesheet" href="~/css/StyleAdminProfile.css">
+<link rel="stylesheet" href="~/css/StyleAdmin/StyleAdminProfile.css">
 
 <div class="background">
     <div class="container">
@@ -64,14 +63,14 @@
                 <hr>
                 <br>
                 <div class="d-flex">
-                    <span id="btn-edit" class="button-2 text-decoration-none text-white">Edit</span>
+                    <span id="btn-edit" class="button-1 text-decoration-none text-white">Edit</span>
                     <span id="btn-edit-cancel" class="button-3 text-decoration-none text-white">Cancel</span>
                     <button type="submit" id="btn-edit-success"
-                        class="button-1 text-decoration-none text-white ml-3">Ok</button>
+                        class="button-2 text-decoration-none text-white ml-3">Ok</button>
 
                     <div class="btn-group ml-auto">
-                        <a asp-action="UpdatePassword" class="button-1 text-decoration-none text-white ml-auto">Đổi mật khẩu</a>
-                        <a asp-action="Index" class="button-2 text-decoration-none text-white ml-3">AdminPage</a>
+                        <a asp-action="UpdatePassword" class="button-2 text-decoration-none text-white ml-auto">Đổi mật khẩu</a>
+                        <a asp-action="Index" class="button-3 text-decoration-none text-white ml-3">Back</a>
                     </div>
                 </div>
             </form>

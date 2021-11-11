@@ -11,7 +11,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="~/css/StyleBox/StyleIndex.css">
-    <link rel="stylesheet" href="~/css/cssPlus/buttonPlus.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
@@ -59,29 +58,33 @@
                                 if (item.ExpirationTime <= DateTime.Now)
                                 {
                                     <li class="deadlineItem old">
-                                        <span><b>Content:</b> @item.Content</span>
-                                        <small>
+                                        <span>
+                                            
+                                                <b>Content:</b> @item.Content
+                                           
+                                        </span>
+                                        <div>
                                             <b>Deadline time:</b>
                                             @item.ExpirationTime.ToShortDateString() @item.ExpirationTime.ToShortTimeString()
-                                        </small>
-                                        <small><b>Subject:</b> @item.RoomChat.Subject.SubjectCode</small>
+                                        </div>
+                                        <div><b>Subject:</b> @item.RoomChat.Subject.SubjectCode</div>
                                         @if (ViewBag.LoginUser.RoleName == "Teacher")
                                         {
-                                            <small>Class: @item.RoomChat.Class.Name</small>
+                                            <div><b>Class:</b>@item.RoomChat.Class.Name</div>
                                         }
                                     </li>
                                 }
                                 else {
                                     <li class="deadlineItem new">
                                         <span><b>Content:</b> @item.Content</span>
-                                        <small>
+                                        <div>
                                             <b>Deadline time:</b>
                                             <u>@item.ExpirationTime.ToShortDateString() @item.ExpirationTime.ToShortTimeString()</u>
-                                        </small>
-                                        <small><b>Subject:</b> @item.RoomChat.Subject.SubjectCode</small>
+                                        </div>
+                                        <div><b>Subject:</b> @item.RoomChat.Subject.SubjectCode</div>
                                         @if (ViewBag.LoginUser.RoleName == "Teacher")
                                         {
-                                            <small>Class: @item.RoomChat.Class.Name</small>
+                                            <div><b>Class:</b>@item.RoomChat.Class.Name</div>
                                         }
                                     </li>
                                 }
