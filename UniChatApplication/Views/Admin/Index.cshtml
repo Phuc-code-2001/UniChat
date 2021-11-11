@@ -4,8 +4,7 @@
     ViewData["Title"] = "AdminPage";
 }
 
-<link rel="stylesheet" href="~/css/StyleAdminIndex.css">
-<link rel="stylesheet" href="~/css/cssPlus/buttonPlus.css">
+<link rel="stylesheet" href="~/css/StyleAdmin/StyleAdminIndex.css">
 
 @*Component 1*@
 <nav class="navbar navbar bg-light justify-content-between">
@@ -22,7 +21,7 @@
 
 <div class="row">
     @*Component 2*@
-    <div class="col-sm-6">
+    <div draggable="true" class="col-sm-6">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Student Management</h5>
@@ -32,7 +31,7 @@
         </div>
     </div>
     @*Component 3*@
-    <div class="col-sm-6">
+    <div draggable="true" class="col-sm-6">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Teacher Management</h5>
@@ -42,7 +41,7 @@
         </div>
     </div>
     @*Component 4*@
-    <div class="col-sm-6">
+    <div draggable="true" class="col-sm-6">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Class Management</h5>
@@ -52,7 +51,7 @@
         </div>
     </div>
     @*Component 5*@
-    <div class="col-sm-6">
+    <div draggable="true" class="col-sm-6">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Subject Management</h5>
@@ -63,7 +62,7 @@
     </div>
 
     @*Component 6*@
-    <div class="col-sm-6">
+    <div draggable="true" class="col-sm-6">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">RoomChat Management</h5>
@@ -74,7 +73,7 @@
     </div>
 
     @*Component 7*@
-    <div class="col-sm-6">
+    <div draggable="true" class="col-sm-6">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Contact Management</h5>
@@ -85,3 +84,63 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+
+  var dragSrcEl = null;
+  
+  function handleDragStart(e) {
+    this.style.opacity = '0.4';
+    
+    dragSrcEl = this;
+
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', this.innerHTML);
+  }
+
+  function handleDragOver(e) {
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+
+    e.dataTransfer.dropEffect = 'move';
+    
+    return false;
+  }
+
+  function handleDragEnter(e) {
+  }
+
+  function handleDragLeave(e) {
+  }
+
+  function handleDrop(e) {
+    if (e.stopPropagation) {
+      e.stopPropagation(); 
+    }
+    
+    if (dragSrcEl != this) {
+      dragSrcEl.innerHTML = this.innerHTML;
+      this.innerHTML = e.dataTransfer.getData('text/html');
+    }
+    
+    return false;
+  }
+
+  function handleDragEnd(e) {
+    this.style.opacity = '1';
+  }
+  
+  
+  let items = document.querySelectorAll('.col-sm-6');
+  items.forEach(function(item) {
+    item.addEventListener('dragstart', handleDragStart, false);
+    item.addEventListener('dragenter', handleDragEnter, false);
+    item.addEventListener('dragover', handleDragOver, false);
+    item.addEventListener('dragleave', handleDragLeave, false);
+    item.addEventListener('drop', handleDrop, false);
+    item.addEventListener('dragend', handleDragEnd, false);
+  });
+});
+</script>
+</script>

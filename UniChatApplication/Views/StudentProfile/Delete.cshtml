@@ -1,6 +1,7 @@
 ﻿@model UniChatApplication.Models.StudentProfile
 
 @{
+
     ViewData["Title"] = "Student - Delete";
 }
 
@@ -8,9 +9,11 @@
 <link rel="stylesheet" href="~/css/cssPlus/buttonPlus.css">
 
 <div class="container">
-    <h1 class="text-center">Student Management</h1>
-    <h4 class="text-center">Delete a student</h4>
-    <a class="button-3 text-white text-decoration-none" asp-action="Index">Back to List</a>
+    <div class="text-center">
+        <h1>Student Management</h1>
+        <h4>Delete a student</h4>
+        <a class="button-3 text-white text-decoration-none" asp-action="Index">Back to List</a>
+    </div>
     <hr>
 
     <div class="d-flex flex-wrap" style="gap: 1rem;">

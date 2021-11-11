@@ -3,7 +3,10 @@
     padding: 0;
 }
 
-/* Main CSS */
+/* Main */
+body{
+    background-color: #e0f7fa;
+}
 
 h1 {
     font-family: monaco, Consolas, Lucida Console, monospace;

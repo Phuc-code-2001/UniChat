@@ -10,17 +10,19 @@
         box-sizing: border-box;
         font-family: monospace, sans-serif;
     }
-
+    /* Main */  
     body {
         padding-top: 80px;
         padding-left: 2rem;
         padding-right: 2rem;
+        background-color: #e0f7fa;
     }
 
     .container {
+        background-color: white;
         padding: 2rem 1rem;
         border-radius: 10px;
-        box-shadow: 0 0 5px 1px blue;
+       border: 2px solid black;
     }
 
     .avatar-box {
@@ -41,7 +43,7 @@
 </style>
 
 <div class="container">
-
+    <div class="text-center"> 
     <h1 class="text-primary text-center">Information about GroupChat</h1>
     <h4 class="text-info text-center">Subject: @ViewBag.RoomChat.Subject.SubjectCode -
         @ViewBag.RoomChat.Subject.FullName</h4>
@@ -55,6 +57,8 @@
     else {
         <a asp-controller="RoomChat" asp-action="Details" asp-route-id="@Model.RoomID" class="button-3 text-white text-decoration-none">Back</a>
     }
+    </div>
+   
     <hr>
 
     <div class="group-student-list">

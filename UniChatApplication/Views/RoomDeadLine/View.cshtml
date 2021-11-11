@@ -1,92 +1,46 @@
 @model IEnumerable<RoomDeadLine>
 
 @{
+
+
+
     ViewData["Title"] = "RoomDeadline Management";
 }
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="~/css/StyleDeadline/View.css">
 
-<style>
-
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: monospace, sans-serif;
-    }
-
-    .container {
-        display: flex;
-        flex-direction: column;
-        gap: .5rem;
-        margin-top: 60px;
-        padding: 2rem;
-        box-shadow: 0 0 5px 1px blue;
-        border-radius: 5px;
-    }
-
-    table {
-        margin-bottom: 0 !important;
-        border-radius: 5px;
-        overflow: hidden;
-    }
-
-    .d-box {
-        padding: 1.5rem;
-        border: 1px solid skyblue;
-        position: relative;
-        border-radius: 5px;
-    }
-
-    .new:before {
-        content: "News";
-        position: absolute;
-        color: red;
-        background-color: white;
-        font-size: 1.2rem;
-        padding: 0 5px;
-        top: 0;
-        left: 1rem; 
-        transform: translateY(-50%);
-    }
-
-    .old:before {
-        content: "Olds";
-        position: absolute;
-        color: green;
-        background-color: white;
-        font-size: 1.2rem;
-        padding: 0 5px;
-        top: 0;
-        left: 1rem; 
-        transform: translateY(-50%);
-    }
-
-</style>
 
 <div class="container">
-
+    @* Tile *@
     <h2 class="text-center text-primary font-weight-bold">DeadLine</h2>
-    
-    <div>
-        <a class="button-3 text-white text-decoration-none" asp-controller="Box" asp-action="RoomChat" asp-route-id="@ViewBag.roomChat.Id">Back</a>
-        @if (ViewBag.LoginUser.RoleName == "Teacher"){
-            <a class="button-2 text-white text-decoration-none" asp-action="Create" asp-route-RoomId="@ViewBag.RoomChat.Id">Create</a>
+    @* Button *@
+    <div class="text-center">
+        @if (ViewBag.LoginUser.RoleName == "Teacher")
+
+        {
+            <a class="button-2 text-white text-decoration-none" asp-action="Create"
+            asp-route-RoomId="@ViewBag.RoomChat.Id">Create</a>
         }
+        <a class="button-3 text-white text-decoration-none" asp-controller="Box" asp-action="RoomChat"
+            asp-route-id="@ViewBag.roomChat.Id">Back</a>
     </div>
     <h4 class="text-center">
         <span class="text-success">@ViewBag.RoomChat.Class.Name - @ViewBag.RoomChat.Subject.FullName</span>
     </h4>
 
-    
+    @* New Deadline *@
     <div class="d-box new">
-        @if (Model.Count() > 0) {
-            <table class="table table-bordered table-info text-center" id="new-table">
-                <thead class="bg-danger text-white">
+        @if (Model.Count() > 0)
+        {
+            <table class="table table-bordered text-center" id="new-table">
+                <thead class="bg-dark text-white">
                     <tr>
                         <th>Number</th>
                         <th>Content</th>
-                        <th>Expiration Time</th>
-                        @if (ViewBag.LoginUser.RoleName == "Teacher"){
+                        <th><i class="fa fa-hourglass-end"></i></th>
+                        @if (ViewBag.LoginUser.RoleName == "Teacher")
+                        {
                             <th>Options</th>
                         }
                     </tr>
@@ -95,46 +49,53 @@
                     @{
                         int i = 0;
                         foreach (RoomDeadLine item in Model)
-                        {   
+                       {
                             i++;
                             <tr>
                                 <td>@i</td>
                                 <td>@item.Content</td>
                                 <td>@item.ExpirationTime</td>
-                                @if(ViewBag.LoginUser.RoleName == "Teacher"){
+                                @if (ViewBag.LoginUser.RoleName == "Teacher")
+                                {
                                     <td>
-                                        <a class="btn btn-danger" name="delete" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                                        <a class="btn btn-success" name="edit" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                        <a class="button-3" name="delete" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                        <a class="button-2" name="edit" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                                     </td>
+
                                 }
                             </tr>
+
                         }
                     }
                 </tbody>
             </table>
         }
-        else if (ViewBag.LoginUser.RoleName == "Student") {
+        else if (ViewBag.LoginUser.RoleName == "Student")
+
+        {
             <div class="text-success text-center bg-light py-3" style="font-size: 1.2rem;">
                 <span>Congratulations!!! You don't have any new deadline. ^^</span>
             </div>
         }
+        else if (ViewBag.LoginUser.RoleName == "Teacher")
 
-        else if (ViewBag.LoginUser.RoleName == "Teacher") {
+        {
             <div class="text-danger text-center bg-light py-3 font-weight-bold" style="font-size: 1.2rem;">
                 <span>Oh No !!! You should create more deadlines for your students.^^</span>
             </div>
         }
-
     </div>
     <hr>
+    @* Old Deadline *@
     <div class="d-box old">
         <table class="table table-bordered table-success text-center" id="old-table">
-            <thead class="bg-success">
+            <thead class="bg-dark text-white">
                 <tr>
                     <th>Number</th>
                     <th>Content</th>
-                    <th>Expiration Time</th>
-                    @if (ViewBag.LoginUser.RoleName == "Teacher"){
+                    <th><i class="fa fa-hourglass-end"></i></th>
+                    @if (ViewBag.LoginUser.RoleName == "Teacher")
+                    {
                         <th>Options</th>
                     }
                 </tr>
@@ -143,17 +104,17 @@
                 @{
                     int _i = 0;
                     foreach (RoomDeadLine item in ViewBag.OldDeadLineList)
-                    {   
+                    {
                         _i++;
                         <tr>
                             <td>@_i</td>
                             <td>@item.Content</td>
                             <td>@item.ExpirationTime</td>
-
-                            @if(ViewBag.LoginUser.RoleName == "Teacher"){
+                            @if (ViewBag.LoginUser.RoleName == "Teacher")
+                            {
                                 <td>
-                                    <a class="btn btn-danger" name="delete" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                                    <a class="btn btn-success" name="edit" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                    <a class="button-3 text-decoration-none text-white" name="delete" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    <a class="button-2 text-decoration-none text-white" name="edit" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                                 </td>
                             }
                         </tr>
@@ -164,13 +125,12 @@
     </div>
 </div>
 
-
 <script>
 
-    $(document).ready(function(){
+    $(document).ready(function () {
 
-        $("a[name='delete']").click(function(e){
-            if (!confirm("Do you want to delete the deadline?")){
+        $("a[name='delete']").click(function (e) {
+            if (!confirm("Do you want to delete the deadline?")) {
                 e.preventDefault();
             }
         });
@@ -184,7 +144,7 @@
                 "infoFiltered": ""
             }
         });
-        
+
     })
 
 </script>

@@ -1,0 +1,8 @@
+create table dbo.message (
+	id int primary key identity(1, 1),
+	sender_id int,
+	receiver_id int,
+	content nvarchar(500) not null,
+	foreign key (sender_id) references dbo.Account (AccID) on delete set null on update set null,
+	foreign key (receiver_id) references dbo.account (AccID) on delete set null on update set null,
+);

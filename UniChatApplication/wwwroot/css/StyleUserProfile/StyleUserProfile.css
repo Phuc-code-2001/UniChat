@@ -7,22 +7,23 @@
 /* Background */
 
 body{
-    background-image: url('Halloween.gif');
+    background-image: url('UserProfileBackground.gif');
     background-repeat: no-repeat;
     background-size: cover;
-   
 }
 
 /*  */
 
 .profile{
-    margin: 2.5rem auto;
-
+    margin-top: 20vh;
+    margin-bottom: 20vh;
 }
 .card{
     height: 100%;
     border-radius: 1rem;
+    border: 1px solid black;
 }
+
 
 .card-image{
     padding: 1rem;
@@ -39,6 +40,7 @@ body{
 .box{
     background-color: white;
     border-radius: 1rem;
+    border: 1px solid black;
     padding: 2rem;
     height: 100%;
     font-size: 1rem;

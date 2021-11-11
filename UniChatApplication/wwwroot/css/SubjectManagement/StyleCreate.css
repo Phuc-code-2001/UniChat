@@ -4,6 +4,10 @@
     box-sizing: border-box;
     font-family: monaco, Consolas, Lucida Console, monospace;
 }
+/* Main */
+body{
+    background-color: #e0f7fa;
+}
 
 select {
     width: 100%;

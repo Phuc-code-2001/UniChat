@@ -3,11 +3,9 @@
     ViewData["Title"] = "Delete";
 }
 <link rel="stylesheet" href="~/css/StyleContact/StyleIndex.css" />
-<div class="container row">
-    <div class="col-sm-4 map">
-
-    </div>
-    <div class="col-sm-8">
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
         <div class="box">
             <h1>Are you sure to delete it?</h1>
 
@@ -47,13 +45,14 @@
                            readonly>
                 </div>
 
-                <button type="submit" value="Confirm" class="btn btn-primary">Confirm</button>
+                <button type="submit" value="Confirm" class="button-2">Confirm</button>
 
                 <a asp-controller="Contact" asp-action="ContactManagement">
-                    <button type="button" class="btn btn-danger">Cancel</button>
+                    <button type="button" class="button-3">Cancel</button>
                 </a>
             </form>
 
         </div>
+    </div>
     </div>
 </div>

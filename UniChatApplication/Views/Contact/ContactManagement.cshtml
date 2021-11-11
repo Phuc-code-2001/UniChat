@@ -5,41 +5,16 @@
 }
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
-<link rel="stylesheet" href="~/css/cssPlus/buttonPlus.css">
+<link rel="stylesheet" href="~/css/ContactManagement/ContactManagement.css" />
 
-
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: monospace;
-    }
-
-    .frame {
-        padding: 3rem;
-        border-radius: 10px;
-        box-shadow: 0 0 5px 1px blue;
-
-    }
-
-    .table-box {
-        overflow: auto;
-    }
-
-    .configure {
-        display: flex;
-        gap: .5rem;
-    }
-</style>
 
 <div class="container-fluid p-5">
     <div class="frame">
 
         <h1 class="text-center text-primary">Contact Management</h1>
         <hr>
-        <div class="head-control">
-            <a class="button-3 text-decoration-none" asp-controller="Admin" asp-action="Index">Back to Admin</a>
+        <div class="head-control text-center">
+            <a class="button-3 text-decoration-none text-white" asp-controller="Admin" asp-action="Index">Back to Admin</a>
         </div>
         <hr>
         <h2 class="text-center text-primary">List of Contact</h2>
