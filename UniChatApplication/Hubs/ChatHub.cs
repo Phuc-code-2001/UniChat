@@ -14,12 +14,11 @@ namespace UniChatApplication.Hubs
 {
     class ChatHub : Hub
     {
-        UniChatDbContext _context;
-        public ChatHub(UniChatDbContext context)
-        {
-            _context = context;
-        }
-
+    
+        /// <summary>
+        /// Allow client side join to a room
+        /// </summary>
+        /// <param name="id"></param>
         public async Task JoinRoom(int id){
 
             await Groups.AddToGroupAsync(Context.ConnectionId, $"RoomChat-{id}");
@@ -27,6 +26,11 @@ namespace UniChatApplication.Hubs
             
         }
 
+        /// <summary>
+        /// Allow client side join to a group
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task JoinGroup(int id){
 
             await Groups.AddToGroupAsync(Context.ConnectionId, $"GroupChat-{id}");
@@ -34,6 +38,15 @@ namespace UniChatApplication.Hubs
             
         }
 
+        /// <summary>
+        /// Use to send the message to clients in a room
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="roomId"></param>
+        /// <param name="username"></param>
+        /// <param name="avatar"></param>
+        /// <param name="message"></param>
+        /// <param name="time"></param>
         public async Task SendRoomMessage(int id, int roomId, string username, string avatar, string message, string time)
         {
 
@@ -47,6 +60,15 @@ namespace UniChatApplication.Hubs
             );
         }
 
+        /// <summary>
+        /// Use to send the message to clients in a group
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="groupId"></param>
+        /// <param name="username"></param>
+        /// <param name="avatar"></param>
+        /// <param name="message"></param>
+        /// <param name="time"></param>
         public async Task SendGroupMessage(int id, int groupId, string username, string avatar, string message, string time)
         {
 
